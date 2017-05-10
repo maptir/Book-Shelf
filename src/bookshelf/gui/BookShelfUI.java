@@ -75,7 +75,7 @@ public class BookShelfUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
-				if (newFolder != "")
+				if (newFolder.chars().allMatch(Character::isLetter))
 					addNewFolder(newFolder);
 			}
 		});
