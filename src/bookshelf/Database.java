@@ -8,12 +8,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
 public class Database {
-	private List<String> bookList = new ArrayList<String>();
+	private List<Book> bookList = new ArrayList<Book>();
 	private InputStream input;
 	private OutputStream output;
 	private File file = new File("database.txt");
@@ -30,26 +29,27 @@ public class Database {
 			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
-				for (String list : temp) {
-					bookList.add(list);
-				}
+				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));
 			}
 			file.delete();
-			System.out.println(Arrays.toString(bookList.toArray()));
+			for (Book book : bookList) {
+				System.out.println(book.getName() +" -"+ book.getDescription() +" -"+ book.getType() +" -"+ book.getLocation());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void add(String fileLocation) {
-		bookList.add(fileLocation);
+	private void add(String filename, String fileDescription, String fileType, String fileLocation) {
+		bookList.add(new Book(filename, fileDescription, fileType, fileLocation));
 	}
 
 	private void close() {
 		try {
 			output = new FileOutputStream(file);
 			for (int x = 0; x < bookList.size(); x++) {
-				byte[] byteTemp = (bookList.get(x) + ",").getBytes();
+				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getDescription() + ","
+						+ bookList.get(x).getType() + "," + bookList.get(x).getLocation() + "\n").getBytes();
 				output.write(byteTemp);
 			}
 		} catch (Exception e1) {
@@ -60,10 +60,16 @@ public class Database {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		Database d = new Database();
-		System.out.println("File Input : ");
-		String in = sc.nextLine();
-		d.add(in);
+		System.out.print("File name : ");
+		String name = sc.nextLine();
+		System.out.print("File Des : ");
+		String des = sc.nextLine();
+		System.out.print("File Type : ");
+		String type = sc.nextLine();
+		System.out.print("File Location : ");
+		String loca = sc.nextLine();
+
+		d.add(name, des, type, loca);
 		d.close();
 	}
-
 }
