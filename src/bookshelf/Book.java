@@ -37,7 +37,7 @@ public class Book {
 		this.type = type;
 	}
 
-	public String getLocation() {
+	public String getLocation() { 
 		return location;
 	}
 
