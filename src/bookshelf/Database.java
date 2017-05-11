@@ -64,10 +64,7 @@ public class Database {
 				System.out.println(book.getName() + " -" + book.getType() + " -" + book.getLocation() + " -"
 						+ book.getDescription());
 			}
-<<<<<<< HEAD
 			// Test typeDatabase
-=======
->>>>>>> 7d76b7df04e7ddfcf658e57ef7282e8a89cae6f3
 			for (String type : typeList) {
 				System.out.print(type + ",");
 			}
