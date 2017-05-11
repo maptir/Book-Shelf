@@ -33,7 +33,8 @@ public class Database {
 			}
 			file.delete();
 			for (Book book : bookList) {
-				System.out.println(book.getName() +" -"+ book.getDescription() +" -"+ book.getType() +" -"+ book.getLocation());
+				System.out.println(book.getName() + " -" + book.getDescription() + " -" + book.getType() + " -"
+						+ book.getLocation());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
