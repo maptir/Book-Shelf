@@ -55,14 +55,15 @@ public class Database {
 				}
 			}
 			// Test Database
-			for (Book book : bookList) {
-				System.out.println(book.getName() + " -" + book.getDescription() + " -" + book.getType() + " -"
-						+ book.getLocation());
-			}
-			for (String type : typeList) {
-				System.out.print(type + ",");
-			}
-			System.out.println();
+			// for (Book book : bookList) {
+			// System.out.println(book.getName() + " -" + book.getDescription()
+			// + " -" + book.getType() + " -"
+			// + book.getLocation());
+			// }
+			// for (String type : typeList) {
+			// System.out.print(type + ",");
+			// }
+			// System.out.println();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,8 +86,9 @@ public class Database {
 	 * 
 	 * @param type
 	 */
-	private void addType(String type) {
+	public void addType(String type) {
 		typeList.add(type);
+		close();
 	}
 
 	/**
@@ -109,6 +111,22 @@ public class Database {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public List<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	public List<String> getTypeList() {
+		return typeList;
+	}
+
+	public void setTypeList(List<String> typeList) {
+		this.typeList = typeList;
 	}
 
 	/**
