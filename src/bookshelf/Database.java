@@ -15,7 +15,6 @@ import java.util.Scanner;
  * The Class that use for manage the database of this program.
  * 
  * @author Triwith Mutitakul
- *
  */
 public class Database {
 	private List<Book> bookList = new ArrayList<Book>();
@@ -44,6 +43,12 @@ public class Database {
 			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
+				// Fix , problem
+				if (temp.length > 4) {
+					for (int x = 4; x < temp.length; x++) {
+						temp[3] += "," + temp[x];
+					}
+				}
 				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));
 			}
 			while ((line = breaderForType.readLine()) != null) {
@@ -55,15 +60,15 @@ public class Database {
 				}
 			}
 			// Test Database
-			// for (Book book : bookList) {
-			// System.out.println(book.getName() + " -" + book.getDescription()
-			// + " -" + book.getType() + " -"
-			// + book.getLocation());
-			// }
-			// for (String type : typeList) {
-			// System.out.print(type + ",");
-			// }
-			// System.out.println();
+			for (Book book : bookList) {
+				System.out.println(book.getName() + " -" + book.getType() + " -" + book.getLocation() + " -"
+						+ book.getDescription());
+			}
+			// Test typeDatabase
+			for (String type : typeList) {
+				System.out.print(type + ",");
+			}
+			System.out.println();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,8 +82,8 @@ public class Database {
 	 * @param fileType
 	 * @param fileLocation
 	 */
-	private void add(String filename, String fileDescription, String fileType, String fileLocation) {
-		bookList.add(new Book(filename, fileDescription, fileType, fileLocation));
+	private void add(String filename, String fileType, String fileLocation, String fileDescription) {
+		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
 	}
 
 	/**
@@ -100,8 +105,8 @@ public class Database {
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
-				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getDescription() + ","
-						+ bookList.get(x).getType() + "," + bookList.get(x).getLocation() + "\n").getBytes();
+				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getType() + ","
+						+ bookList.get(x).getLocation() + "," + bookList.get(x).getDescription() + "\n").getBytes();
 				output.write(byteTemp);
 			}
 			for (int x = 0; x < typeList.size(); x++) {
@@ -145,7 +150,7 @@ public class Database {
 		String type = sc.nextLine();
 		System.out.print("File Location : ");
 		String loca = sc.nextLine();
-		d.add(name, des, type, loca);
+		d.add(name, type, loca, des);
 		d.addType(type);
 		d.close();
 	}
