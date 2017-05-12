@@ -43,10 +43,11 @@ public class Database {
 			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
-				// Fix , problem
-				if (temp.length > 4) {
-					for (int x = 4; x < temp.length; x++) {
-						temp[3] += "," + temp[x];
+
+				//Fix spliter problem. 
+				if(temp.length>4){
+					for(int x = 4;x<temp.length;x++){
+						temp[3]+=","+temp[x];
 					}
 				}
 				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));

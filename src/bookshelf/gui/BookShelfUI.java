@@ -67,9 +67,10 @@ public class BookShelfUI extends JFrame {
 			addNewFolder(type);
 		try {
 			addFolder = new JButton("+");
-			Image img = ImageIO.read(new File("box.jpg"));
+			Image img = ImageIO.read(new File("Picture//Add.png"));
 			addFolder.setIcon(new ImageIcon(img));
 			addFolder.setHorizontalTextPosition(SwingConstants.CENTER);
+			addFolder.setBorder(new EmptyBorder(10, 10, 10, 10));
 			this.add(addFolder, BorderLayout.EAST);
 		} catch (IOException e) {
 			e.printStackTrace();
