@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+WORK,NOVEL,COMIC,EDUCATION,rtyuio,dfghjk,rtyui,NOvel,
+=======
 WORK,NOVEL,COMIC,EDUCATION,HELLO,SKE,dfghg,asdf,sdfgghgry,
+>>>>>>> e128a201429a620b3845ddb7c812838640779ac6
