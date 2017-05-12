@@ -1,14 +1,8 @@
-<<<<<<< HEAD
 Alice,Novel,//file,alice,in,wonder,land
-=======
-<<<<<<< HEAD
 Alice in Wonderland,The story of woman who can,Novel,//file/eiei
 Sherlock,The story of Sherlock,Novel,//file/picture/sherlock
 alqwe,sdfhj, qweoo,asdk
-Map,Map,Fame,SKE,KU
-=======
+Map,Map,Fame,SKE
 Alice in,Des of Alice,Novel,//file
 Batman,Des Batman,Comic,//file
 Jacker,dddd,Novel,//fileGG
->>>>>>> d0516416f556729b7420699a172a61802cb7eed8
->>>>>>> 7d76b7df04e7ddfcf658e57ef7282e8a89cae6f3

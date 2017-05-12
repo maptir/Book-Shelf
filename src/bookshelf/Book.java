@@ -4,9 +4,9 @@ public class Book {
 	private String name = "";
 	private String description = "";
 	private String type = "";
-	private String location= "";
-	
-	public Book(String name,String type,String location,String description) {
+	private String location = "";
+
+	public Book(String name, String type, String location, String description) {
 		this.name = name;
 		this.description = description;
 		this.type = type;
@@ -37,13 +37,12 @@ public class Book {
 		this.type = type;
 	}
 
-	public String getLocation() { 
+	public String getLocation() {
 		return location;
 	}
 
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
 
 }

@@ -43,10 +43,17 @@ public class Database {
 			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
+<<<<<<< HEAD
 				//Fix spliter problem. 
 				if(temp.length>4){
 					for(int x = 4;x<temp.length;x++){
 						temp[3]+=","+temp[x];
+=======
+				// Fix , problem
+				if (temp.length > 4) {
+					for (int x = 4; x < temp.length; x++) {
+						temp[3] += "," + temp[x];
+>>>>>>> 8e4fa7f0a648eee913b48f750c39072f2b758932
 					}
 				}
 				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));
@@ -91,8 +98,9 @@ public class Database {
 	 * 
 	 * @param type
 	 */
-	private void addType(String type) {
+	public void addType(String type) {
 		typeList.add(type);
+		close();
 	}
 
 	/**
@@ -115,6 +123,22 @@ public class Database {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+
+	public List<Book> getBookList() {
+		return bookList;
+	}
+
+	public void setBookList(List<Book> bookList) {
+		this.bookList = bookList;
+	}
+
+	public List<String> getTypeList() {
+		return typeList;
+	}
+
+	public void setTypeList(List<String> typeList) {
+		this.typeList = typeList;
 	}
 
 	/**
