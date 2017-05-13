@@ -39,8 +39,10 @@ public class Database {
 		try {
 			input = new FileInputStream(file);
 			inputForType = new FileInputStream(typeFile);
-			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
-			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
+			BufferedReader breader = new BufferedReader(new InputStreamReader(
+					input));
+			BufferedReader breaderForType = new BufferedReader(
+					new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
 
@@ -60,6 +62,20 @@ public class Database {
 					}
 				}
 			}
+<<<<<<< HEAD
+=======
+			// Test Database
+			// for (Book book : bookList) {
+			// System.out.println(book.getName() + " -" + book.getType()
+			// + " -" + book.getLocation() + " -"
+			// + book.getDescription());
+			// }
+			// // Test typeDatabase
+			// for (String type : typeList) {
+			// System.out.print(type + ",");
+			// }
+			// System.out.println();
+>>>>>>> af863bc0f7c9a336079fc73cb7520057d10228d4
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,8 +89,10 @@ public class Database {
 	 * @param fileType
 	 * @param fileLocation
 	 */
-	private void add(String filename, String fileType, String fileLocation, String fileDescription) {
+	public void add(String filename, String fileType, String fileLocation,
+			String fileDescription) {
 		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
+		close();
 	}
 
 	/**
@@ -96,8 +114,10 @@ public class Database {
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
-				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getType() + ","
-						+ bookList.get(x).getLocation() + "," + bookList.get(x).getDescription() + "\n").getBytes();
+				byte[] byteTemp = (bookList.get(x).getName() + ","
+						+ bookList.get(x).getType() + ","
+						+ bookList.get(x).getLocation() + ","
+						+ bookList.get(x).getDescription() + "\n").getBytes();
 				output.write(byteTemp);
 			}
 			for (int x = 0; x < typeList.size(); x++) {
@@ -130,6 +150,7 @@ public class Database {
 	 * 
 	 * @param args
 	 */
+<<<<<<< HEAD
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		Database d = new Database();
@@ -152,4 +173,21 @@ public class Database {
 		}
 		d.close();
 	}
+=======
+	// public static void main(String[] args) {
+	// Scanner sc = new Scanner(System.in);
+	// Database d = new Database();
+	// System.out.print("File name : ");
+	// String name = sc.nextLine();
+	// System.out.print("File Des : ");
+	// String des = sc.nextLine();
+	// System.out.print("File Type : ");
+	// String type = sc.nextLine();
+	// System.out.print("File Location : ");
+	// String loca = sc.nextLine();
+	// d.add(name, type, loca, des);
+	// d.addType(type);
+	// d.close();
+	// }
+>>>>>>> af863bc0f7c9a336079fc73cb7520057d10228d4
 }
