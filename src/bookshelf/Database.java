@@ -74,7 +74,6 @@ public class Database {
 	 */
 	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
 		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
-		close();
 	}
 
 	/**
@@ -124,5 +123,4 @@ public class Database {
 	public void setTypeList(List<String> typeList) {
 		this.typeList = typeList;
 	}
-
 }
