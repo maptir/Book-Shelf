@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-Novel,Novel,Novel,Novel,
-=======
-Comic,Novel,qwertyuiop,Education,tyuio,drtyujio,QWewrtytu,
->>>>>>> af863bc0f7c9a336079fc73cb7520057d10228d4
+Comic,Novel,qwertyuiop,Education,tyuio,drtyujio,QWewrtytu,wertyu,

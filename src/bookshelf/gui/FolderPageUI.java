@@ -113,7 +113,7 @@ public class FolderPageUI implements Runnable {
 		emptyLabel.setVerticalTextPosition(SwingConstants.NORTH);
 
 		preButton.setIcon(iconPre);
-		preButton.setPreferredSize((new Dimension(100, 100)));
+		preButton.setPreferredSize(new Dimension(100, 100));
 		preButton.setBorder(new EmptyBorder(10, 10, 10, 10));
 		preButton.setHorizontalAlignment(SwingConstants.CENTER);
 		preButton.setVerticalAlignment(SwingConstants.NORTH);
@@ -164,8 +164,8 @@ public class FolderPageUI implements Runnable {
 
 		frame.add(panelCenter, BorderLayout.CENTER);
 		frame.add(panelSouth, BorderLayout.SOUTH);
-		frame.pack();
-		frame.setDefaultCloseOperation(frame.EXIT_ON_CLOSE);
+		// frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
 
@@ -255,7 +255,7 @@ public class FolderPageUI implements Runnable {
 	}
 
 	public static void main(String[] args) {
-		FolderPageUI r = new FolderPageUI("Novel");
+		FolderPageUI r = new FolderPageUI("Comic");
 		r.run();
 	}
 

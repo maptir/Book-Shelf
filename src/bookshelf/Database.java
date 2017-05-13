@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * The Class that use for manage the database of this program.
@@ -73,7 +72,7 @@ public class Database {
 	 * @param fileType
 	 * @param fileLocation
 	 */
-	private void add(String filename, String fileType, String fileLocation, String fileDescription) {
+	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
 		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
 	}
 
@@ -123,33 +122,5 @@ public class Database {
 
 	public void setTypeList(List<String> typeList) {
 		this.typeList = typeList;
-	}
-
-	/**
-	 * Test database
-	 * 
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		Database d = new Database();
-		while(true){
-			System.out.println("Add or not? : ");
-			String ans = sc.nextLine();
-			if(ans.equalsIgnoreCase("q")){
-				break;
-			}
-			System.out.print("File name : ");
-			String name = sc.nextLine();
-			System.out.print("File Des : ");
-			String des = sc.nextLine();
-			System.out.print("File Type : ");
-			String type = sc.nextLine();
-			System.out.print("File Location : ");
-			String loca = sc.nextLine();
-			d.add(name, type, loca, des);
-			d.addType(type);
-		}
-		d.close();
 	}
 }
