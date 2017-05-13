@@ -40,7 +40,7 @@ public class FolderPageUI implements Runnable {
 	private JButton nextButton;
 	private JButton addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel,garbageLabel;
+	private JLabel emptyLabel, garbageLabel;
 	private ImageIcon img;
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
@@ -97,7 +97,7 @@ public class FolderPageUI implements Runnable {
 		Image imgAddBoo = iconAddBook.getImage();
 		Image newimg3 = imgAddBoo.getScaledInstance(150, 155, Image.SCALE_SMOOTH);
 		iconAddBook = new ImageIcon(newimg3);
-		
+
 		ImageIcon iconGarbage = new ImageIcon("Picture//bin.png");
 		Image imgGarbage = iconGarbage.getImage();
 		Image newimg4 = imgGarbage.getScaledInstance(150, 155, Image.SCALE_SMOOTH);
@@ -129,7 +129,7 @@ public class FolderPageUI implements Runnable {
 		addBookButton.setVerticalAlignment(SwingConstants.NORTH);
 		addBookButton.setHorizontalAlignment(SwingConstants.CENTER);
 		addBookButton.setBackground(new Color(38, 30, 19));
-		
+
 		garbageLabel.setIcon(iconGarbage);
 		garbageLabel.setPreferredSize((new Dimension(150, 155)));
 		garbageLabel.setVerticalAlignment(SwingConstants.NORTH);
@@ -189,7 +189,7 @@ public class FolderPageUI implements Runnable {
 			but.setFont(new Font("Arial", 0, 35));
 			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
-			
+
 			backGLabel.add(but, BorderLayout.CENTER);
 			backGLabel.add(new JLabel("            "));
 			countPerLine++;
@@ -201,7 +201,8 @@ public class FolderPageUI implements Runnable {
 			}
 		}
 		backGLabel.add(addBookButton);
-		backGLabel.add(new JLabel("                                                                                                                                                                                                                         "));
+		backGLabel.add(new JLabel(
+				"                                                                                                                                                                                                                         "));
 		backGLabel.add(garbageLabel);
 		return backGLabel;
 	}
@@ -284,7 +285,7 @@ public class FolderPageUI implements Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String fileLocation = bookList.get((Integer.parseInt(e.getActionCommand()))).getLocation();
+			String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
 			openFile(fileLocation);
 		}
 
