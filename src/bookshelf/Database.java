@@ -44,10 +44,10 @@ public class Database {
 			while ((line = breader.readLine()) != null) {
 				temp = line.split(",");
 
-				//Fix spliter problem. 
-				if(temp.length>4){
-					for(int x = 4;x<temp.length;x++){
-						temp[3]+=","+temp[x];
+				// Fix spliter problem.
+				if (temp.length > 4) {
+					for (int x = 4; x < temp.length; x++) {
+						temp[3] += "," + temp[x];
 					}
 				}
 				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));
@@ -60,16 +60,6 @@ public class Database {
 					}
 				}
 			}
-			// Test Database
-			for (Book book : bookList) {
-				System.out.println(book.getName() + " -" + book.getType() + " -" + book.getLocation() + " -"
-						+ book.getDescription());
-			}
-			// Test typeDatabase
-			for (String type : typeList) {
-				System.out.print(type + ",");
-			}
-			System.out.println();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -143,16 +133,23 @@ public class Database {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		Database d = new Database();
-		System.out.print("File name : ");
-		String name = sc.nextLine();
-		System.out.print("File Des : ");
-		String des = sc.nextLine();
-		System.out.print("File Type : ");
-		String type = sc.nextLine();
-		System.out.print("File Location : ");
-		String loca = sc.nextLine();
-		d.add(name, type, loca, des);
-		d.addType(type);
+		while(true){
+			System.out.println("Add or not? : ");
+			String ans = sc.nextLine();
+			if(ans.equalsIgnoreCase("q")){
+				break;
+			}
+			System.out.print("File name : ");
+			String name = sc.nextLine();
+			System.out.print("File Des : ");
+			String des = sc.nextLine();
+			System.out.print("File Type : ");
+			String type = sc.nextLine();
+			System.out.print("File Location : ");
+			String loca = sc.nextLine();
+			d.add(name, type, loca, des);
+			d.addType(type);
+		}
 		d.close();
 	}
 }
