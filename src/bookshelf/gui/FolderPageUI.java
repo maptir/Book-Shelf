@@ -10,6 +10,8 @@ import java.awt.Image;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,8 +62,8 @@ public class FolderPageUI implements Runnable {
 
 	private void initComponents() {
 		frame = new JFrame("Search Result");
-		frame.setSize(1000, 900);
-		frame.setPreferredSize(new Dimension(1000, 900));
+		frame.setSize(900, 700);
+		frame.setPreferredSize(new Dimension(900, 700));
 		emptyLabel = new JLabel("Page : " + currentPage);
 		emptyLabel2 = new JTextField(100);
 		emptyLabel3 = new JTextField(100);
@@ -69,7 +71,7 @@ public class FolderPageUI implements Runnable {
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
 		img = new ImageIcon("Picture//backGR.jpg");
-		img = new ImageIcon(img.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH));
+		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
 		panelSouth = new JPanel();
 		nextButton = new JButton();
@@ -95,12 +97,12 @@ public class FolderPageUI implements Runnable {
 
 		ImageIcon iconAddBook = new ImageIcon("Picture//AddBook.png");
 		Image imgAddBoo = iconAddBook.getImage();
-		Image newimg3 = imgAddBoo.getScaledInstance(150, 155, Image.SCALE_SMOOTH);
+		Image newimg3 = imgAddBoo.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 		iconAddBook = new ImageIcon(newimg3);
 
 		ImageIcon iconGarbage = new ImageIcon("Picture//bin.png");
 		Image imgGarbage = iconGarbage.getImage();
-		Image newimg4 = imgGarbage.getScaledInstance(150, 155, Image.SCALE_SMOOTH);
+		Image newimg4 = imgGarbage.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 		iconGarbage = new ImageIcon(newimg4);
 
 		emptyLabel.setPreferredSize(new Dimension(90, 40));
@@ -124,14 +126,15 @@ public class FolderPageUI implements Runnable {
 		nextButton.setHorizontalAlignment(SwingConstants.CENTER);
 		nextButton.setBackground(new Color(38, 30, 19));
 
+		addBookButton.setBorderPainted(false);
 		addBookButton.setIcon(iconAddBook);
-		addBookButton.setPreferredSize((new Dimension(150, 155)));
+		addBookButton.setPreferredSize((new Dimension(70, 70)));
 		addBookButton.setVerticalAlignment(SwingConstants.NORTH);
 		addBookButton.setHorizontalAlignment(SwingConstants.CENTER);
 		addBookButton.setBackground(new Color(38, 30, 19));
 
 		garbageLabel.setIcon(iconGarbage);
-		garbageLabel.setPreferredSize((new Dimension(150, 155)));
+		garbageLabel.setPreferredSize((new Dimension(70, 70)));
 		garbageLabel.setVerticalAlignment(SwingConstants.NORTH);
 		garbageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		garbageLabel.setBackground(new Color(38, 30, 19));
@@ -143,9 +146,13 @@ public class FolderPageUI implements Runnable {
 			nextButton.setEnabled(false);
 		}
 
+		panelSouth.add(garbageLabel);
+		panelSouth.add(new JLabel("                                                                       "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
+		panelSouth.add(new JLabel("                                                                   "));
+		panelSouth.add(addBookButton);
 		panelSouth.setLayout(new FlowLayout());
 		panelSouth.setBackground(new Color(38, 30, 19));
 		panelSouth.setPreferredSize(new Dimension(80, 80));
@@ -200,10 +207,10 @@ public class FolderPageUI implements Runnable {
 				backGLabel.add(emptyLabel5);
 			}
 		}
-		backGLabel.add(addBookButton);
-		backGLabel.add(new JLabel(
-				"                                                                                                                                                                                                                         "));
-		backGLabel.add(garbageLabel);
+		// backGLabel.add(addBookButton);
+		// backGLabel.add(new JLabel(
+		// " "));
+		// backGLabel.add(garbageLabel);
 		return backGLabel;
 	}
 
@@ -216,14 +223,14 @@ public class FolderPageUI implements Runnable {
 
 		ImageIcon iconBook = new ImageIcon("Picture//sampleBook.jpg");
 		Image imgBook = iconBook.getImage();
-		Image newimg3 = imgBook.getScaledInstance(180, 265, Image.SCALE_SMOOTH);
+		Image newimg3 = imgBook.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
 
 		for (Book book : temp) {
 			JButton bookBut = new JButton(book.getName(), iconBook);
 			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 			bookBut.setVerticalAlignment(SwingConstants.CENTER);
-			bookBut.setPreferredSize(new Dimension(180, 265));
+			bookBut.setPreferredSize(new Dimension(140, 200));
 			String toolTip = String.format("Description : %s", book.getDescription());
 			bookBut.setToolTipText(toolTip);
 			bookListButton.add(bookBut);
@@ -262,7 +269,7 @@ public class FolderPageUI implements Runnable {
 				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(1000, 900);
+				frame.setSize(900, 700);
 				if (currentPage + 1 >= havePage) {
 					nextButton.setEnabled(false);
 				}
@@ -272,7 +279,7 @@ public class FolderPageUI implements Runnable {
 				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(1000, 900);
+				frame.setSize(900, 700);
 				if (currentPage <= 1) {
 					preButton.setEnabled(false);
 				}
