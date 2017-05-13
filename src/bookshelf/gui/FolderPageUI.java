@@ -6,7 +6,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,18 +18,14 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-
-import com.sun.javafx.binding.StringFormatter;
 
 import bookshelf.Book;
 import bookshelf.Database;
@@ -42,7 +37,7 @@ public class FolderPageUI implements Runnable {
 	private JPanel panelSouth;
 	private JButton preButton;
 	private JButton nextButton;
-	private JTextField emptyLabel2,emptyLabel3,emptyLabel4;
+	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
 	private JLabel emptyLabel;
 	private ImageIcon img;
 	protected List<JButton> bookListButton;
@@ -53,7 +48,7 @@ public class FolderPageUI implements Runnable {
 	private int havePage = 0;
 	private int starterPageNum = 0;
 	private JLabel woodPic;
-	private int[] starterPage = { 0, 8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96 };
+	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
 
 	public FolderPageUI(String filter) {
 		this.filter = filter;
@@ -63,12 +58,15 @@ public class FolderPageUI implements Runnable {
 
 	private void initComponents() {
 		frame = new JFrame("Search Result");
-		frame.setSize(800, 800);
-		emptyLabel = new JLabel("Page : "+currentPage);
-		emptyLabel2 = new JTextField(110);
-		emptyLabel3 = new JTextField(110);
-		emptyLabel4 = new JTextField(110);
+		frame.setSize(1000, 900);
+		frame.setPreferredSize(new Dimension(1000, 900));
+		emptyLabel = new JLabel("Page : " + currentPage);
+		emptyLabel2 = new JTextField(100);
+		emptyLabel3 = new JTextField(100);
+		emptyLabel4 = new JTextField(100);
+		emptyLabel5 = new JTextField(100);
 		img = new ImageIcon("Picture//backGR.jpg");
+		img = new ImageIcon(img.getImage().getScaledInstance(1000, 800, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
 		panelSouth = new JPanel();
 		nextButton = new JButton();
@@ -80,7 +78,7 @@ public class FolderPageUI implements Runnable {
 			e.printStackTrace();
 		}
 
-		woodPic.setPreferredSize(new Dimension(1200, 20));
+		woodPic.setPreferredSize(new Dimension(400, 25));
 		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
 		Image imgPreButt = iconPre.getImage();
 		Image newimg = imgPreButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -90,13 +88,13 @@ public class FolderPageUI implements Runnable {
 		Image imgNextButt = iconNext.getImage();
 		Image newimg2 = imgNextButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		iconNext = new ImageIcon(newimg2);
-		
-		emptyLabel.setPreferredSize(new Dimension(90,40));
-		emptyLabel.setFont(new Font("Arial",0,20));
+
+		emptyLabel.setPreferredSize(new Dimension(90, 40));
+		emptyLabel.setFont(new Font("Arial", 0, 20));
 		emptyLabel.setForeground(Color.WHITE);
 		emptyLabel.setHorizontalTextPosition(SwingConstants.CENTER);
 		emptyLabel.setVerticalTextPosition(SwingConstants.NORTH);
-		
+
 		preButton.setIcon(iconPre);
 		preButton.setPreferredSize((new Dimension(100, 100)));
 		preButton.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -113,7 +111,7 @@ public class FolderPageUI implements Runnable {
 		preButton.setEnabled(false);
 		if (bookList.size() >= 8) {
 			nextButton.setEnabled(true);
-		}else{
+		} else {
 			nextButton.setEnabled(false);
 		}
 
@@ -145,13 +143,13 @@ public class FolderPageUI implements Runnable {
 		backGLabel.add(emptyLabel3);
 		int countPerLine = 0;
 		for (; start < bookListButton.size(); start++) {
-			if (countPerLine == 8) {
+			if (countPerLine == 6) {
 				emptyLabel2.setBackground(new Color(180, 115, 73));
 				emptyLabel2.setEditable(false);
 				emptyLabel2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				backGLabel.add(emptyLabel2);
 				break;
-			} else if (countPerLine == 4) {
+			} else if (countPerLine == 3) {
 				emptyLabel4.setBackground(new Color(180, 115, 73));
 				emptyLabel4.setEditable(false);
 				emptyLabel4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
@@ -161,11 +159,17 @@ public class FolderPageUI implements Runnable {
 			backGLabel.setLayout(new FlowLayout());
 			but.setHorizontalTextPosition(SwingConstants.CENTER);
 			but.setFont(new Font("Arial", 0, 35));
-			but.setActionCommand(""+start);
+			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
 			backGLabel.add(but, BorderLayout.CENTER);
-			backGLabel.add(new JLabel("            "));
+			backGLabel.add(new JLabel("                          "));
 			countPerLine++;
+			if (start == bookListButton.size() - 1) {
+				emptyLabel5.setBackground(new Color(180, 115, 73));
+				emptyLabel5.setEditable(false);
+				emptyLabel5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+				backGLabel.add(emptyLabel5);
+			}
 		}
 		return backGLabel;
 	}
@@ -179,29 +183,29 @@ public class FolderPageUI implements Runnable {
 
 		ImageIcon iconBook = new ImageIcon("Picture//sampleBook.jpg");
 		Image imgBook = iconBook.getImage();
-		Image newimg3 = imgBook.getScaledInstance(250, 380, Image.SCALE_SMOOTH);
+		Image newimg3 = imgBook.getScaledInstance(170, 240, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
 
 		for (Book book : temp) {
 			JButton bookBut = new JButton(book.getName(), iconBook);
 			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 			bookBut.setVerticalAlignment(SwingConstants.CENTER);
-			bookBut.setPreferredSize(new Dimension(250, 380));
+			bookBut.setPreferredSize(new Dimension(170, 240));
 			String toolTip = String.format("Description : %s", book.getDescription());
 			bookBut.setToolTipText(toolTip);
 			bookListButton.add(bookBut);
 		}
-		havePage = bookList.size() / 8;
+		havePage = bookList.size() / 6;
 	}
-	
-	private void openFile(String fileLocation){
+
+	private void openFile(String fileLocation) {
 		if (Desktop.isDesktopSupported()) {
-		    try {
-		        File myFile = new File(fileLocation);
-		        Desktop.getDesktop().open(myFile);
-		    } catch (IOException|IllegalArgumentException ex) {
-		    	System.out.println("File Not Found");
-		    }
+			try {
+				File myFile = new File(fileLocation);
+				Desktop.getDesktop().open(myFile);
+			} catch (IOException | IllegalArgumentException ex) {
+				System.out.println("File Not Found");
+			}
 		}
 	}
 
@@ -222,20 +226,20 @@ public class FolderPageUI implements Runnable {
 			if (e.getSource() == nextButton) {
 				preButton.setEnabled(true);
 				currentPage++;
-				emptyLabel.setText("Page : "+currentPage);
+				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(1330, 1000);
+				frame.setSize(1000, 900);
 				if (currentPage + 1 >= havePage) {
 					nextButton.setEnabled(false);
 				}
 			} else if (e.getSource() == preButton) {
 				nextButton.setEnabled(true);
 				currentPage--;
-				emptyLabel.setText("Page : "+currentPage);
+				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(1330, 999);
+				frame.setSize(1000, 900);
 				if (currentPage <= 1) {
 					preButton.setEnabled(false);
 				}
@@ -243,14 +247,15 @@ public class FolderPageUI implements Runnable {
 		}
 
 	}
-	public class BookClickAction implements ActionListener{
+
+	public class BookClickAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String fileLocation = bookList.get((Integer.parseInt(e.getActionCommand()))).getLocation();
 			openFile(fileLocation);
 		}
-		
+
 	}
 
 }
