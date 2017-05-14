@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * The Class that use for manage the database of this program.
@@ -86,11 +87,21 @@ public class Database {
 		close();
 	}
 
+	public void removeBook(String name, String des) {
+		for (int x = 0; x < bookList.size(); x++) {
+			if (bookList.get(x).getName().equalsIgnoreCase(name)
+					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
+				System.out.println("We are in");
+				bookList.remove(x);
+			}
+		}
+	}
+
 	/**
 	 * The method that use for write the data to the database when the program
 	 * is closed.
 	 */
-	private void close() {
+	public void close() {
 		try {
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
@@ -122,5 +133,26 @@ public class Database {
 
 	public void setTypeList(List<String> typeList) {
 		this.typeList = typeList;
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		Database d = new Database();
+		while (true) {
+			System.out.println("Add ? : ");
+			if(sc.nextLine().equals("q")){
+				break;
+			}
+			System.out.println("File name : ");
+			String name = sc.nextLine();
+			System.out.println("File Type : ");
+			String type = sc.nextLine();
+			System.out.println("File Location : ");
+			String loca = sc.nextLine();
+			System.out.println("File Description :");
+			String des = sc.nextLine();
+			d.add(name, type, loca, des);
+			d.close();
+		}
 	}
 }

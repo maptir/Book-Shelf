@@ -2,11 +2,16 @@ package bookshelf.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,6 +28,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -54,6 +60,8 @@ public class FolderPageUI implements Runnable {
 	private int starterPageNum = 0;
 	private JLabel woodPic;
 	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
+	private boolean isDoubleClick = false;
+	private Database data;
 
 	public FolderPageUI(String filter) {
 		this.filter = filter;
@@ -138,9 +146,9 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setVerticalAlignment(SwingConstants.NORTH);
 		garbageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		garbageLabel.setBackground(new Color(38, 30, 19));
-		garbageLabel.setDropTarget(new DropTarget());
+		garbageLabel.setTransferHandler(new DropOnGarbage());
 
-		if (bookList.size() >= 8) {
+		if (bookList.size() >= 6) {
 			nextButton.setEnabled(true);
 		} else {
 			nextButton.setEnabled(false);
@@ -196,7 +204,17 @@ public class FolderPageUI implements Runnable {
 			but.setFont(new Font("Arial", 0, 35));
 			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
-			
+			but.addMouseListener(new doubleClickAction());
+			but.setTransferHandler(new DragBookAction(Integer.toString(start)));
+			but.addMouseMotionListener(new MouseAdapter() {
+				@Override
+				public void mouseDragged(MouseEvent e) {
+					JButton button = (JButton) e.getSource();
+					TransferHandler handle = button.getTransferHandler();
+					handle.exportAsDrag(button, e, TransferHandler.COPY);
+				}
+			});
+
 			backGLabel.add(but, BorderLayout.CENTER);
 			backGLabel.add(new JLabel("            "));
 			countPerLine++;
@@ -207,26 +225,26 @@ public class FolderPageUI implements Runnable {
 				backGLabel.add(emptyLabel5);
 			}
 		}
-//		backGLabel.add(addBookButton);
-//		backGLabel.add(new JLabel(
-//				"                                                                                                                                                                                                                         "));
-//		backGLabel.add(garbageLabel);
+		// backGLabel.add(addBookButton);
+		// backGLabel.add(new JLabel(
+		// " "));
+		// backGLabel.add(garbageLabel);
 		return backGLabel;
 	}
 
 	private void databaseSetUp() {
-		Database data = new Database();
+		data = new Database();
 		bookListButton = new ArrayList<>();
 		bookList = data.getBookList();
 		Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
-		List<Book> temp = bookList.stream().filter(fil).collect(Collectors.toList());
+		bookList = bookList.stream().filter(fil).collect(Collectors.toList());
 
 		ImageIcon iconBook = new ImageIcon("Picture//sampleBook.jpg");
 		Image imgBook = iconBook.getImage();
 		Image newimg3 = imgBook.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
 
-		for (Book book : temp) {
+		for (Book book : bookList) {
 			JButton bookBut = new JButton(book.getName(), iconBook);
 			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 			bookBut.setVerticalAlignment(SwingConstants.CENTER);
@@ -269,7 +287,7 @@ public class FolderPageUI implements Runnable {
 				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(900, 700);
+				frame.validate();
 				if (currentPage + 1 >= havePage) {
 					nextButton.setEnabled(false);
 				}
@@ -279,7 +297,7 @@ public class FolderPageUI implements Runnable {
 				emptyLabel.setText("Page : " + currentPage);
 				panelCenter.removeAll();
 				panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.setSize(900, 700);
+				frame.validate();
 				if (currentPage <= 1) {
 					preButton.setEnabled(false);
 				}
@@ -292,10 +310,92 @@ public class FolderPageUI implements Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			if(isDoubleClick){
 			String fileLocation = bookList.get((Integer.parseInt(e.getActionCommand()))).getLocation();
 			openFile(fileLocation);
+			isDoubleClick = false;
+			}
+		}
+	}
+	
+	public class doubleClickAction extends MouseAdapter{
+		@Override
+	    public void mouseClicked(MouseEvent e){
+	        if(e.getClickCount()==1){
+	        	isDoubleClick=true;
+	        }
+	    }
+	}
+
+	public class DragBookAction extends TransferHandler {
+		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
+		private String value;
+
+		public DragBookAction(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		@Override
+		public int getSourceActions(JComponent c) {
+			return DnDConstants.ACTION_COPY_OR_MOVE;
+		}
+
+		@Override
+		protected Transferable createTransferable(JComponent c) {
+			Transferable t = new StringSelection(getValue());
+			return t;
+		}
+
+		@Override
+		protected void exportDone(JComponent source, Transferable data, int action) {
+			super.exportDone(source, data, action);
+			// Decide what to do after the drop has been accepted
 		}
 
 	}
 
+	public class DropOnGarbage extends TransferHandler {
+		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
+
+		@Override
+		public boolean canImport(TransferHandler.TransferSupport support) {
+			return support.isDataFlavorSupported(SUPPORTED_DATE_FLAVOR);
+		}
+
+		@Override
+		public boolean importData(TransferHandler.TransferSupport support) {
+			boolean accept = false;
+			if (canImport(support)) {
+				try {
+					Transferable t = support.getTransferable();
+					Object value = t.getTransferData(SUPPORTED_DATE_FLAVOR);
+					if (value instanceof String) {
+						Component component = support.getComponent();
+						if (component instanceof JLabel) {
+							System.out.println(value);
+							bookListButton.remove(Integer.parseInt(value.toString()));
+							System.out.println(bookListButton.size());
+							panelCenter.removeAll();
+							panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
+							data.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),bookList.get(Integer.parseInt(value.toString())).getDescription());
+							data.close();
+							bookList.remove(Integer.parseInt(value.toString()));
+							if(bookList.size()<=6){
+								nextButton.setEnabled(false);
+							}
+							frame.validate();
+							accept = true;
+						}
+					}
+				} catch (Exception exp) {
+					exp.printStackTrace();
+				}
+			}
+			return accept;
+		}
+	}
 }
