@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * The Class that use for manage the database of this program.
@@ -38,9 +39,14 @@ public class Database {
 		try {
 			input = new FileInputStream(file);
 			inputForType = new FileInputStream(typeFile);
-			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
-			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
+			BufferedReader breader = new BufferedReader(new InputStreamReader(
+					input));
+			BufferedReader breaderForType = new BufferedReader(
+					new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
+				if(line.equals("")){
+					continue;
+				}
 				temp = line.split(",");
 
 				// Fix spliter problem.
@@ -72,8 +78,10 @@ public class Database {
 	 * @param fileType
 	 * @param fileLocation
 	 */
-	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
+	public void add(String filename, String fileType, String fileLocation,
+			String fileDescription) {
 		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
+		close();
 	}
 
 	/**
@@ -86,17 +94,30 @@ public class Database {
 		close();
 	}
 
+	public void removeBook(String name, String des) {
+		for (int x = 0; x < bookList.size(); x++) {
+			if (bookList.get(x).getName().equalsIgnoreCase(name)
+					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
+				System.out.println("We are in");
+				bookList.remove(x);
+			}
+		}
+		close();
+	}
+
 	/**
 	 * The method that use for write the data to the database when the program
 	 * is closed.
 	 */
-	private void close() {
+	public void close() {
 		try {
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
-				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getType() + ","
-						+ bookList.get(x).getLocation() + "," + bookList.get(x).getDescription() + "\n").getBytes();
+				byte[] byteTemp = (bookList.get(x).getName() + ","
+						+ bookList.get(x).getType() + ","
+						+ bookList.get(x).getLocation() + ","
+						+ bookList.get(x).getDescription() + "\n").getBytes();
 				output.write(byteTemp);
 			}
 			for (int x = 0; x < typeList.size(); x++) {
@@ -122,5 +143,26 @@ public class Database {
 
 	public void setTypeList(List<String> typeList) {
 		this.typeList = typeList;
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		Database d = new Database();
+		while (true) {
+			System.out.println("Add ? : ");
+			if (sc.nextLine().equals("q")) {
+				break;
+			}
+			System.out.println("File name : ");
+			String name = sc.nextLine();
+			System.out.println("File Type : ");
+			String type = sc.nextLine();
+			System.out.println("File Location : ");
+			String loca = sc.nextLine();
+			System.out.println("File Description :");
+			String des = sc.nextLine();
+			d.add(name, type, loca, des);
+			d.close();
+		}
 	}
 }

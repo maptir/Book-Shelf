@@ -14,7 +14,6 @@ import javax.swing.border.EmptyBorder;
 
 
 
-
 public class TestBookUI implements Runnable {
 	private JFrame frame;
 	private JLabel background;

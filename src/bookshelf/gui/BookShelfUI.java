@@ -36,16 +36,19 @@ public class BookShelfUI extends JFrame {
 		this.setSize(900, 700);
 		this.setLocation(230, 20);
 
-		getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.orange));
+		getRootPane().setBorder(
+				BorderFactory.createMatteBorder(4, 4, 4, 4, Color.orange));
 		logo = ImageIO.read(new File("Picture//Logo.png"));
 		addImage = ImageIO.read(new File("Picture//Add.png"));
 		addType = ImageIO.read(new File("Picture//AddBook.png"));
 		// backGround = ImageIO.read(new File("Picture//background.jpg"));
 		// backGroundLabel = new JLabel(new ImageIcon(backGround));
 		// getRootPane().setContentPane(backGroundLabel);
-		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
+		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
 		addImageadd = new JButton();
-		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(90, 70, Image.SCALE_DEFAULT)));
+		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(90, 70,
+				Image.SCALE_DEFAULT)));
 		getContentPane().setLayout(new FlowLayout());
 
 		panel1 = new JPanel();
@@ -72,7 +75,8 @@ public class BookShelfUI extends JFrame {
 			addNewFolder(type);
 
 		addFolder = new JButton();
-		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
+		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
 		addFolder.setBorder(new EmptyBorder(0, 30, 0, 0));
 		panelAdd.add(addFolder);
 		panelAdd.add(addImageadd);
@@ -89,7 +93,8 @@ public class BookShelfUI extends JFrame {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
 				if (newFolder == null)
 					return;
-				if (newFolder.chars().allMatch(Character::isLetter) && !data.getTypeList().contains(newFolder)) {
+				if (newFolder.chars().allMatch(Character::isLetter)
+						&& !data.getTypeList().contains(newFolder)) {
 					addNewFolder(newFolder);
 					data.addType(newFolder);
 				}
@@ -98,7 +103,8 @@ public class BookShelfUI extends JFrame {
 
 		panel1.setBorder(new EmptyBorder(30, 30, 30, 30));
 		panel2.setBorder(new EmptyBorder(30, 30, 30, 30));
-		panelButton.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
+		panelButton.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3,
+				Color.BLACK));
 		panelButton.setPreferredSize(new Dimension(600, 500));
 		panelButton.setLayout(new FlowLayout());
 		panelButton.add(panel1, BorderLayout.WEST);
@@ -110,14 +116,15 @@ public class BookShelfUI extends JFrame {
 		panelAll.add(scrollPane, BorderLayout.CENTER);
 		panelAll.add(panelAdd, BorderLayout.EAST);
 
-		this.add(panelAll);
+		getContentPane().add(panelAll);
 	}
 
 	public void addNewFolder(String newFolder) {
 		JButton newButton = new JButton(newFolder);
 		newButton.setFont(new Font("Rockwell", 0, 20));
 		try {
-			Image img = ImageIO.read(new File("Picture//folder.png")).getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+			Image img = ImageIO.read(new File("Picture//folder.png"))
+					.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
 			newButton.setIcon(new ImageIcon(img));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -138,13 +145,16 @@ public class BookShelfUI extends JFrame {
 		ActionListener action = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				JButton button = (JButton) e.getSource();
+				FolderPageUI folder = new FolderPageUI(button.getText());
+				folder.run();
 			}
 		};
 		return action;
 	}
 
-	public void addType(String aName, String aType, String aLocation, String aDescription) {
+	public void addType(String aName, String aType, String aLocation,
+			String aDescription) {
 		String[] typeArr = {};
 		typeArr = data.getTypeList().toArray(typeArr);
 		JComboBox<String> cBox = new JComboBox<>(typeArr);
@@ -159,8 +169,9 @@ public class BookShelfUI extends JFrame {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+			chooser.setFileFilter(new FileNameExtensionFilter(
+					"PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+					"pptx"));
 			int result = chooser.showOpenDialog(BookShelfUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
@@ -189,7 +200,8 @@ public class BookShelfUI extends JFrame {
 		panel.add(panelLoca);
 		panel.add(panelDes);
 
-		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
+		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book",
+				JOptionPane.OK_CANCEL_OPTION);
 
 		if (JOptionPane.OK_OPTION == choose) {
 			String name = textName.getText();
@@ -197,9 +209,11 @@ public class BookShelfUI extends JFrame {
 			String location = textLoc.getText();
 			String description = textDesc.getText();
 			if (name.length() == 0) {
-				JOptionPane.showMessageDialog(null, "You forget to input a name !");
+				JOptionPane.showMessageDialog(null,
+						"You forget to input a name !");
 				addType(name, type, location, description);
-			} else if (!location.matches("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?")) {
+			} else if (!location
+					.matches("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?")) {
 				JOptionPane.showMessageDialog(null, "Invalid Path File");
 				addType(name, type, location, description);
 			} else if (description.length() == 0) {
