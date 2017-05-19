@@ -135,6 +135,7 @@ public class FolderPageUI implements Runnable {
 		nextButton.setHorizontalAlignment(SwingConstants.CENTER);
 		nextButton.setBackground(new Color(38, 30, 19));
 
+		addBookButton.setBorderPainted(false);
 		addBookButton.setIcon(iconAddBook);
 		addBookButton.setPreferredSize((new Dimension(70, 70)));
 		addBookButton.setVerticalAlignment(SwingConstants.NORTH);
@@ -204,6 +205,7 @@ public class FolderPageUI implements Runnable {
 			but.setFont(new Font("Arial", 0, 35));
 			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
+
 			but.addMouseListener(new doubleClickAction());
 			but.setTransferHandler(new DragBookAction(Integer.toString(start)));
 			but.addMouseMotionListener(new MouseAdapter() {
@@ -214,6 +216,7 @@ public class FolderPageUI implements Runnable {
 					handle.exportAsDrag(button, e, TransferHandler.COPY);
 				}
 			});
+
 
 			backGLabel.add(but, BorderLayout.CENTER);
 			backGLabel.add(new JLabel("            "));
@@ -311,7 +314,7 @@ public class FolderPageUI implements Runnable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(isDoubleClick){
-			String fileLocation = bookList.get((Integer.parseInt(e.getActionCommand()))).getLocation();
+			String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
 			openFile(fileLocation);
 			isDoubleClick = false;
 			}
