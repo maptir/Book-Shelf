@@ -1,20 +1,4 @@
-<<<<<<< HEAD
 Jacky,Comic,qwer,asd
 Fame,Comic,asdf,asdf
 Lab13-1-Generics,Education,C:\Users\User\Downloads\Lab13-1-Generics.pdf,Lab13 is aboout generics in java
 Lab13-OCSF-Framework,Education,C:\Users\User\Downloads\Lab13-OCSF-Framework.pdf,Lab13 is OCSF in java
-
-=======
-aMP,ASD,,dsa
-fds,df,fd,s
-ggg,soadkds,xzvdzv,ddd
-Game,Comic,asdf,dsaf
-Ji,Comic,adsf,sadf
-MM,Comic,dsaf,fad
-A,Comic,dsa,adsfd
-B,Comic,asda,dsaf
-L,Comic,dsf,adsfd
-DF,Comic,ads,dsf
-k,Comic,ads,adsf
-PPkk,Comic,dsaf,dsafs
->>>>>>> 2bf42abcee656ef68ba4e52778b69fc32f9fd868
