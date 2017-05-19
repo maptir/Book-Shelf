@@ -195,7 +195,6 @@ public class FolderPageUI implements Runnable {
 		int countPerLine = 0;
 		// case remove last book of page
 		if (isRemoveState && start >= 6 && start - bookListButton.size() == 0) {
-			System.out.println(55);
 			currentPage--;
 			updateFrame(start - 6);
 		}
