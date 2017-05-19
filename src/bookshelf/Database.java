@@ -42,8 +42,10 @@ public class Database {
 			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
 			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
+				if(line==""){
+					continue;
+				}
 				temp = line.split(",");
-
 				// Fix spliter problem.
 				if (temp.length > 4) {
 					for (int x = 4; x < temp.length; x++) {
@@ -91,7 +93,6 @@ public class Database {
 		for (int x = 0; x < bookList.size(); x++) {
 			if (bookList.get(x).getName().equalsIgnoreCase(name)
 					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
-				System.out.println("We are in");
 				bookList.remove(x);
 			}
 		}
@@ -140,7 +141,7 @@ public class Database {
 		Database d = new Database();
 		while (true) {
 			System.out.println("Add ? : ");
-			if(sc.nextLine().equals("q")){
+			if (sc.nextLine().equals("q")) {
 				break;
 			}
 			System.out.println("File name : ");
