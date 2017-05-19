@@ -391,6 +391,7 @@ public class FolderPageUI implements Runnable {
 							accept = true;
 						}
 					}
+					
 				} catch (Exception exp) {
 					exp.printStackTrace();
 				}

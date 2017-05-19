@@ -1,5 +1,2 @@
-Fame,Comic,asdf,adsfg
-Ton,Comic,dasf,asdfg
-Amp,Comic,adsf,adsf
-GaiThod,Comic,sdaf,aDSF
 aMP,ASD,,dsa
+sdfdf,Comic,sdaf,wer
