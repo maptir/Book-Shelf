@@ -42,7 +42,7 @@ public class Database {
 			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
 			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
-				if(line==""){
+				if (line.equals("")) {
 					continue;
 				}
 				temp = line.split(",");

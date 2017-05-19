@@ -40,6 +40,12 @@ import javax.swing.border.EmptyBorder;
 import bookshelf.Book;
 import bookshelf.Database;
 
+/**
+ * The folder page of this program.
+ * 
+ * @author Triwith Mutitakul
+ *
+ */
 public class FolderPageUI implements Runnable {
 	private Database data;
 	protected List<JButton> bookListButton;
@@ -65,7 +71,6 @@ public class FolderPageUI implements Runnable {
 	private JLabel emptyLabel, garbageLabel;
 	private ImageIcon img;
 	private JLabel woodPic;
-	
 
 	public FolderPageUI(String filter) {
 		this.filter = filter;
@@ -185,6 +190,12 @@ public class FolderPageUI implements Runnable {
 
 	}
 
+	/**
+	 * The method is use for create the page.
+	 * 
+	 * @param start
+	 * @return label of page.
+	 */
 	private JLabel createBookPerPage(int start) {
 		backGLabel = new JLabel(img);
 		backGLabel.setLayout(new FlowLayout());
@@ -241,6 +252,9 @@ public class FolderPageUI implements Runnable {
 		return backGLabel;
 	}
 
+	/**
+	 * The method that use for read the database file.
+	 */
 	private void databaseSetUp() {
 		data = new Database();
 		bookListButton = new ArrayList<>();
@@ -258,13 +272,19 @@ public class FolderPageUI implements Runnable {
 			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 			bookBut.setVerticalAlignment(SwingConstants.CENTER);
 			bookBut.setPreferredSize(new Dimension(140, 200));
-			String toolTip = String.format("<html><p width=\"250\">" +"%s<br>Type : %s<br>File Location : %s<br>%s",book.getName(),book.getType(),book.getLocation(),book.getLocation()+"</p></html>");
+			String toolTip = String.format("<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>%s",
+					book.getName(), book.getType(), book.getLocation(), book.getLocation() + "</p></html>");
 			bookBut.setToolTipText(toolTip);
 			bookListButton.add(bookBut);
 		}
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
 	}
 
+	/**
+	 * This method is use for open the file.
+	 * 
+	 * @param fileLocation
+	 */
 	private void openFile(String fileLocation) {
 		if (Desktop.isDesktopSupported()) {
 			try {
@@ -276,6 +296,9 @@ public class FolderPageUI implements Runnable {
 		}
 	}
 
+	/**
+	 * This method is use for update the frame.
+	 */
 	public void updateFrame() {
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
 		emptyLabel.setText("Page : " + currentPage);
@@ -290,6 +313,11 @@ public class FolderPageUI implements Runnable {
 		frame.validate();
 	}
 
+	/**
+	 * This method is use for update the frame by input number of starter book.
+	 * 
+	 * @param start
+	 */
 	public void updateFrame(int start) {
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
@@ -297,6 +325,9 @@ public class FolderPageUI implements Runnable {
 		frame.validate();
 	}
 
+	/**
+	 * This method is use for run the program.
+	 */
 	@Override
 	public void run() {
 		frame.setVisible(true);
@@ -307,6 +338,12 @@ public class FolderPageUI implements Runnable {
 		r.run();
 	}
 
+	/**
+	 * This class is the ActionListener of next and previous button.
+	 * 
+	 * @author Triwith Mutitakul
+	 *
+	 */
 	public class ButtonAction implements ActionListener {
 
 		@Override
@@ -325,6 +362,12 @@ public class FolderPageUI implements Runnable {
 
 	}
 
+	/**
+	 * This class is the ActionListener of each book.
+	 * 
+	 * @author Triwith Mutitakul
+	 *
+	 */
 	public class BookClickAction implements ActionListener {
 
 		@Override
@@ -338,6 +381,12 @@ public class FolderPageUI implements Runnable {
 		}
 	}
 
+	/**
+	 * This class is the Mouse action of each book.
+	 * 
+	 * @author Triwith Mutitakul
+	 *
+	 */
 	public class doubleClickAction extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -347,6 +396,12 @@ public class FolderPageUI implements Runnable {
 		}
 	}
 
+	/**
+	 * This class is the ActionListener that use for drag the book.
+	 * 
+	 * @author Triwith Mutitakul
+	 *
+	 */
 	public class DragBookAction extends TransferHandler {
 		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
 		private String value;
@@ -378,6 +433,12 @@ public class FolderPageUI implements Runnable {
 
 	}
 
+	/**
+	 * This class is the ActionListener that use for drop the book.
+	 * 
+	 * @author Triwith Mutitakul
+	 *
+	 */
 	public class DropOnGarbage extends TransferHandler {
 		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
 
