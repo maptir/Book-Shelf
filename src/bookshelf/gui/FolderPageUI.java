@@ -12,7 +12,6 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DnDConstants;
-import java.awt.dnd.DropTarget;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -43,7 +42,21 @@ import bookshelf.Book;
 import bookshelf.Database;
 
 public class FolderPageUI implements Runnable {
+	private Database data;
+	protected List<JButton> bookListButton;
+	protected List<Book> bookList;
+	protected List<JLabel> eachPerPage;
+	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66,
+			72 };
+	private int currentPage = 1;
+	private int havePage = 0;
+	private int starterPageNum = 0;
+	private String filter;
+	private boolean isDoubleClick = false;
+	private boolean isRemoveState = false;
+
 	private JFrame frame;
+	private JFrame detailFrame;
 	private JLabel backGLabel;
 	private JPanel panelCenter;
 	private JPanel panelSouth;
@@ -53,18 +66,7 @@ public class FolderPageUI implements Runnable {
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
 	private JLabel emptyLabel, garbageLabel;
 	private ImageIcon img;
-	protected List<JButton> bookListButton;
-	protected List<Book> bookList;
-	protected List<JLabel> eachPerPage;
-	private String filter;
-	private int currentPage = 1;
-	private int havePage = 0;
-	private int starterPageNum = 0;
 	private JLabel woodPic;
-	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66,
-			72 };
-	private boolean isDoubleClick = false;
-	private Database data;
 
 	public FolderPageUI(String filter) {
 		this.filter = filter;
@@ -73,7 +75,11 @@ public class FolderPageUI implements Runnable {
 	}
 
 	private void initComponents() {
+		UIManager.put("ToolTip.background", Color.BLACK);
+		UIManager.put("ToolTip.foreground", Color.WHITE);
 		frame = new JFrame("Search Result");
+		detailFrame = new JFrame();
+		detailFrame.setUndecorated(true);
 		frame.setSize(900, 700);
 		frame.setPreferredSize(new Dimension(900, 700));
 		emptyLabel = new JLabel("Page : " + currentPage);
@@ -156,7 +162,7 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setBackground(new Color(38, 30, 19));
 		garbageLabel.setTransferHandler(new DropOnGarbage());
 
-		if (bookList.size() >= 6) {
+		if (bookList.size() > 6) {
 			nextButton.setEnabled(true);
 		} else {
 			nextButton.setEnabled(false);
@@ -184,9 +190,6 @@ public class FolderPageUI implements Runnable {
 
 		frame.add(panelCenter, BorderLayout.CENTER);
 		frame.add(panelSouth, BorderLayout.SOUTH);
-		// frame.pack();
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 
 	private JLabel createBookPerPage(int start) {
@@ -197,6 +200,12 @@ public class FolderPageUI implements Runnable {
 		emptyLabel3.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		backGLabel.add(emptyLabel3);
 		int countPerLine = 0;
+		// case remove last book of page
+		if (isRemoveState && start >= 6 && start - bookListButton.size() == 0) {
+			System.out.println(55);
+			currentPage--;
+			updateFrame(start - 6);
+		}
 		for (; start < bookListButton.size(); start++) {
 			if (countPerLine == 6) {
 				emptyLabel2.setBackground(new Color(180, 115, 73));
@@ -218,7 +227,6 @@ public class FolderPageUI implements Runnable {
 			but.setFont(new Font("Arial", 0, 35));
 			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
-
 			but.addMouseListener(new doubleClickAction());
 			but.setTransferHandler(new DragBookAction(Integer.toString(start)));
 			but.addMouseMotionListener(new MouseAdapter() {
@@ -241,10 +249,6 @@ public class FolderPageUI implements Runnable {
 				backGLabel.add(emptyLabel5);
 			}
 		}
-		// backGLabel.add(addBookButton);
-		// backGLabel.add(new JLabel(
-		// " "));
-		// backGLabel.add(garbageLabel);
 		return backGLabel;
 	}
 
@@ -265,12 +269,14 @@ public class FolderPageUI implements Runnable {
 			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 			bookBut.setVerticalAlignment(SwingConstants.CENTER);
 			bookBut.setPreferredSize(new Dimension(140, 200));
-			String toolTip = String.format("Description : %s",
-					book.getDescription());
+			String toolTip = String.format("<html><p width=\"250\">"
+					+ "%s<br>Type : %s<br>File Location : %s<br>%s",
+					book.getName(), book.getType(), book.getLocation(),
+					book.getLocation() + "</p></html>");
 			bookBut.setToolTipText(toolTip);
 			bookListButton.add(bookBut);
 		}
-		havePage = bookList.size() / 6;
+		havePage = (int) Math.ceil(bookList.size() / 6.0);
 	}
 
 	private void openFile(String fileLocation) {
@@ -282,6 +288,27 @@ public class FolderPageUI implements Runnable {
 				System.out.println("File Not Found");
 			}
 		}
+	}
+
+	public void updateFrame() {
+		havePage = (int) Math.ceil(bookList.size() / 6.0);
+		emptyLabel.setText("Page : " + currentPage);
+		panelCenter.removeAll();
+		panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
+		if (currentPage <= 1) {
+			preButton.setEnabled(false);
+		}
+		if (currentPage + 1 > havePage) {
+			nextButton.setEnabled(false);
+		}
+		frame.validate();
+	}
+
+	public void updateFrame(int start) {
+		emptyLabel.setText("Page : " + currentPage);
+		panelCenter.removeAll();
+		panelCenter.add(createBookPerPage(start));
+		frame.validate();
 	}
 
 	@Override
@@ -302,28 +329,15 @@ public class FolderPageUI implements Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			isRemoveState = false;
 			if (e.getSource() == nextButton) {
 				preButton.setEnabled(true);
 				currentPage++;
-				emptyLabel.setText("Page : " + currentPage);
-				panelCenter.removeAll();
-				panelCenter
-						.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.validate();
-				if (currentPage + 1 >= havePage) {
-					nextButton.setEnabled(false);
-				}
+				updateFrame();
 			} else if (e.getSource() == preButton) {
 				nextButton.setEnabled(true);
 				currentPage--;
-				emptyLabel.setText("Page : " + currentPage);
-				panelCenter.removeAll();
-				panelCenter
-						.add(createBookPerPage(starterPage[currentPage - 1]));
-				frame.validate();
-				if (currentPage <= 1) {
-					preButton.setEnabled(false);
-				}
+				updateFrame();
 			}
 		}
 
@@ -333,6 +347,7 @@ public class FolderPageUI implements Runnable {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			isRemoveState = false;
 			if (isDoubleClick) {
 				String fileLocation = bookList.get(
 						Integer.parseInt(e.getActionCommand())).getLocation();
@@ -401,13 +416,8 @@ public class FolderPageUI implements Runnable {
 					if (value instanceof String) {
 						Component component = support.getComponent();
 						if (component instanceof JLabel) {
-							System.out.println(value);
 							bookListButton.remove(Integer.parseInt(value
 									.toString()));
-							System.out.println(bookListButton.size());
-							panelCenter.removeAll();
-							panelCenter
-									.add(createBookPerPage(starterPage[currentPage - 1]));
 							data.removeBook(
 									bookList.get(
 											Integer.parseInt(value.toString()))
@@ -420,7 +430,8 @@ public class FolderPageUI implements Runnable {
 							if (bookList.size() <= 6) {
 								nextButton.setEnabled(false);
 							}
-							frame.validate();
+							isRemoveState = true;
+							updateFrame();
 							accept = true;
 						}
 					}
