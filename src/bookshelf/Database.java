@@ -27,6 +27,7 @@ public class Database {
 	private File typeFile = new File("TypeDatabase.txt");
 	private String line;
 	private String[] temp;
+	private BookFactory bookFactory = BookFactory.getInstances();;
 
 	public Database() {
 		readFromDatabase();
@@ -52,7 +53,7 @@ public class Database {
 						temp[3] += "," + temp[x];
 					}
 				}
-				bookList.add(new Book(temp[0], temp[1], temp[2], temp[3]));
+				bookFactory.add(temp[0], temp[1], temp[2], temp[3]);
 			}
 			while ((line = breaderForType.readLine()) != null) {
 				temp = line.split(",");
@@ -62,6 +63,7 @@ public class Database {
 					}
 				}
 			}
+			bookList = bookFactory.getBookList();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -76,7 +78,8 @@ public class Database {
 	 * @param fileLocation
 	 */
 	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
-		bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
+		bookFactory.add(filename, fileType, fileLocation, fileDescription);
+		close();
 	}
 
 	/**
@@ -90,12 +93,8 @@ public class Database {
 	}
 
 	public void removeBook(String name, String des) {
-		for (int x = 0; x < bookList.size(); x++) {
-			if (bookList.get(x).getName().equalsIgnoreCase(name)
-					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
-				bookList.remove(x);
-			}
-		}
+		bookFactory.removeBook(name, des);
+		close();
 	}
 
 	/**
@@ -104,6 +103,7 @@ public class Database {
 	 */
 	public void close() {
 		try {
+			bookList = bookFactory.getBookList();
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
@@ -124,16 +124,8 @@ public class Database {
 		return bookList;
 	}
 
-	public void setBookList(List<Book> bookList) {
-		this.bookList = bookList;
-	}
-
 	public List<String> getTypeList() {
 		return typeList;
-	}
-
-	public void setTypeList(List<String> typeList) {
-		this.typeList = typeList;
 	}
 
 	public static void main(String[] args) {
@@ -152,7 +144,7 @@ public class Database {
 			String loca = sc.nextLine();
 			System.out.println("File Description :");
 			String des = sc.nextLine();
-			d.add(name, type, loca, des);
+			BookFactory.getInstances().add(name, type, loca, des);
 			d.close();
 		}
 	}

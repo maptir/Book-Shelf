@@ -25,17 +25,24 @@ import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bookshelf.Book;
 import bookshelf.Database;
@@ -71,16 +78,19 @@ public class FolderPageUI implements Runnable {
 	private JLabel emptyLabel, garbageLabel;
 	private ImageIcon img;
 	private JLabel woodPic;
+	private ImageIcon iconBook;
 
 	public FolderPageUI(String filter) {
 		this.filter = filter;
 		databaseSetUp();
 		initComponents();
+		frame.setResizable(false);
 	}
 
 	private void initComponents() {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
+
 		frame = new JFrame("Search Result");
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
@@ -154,6 +164,7 @@ public class FolderPageUI implements Runnable {
 		addBookButton.setVerticalAlignment(SwingConstants.NORTH);
 		addBookButton.setHorizontalAlignment(SwingConstants.CENTER);
 		addBookButton.setBackground(new Color(38, 30, 19));
+		addBookButton.addActionListener(new addBookAction());
 
 		garbageLabel.setIcon(iconGarbage);
 		garbageLabel.setPreferredSize((new Dimension(70, 70)));
@@ -186,8 +197,6 @@ public class FolderPageUI implements Runnable {
 
 		frame.add(panelCenter, BorderLayout.CENTER);
 		frame.add(panelSouth, BorderLayout.SOUTH);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 	}
 
 	/**
@@ -262,20 +271,13 @@ public class FolderPageUI implements Runnable {
 		Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
 		bookList = bookList.stream().filter(fil).collect(Collectors.toList());
 
-		ImageIcon iconBook = new ImageIcon("Picture//sampleBook.jpg");
+		iconBook = new ImageIcon("Picture//sampleBook.jpg");
 		Image imgBook = iconBook.getImage();
 		Image newimg3 = imgBook.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
 
 		for (Book book : bookList) {
-			JButton bookBut = new JButton(book.getName(), iconBook);
-			bookBut.setHorizontalAlignment(SwingConstants.CENTER);
-			bookBut.setVerticalAlignment(SwingConstants.CENTER);
-			bookBut.setPreferredSize(new Dimension(140, 200));
-			String toolTip = String.format("<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>%s",
-					book.getName(), book.getType(), book.getLocation(), book.getLocation() + "</p></html>");
-			bookBut.setToolTipText(toolTip);
-			bookListButton.add(bookBut);
+			createBookButton(book);
 		}
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
 	}
@@ -294,6 +296,17 @@ public class FolderPageUI implements Runnable {
 				System.out.println("File Not Found");
 			}
 		}
+	}
+
+	public void createBookButton(Book book) {
+		JButton bookBut = new JButton(book.getName(), iconBook);
+		bookBut.setHorizontalAlignment(SwingConstants.CENTER);
+		bookBut.setVerticalAlignment(SwingConstants.CENTER);
+		bookBut.setPreferredSize(new Dimension(140, 200));
+		String toolTip = String.format("<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>%s",
+				book.getName(), book.getType(), book.getLocation(), book.getLocation() + "</p></html>");
+		bookBut.setToolTipText(toolTip);
+		bookListButton.add(bookBut);
 	}
 
 	/**
@@ -333,7 +346,9 @@ public class FolderPageUI implements Runnable {
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		FolderPageUI r = new FolderPageUI("Comic");
 		r.run();
 	}
@@ -457,16 +472,22 @@ public class FolderPageUI implements Runnable {
 					if (value instanceof String) {
 						Component component = support.getComponent();
 						if (component instanceof JLabel) {
-							bookListButton.remove(Integer.parseInt(value.toString()));
-							data.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
-									bookList.get(Integer.parseInt(value.toString())).getDescription());
-							data.close();
-							bookList.remove(Integer.parseInt(value.toString()));
-							if (bookList.size() <= 6) {
-								nextButton.setEnabled(false);
+							int choose = JOptionPane.showConfirmDialog(frame,
+									String.format("Remove %s?",
+											bookList.get(Integer.parseInt(value.toString())).getName()),
+									"Delete Book", JOptionPane.OK_CANCEL_OPTION);
+							if (choose == JOptionPane.OK_OPTION) {
+								bookListButton.remove(Integer.parseInt(value.toString()));
+								data.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
+										bookList.get(Integer.parseInt(value.toString())).getDescription());
+								data.close();
+								bookList.remove(Integer.parseInt(value.toString()));
+								if (bookList.size() <= 6) {
+									nextButton.setEnabled(false);
+								}
+								isRemoveState = true;
+								updateFrame();
 							}
-							isRemoveState = true;
-							updateFrame();
 							accept = true;
 						}
 					}
@@ -477,5 +498,80 @@ public class FolderPageUI implements Runnable {
 			}
 			return accept;
 		}
+	}
+
+	public class addBookAction implements ActionListener {
+		public void addType(String aName, String aType, String aLocation, String aDescription) {
+
+			JButton browse = new JButton("BROWSE");
+			JTextField textName = new JTextField(20);
+			JTextField textLoc = new JTextField(10);
+			JTextArea textDesc = new JTextArea(5, 20);
+			textName.setText(aName);
+			textDesc.setText(aDescription);
+			textLoc.setText(aLocation);
+			JScrollPane scrollPane = new JScrollPane(textDesc);
+			textDesc.setLineWrap(true);
+			browse.addActionListener((s) -> {
+				JFileChooser chooser = new JFileChooser();
+				chooser.setFileFilter(
+						new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+				int result = chooser.showOpenDialog(frame);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File file = chooser.getSelectedFile();
+					textLoc.setText(file.getPath());
+					textName.setText(file.getName());
+				}
+			});
+			JPanel panel = new JPanel();
+			JPanel panelName = new JPanel();
+			JPanel panelLoca = new JPanel();
+			JPanel panelDes = new JPanel();
+
+			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+			panelName.setLayout(new FlowLayout(FlowLayout.LEFT));
+			panelLoca.setLayout(new FlowLayout(FlowLayout.LEFT));
+			panelDes.setLayout(new FlowLayout(FlowLayout.LEFT));
+			panelName.add(new JLabel("Name:"));
+			panelName.add(textName);
+			panelLoca.add(new JLabel("Location:"));
+			panelLoca.add(textLoc);
+			panelLoca.add(browse);
+			panelDes.add(new JLabel("Description:"));
+			panelDes.add(scrollPane);
+			panel.add(panelName);
+			panel.add(panelLoca);
+			panel.add(panelDes);
+
+			int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
+
+			if (JOptionPane.OK_OPTION == choose) {
+				String name = textName.getText();
+				String location = textLoc.getText();
+				String description = textDesc.getText();
+				if (name.length() == 0) {
+					JOptionPane.showMessageDialog(null, "You forget to input a name !");
+					addType(name, filter, location, description);
+				} else if (location.trim().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Invalid Path File");
+					addType(name, filter, location, description);
+				} else if (description.length() == 0) {
+					description = " ";
+					addType(name, filter, location, description);
+				} else {
+					data.add(name, filter, location, description);
+					bookList.add(new Book(name, filter, location, description));
+					createBookButton(new Book(name, filter, location, description));
+					updateFrame();
+				}
+			}
+
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addType("", "", "", "");
+		}
+
 	}
 }
