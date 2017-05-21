@@ -25,13 +25,17 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import bookshelf.Book;
+import bookshelf.BookFactory;
 import bookshelf.Database;
+import bookshelf.TypeFactory;
 
 public class SearchPageUI {
 	private JFrame frame;
+	private Database data;
 	private List<Book> bookList;
 	private List<String> typeList;
-	private Database data;
+	private BookFactory bookFactory;
+	private TypeFactory typeFactory;
 	private String type = "";
 	private int havePage;
 	private JLabel searchLabel;
@@ -45,6 +49,7 @@ public class SearchPageUI {
 	private JButton searchButton;
 	private JButton nextButton;
 	private JButton preButton;
+	private JButton addFavorButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -74,6 +79,7 @@ public class SearchPageUI {
 		searchButton = new JButton();
 		preButton = new JButton();
 		nextButton = new JButton();
+		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -155,9 +161,10 @@ public class SearchPageUI {
 
 	private void databaseSetUp(String type, String name) {
 		data = new Database();
-		bookList = new ArrayList<>();
-		bookList = data.getBookList();
-		typeList = data.getTypeList();
+		bookFactory = BookFactory.getInstances();
+		bookList = bookFactory.getBookList();
+		typeFactory = TypeFactory.getInstances();
+		typeList = typeFactory.getTypeList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
 		bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
@@ -259,7 +266,7 @@ public class SearchPageUI {
 	public class ClickBookMouseAction extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (e.getClickCount() == 2) {
+			if (e.getClickCount() == 1) {
 				isDoubleClick = true;
 			}
 		}

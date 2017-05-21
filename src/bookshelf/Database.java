@@ -19,15 +19,17 @@ import java.util.Scanner;
 public class Database {
 	private List<Book> bookList = new ArrayList<Book>();
 	private List<String> typeList = new ArrayList<String>();
+	private List<String> favoList = new ArrayList<>();
 	private InputStream input;
 	private InputStream inputForType;
 	private OutputStream output;
 	private OutputStream outputForType;
 	private File file = new File("database.txt");
-	private File typeFile = new File("TypeDatabase.txt");
+	private File typeFile = new File("TypeFavorDatabase.txt");
 	private String line;
 	private String[] temp;
-	private BookFactory bookFactory = BookFactory.getInstances();;
+	private BookFactory bookFactory = BookFactory.getInstances();
+	private TypeFactory typeFactory = TypeFactory.getInstances();
 
 	public Database() {
 		readFromDatabase();
@@ -55,46 +57,35 @@ public class Database {
 				}
 				bookFactory.add(temp[0], temp[1], temp[2], temp[3]);
 			}
-			while ((line = breaderForType.readLine()) != null) {
-				temp = line.split(",");
-				for (String type : temp) {
-					if (!typeList.contains(type)) {
-						typeList.add(type);
-					}
-				}
+			line = breaderForType.readLine();
+			temp = line.split(",");
+			for (String type : temp) {
+				typeFactory.addType(type);
 			}
-			bookList = bookFactory.getBookList();
+			line = breaderForType.readLine();
+			temp = line.split(",");
+			for (String favor : temp) {
+				favoList.add(favor);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * The method that use for add new book to the ArrayList of books.
-	 * 
-	 * @param filename
-	 * @param fileDescription
-	 * @param fileType
-	 * @param fileLocation
-	 */
-	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
-		bookFactory.add(filename, fileType, fileLocation, fileDescription);
-		close();
+	public List<String> getFavorList() {
+		return favoList;
 	}
 
-	/**
-	 * The method that use for add new type of category.
-	 * 
-	 * @param type
-	 */
-	public void addType(String type) {
-		typeList.add(type);
-		close();
+	public void addFavor(String index) {
+		if (!favoList.contains(index)) {
+			favoList.add(index);
+		}
 	}
 
-	public void removeBook(String name, String des) {
-		bookFactory.removeBook(name, des);
-		close();
+	public void removeFavor(String index) {
+		if (favoList.contains(index)) {
+			favoList.remove(index);
+		}
 	}
 
 	/**
@@ -104,6 +95,7 @@ public class Database {
 	public void close() {
 		try {
 			bookList = bookFactory.getBookList();
+			typeList = typeFactory.getTypeList();
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
@@ -115,17 +107,14 @@ public class Database {
 				byte[] byteTypeTemp = (typeList.get(x) + ",").getBytes();
 				outputForType.write(byteTypeTemp);
 			}
+			outputForType.write("\n".getBytes());
+			for (int x = 0; x < favoList.size(); x++) {
+				byte[] byteTypeTemp = (favoList.get(x) + ",").getBytes();
+				outputForType.write(byteTypeTemp);
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-	}
-
-	public List<Book> getBookList() {
-		return bookList;
-	}
-
-	public List<String> getTypeList() {
-		return typeList;
 	}
 
 	public static void main(String[] args) {

@@ -1,0 +1,2 @@
+Comic,Novel,Education,Work,
+1,3,5,4,
