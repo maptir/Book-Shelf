@@ -44,6 +44,8 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.sun.glass.ui.CommonDialogs.Type;
+
 import bookshelf.Book;
 import bookshelf.BookFactory;
 import bookshelf.Database;
@@ -59,7 +61,7 @@ public class FolderPageUI implements Runnable {
 	private BookFactory bookFactory;
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
-	protected List<JLabel> eachPerPage;
+	protected List<String> favorList;
 	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
 	private int currentPage = 1;
 	private int havePage = 0;
@@ -77,7 +79,7 @@ public class FolderPageUI implements Runnable {
 	private JButton nextButton;
 	private JButton addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
 	private ImageIcon img;
 	private JLabel woodPic;
 	private ImageIcon iconBook;
@@ -104,6 +106,8 @@ public class FolderPageUI implements Runnable {
 		emptyLabel4 = new JTextField(100);
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
+		favorLabel = new JLabel();
+		favorText = new JLabel("                       Add Favourite");
 		img = new ImageIcon("Picture//backGR.jpg");
 		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
@@ -139,6 +143,11 @@ public class FolderPageUI implements Runnable {
 		Image newimg4 = imgGarbage.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 		iconGarbage = new ImageIcon(newimg4);
 
+		ImageIcon iconFavor = new ImageIcon("Picture//star3.png");
+		Image imgstar = iconFavor.getImage();
+		Image newimg6 = imgstar.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		iconFavor = new ImageIcon(newimg6);
+
 		emptyLabel.setPreferredSize(new Dimension(90, 40));
 		emptyLabel.setFont(new Font("Arial", 0, 20));
 		emptyLabel.setForeground(Color.WHITE);
@@ -173,8 +182,18 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setVerticalAlignment(SwingConstants.NORTH);
 		garbageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		garbageLabel.setBackground(new Color(38, 30, 19));
-		garbageLabel.setTransferHandler(new DropOnGarbage());
+		garbageLabel.setTransferHandler(new DropAction());
 
+		if (!filter.equalsIgnoreCase("favor")) {
+			favorText.setForeground(Color.WHITE);
+			favorText.setBackground(new Color(38, 30, 19));
+			favorLabel.setIcon(iconFavor);
+			favorLabel.setPreferredSize((new Dimension(70, 110)));
+			favorLabel.setVerticalAlignment(SwingConstants.NORTH);
+			favorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			favorLabel.setBackground(new Color(38, 30, 19));
+			favorLabel.setTransferHandler(new DropAction());
+		}
 		if (bookList.size() > 6) {
 			nextButton.setEnabled(true);
 		} else {
@@ -182,11 +201,12 @@ public class FolderPageUI implements Runnable {
 		}
 
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                                                       "));
+		panelSouth.add(new JLabel("                                                                   "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
-		panelSouth.add(new JLabel("                                                                   "));
+		panelSouth.add(favorText);
+		panelSouth.add(favorLabel);
 		panelSouth.add(addBookButton);
 		panelSouth.setLayout(new FlowLayout());
 		panelSouth.setBackground(new Color(38, 30, 19));
@@ -216,10 +236,12 @@ public class FolderPageUI implements Runnable {
 		backGLabel.add(emptyLabel3);
 		int countPerLine = 0;
 		// case remove last book of page
-		if (isRemoveState && start >= 6 && start - bookListButton.size() == 0) {
+		if (isRemoveState && start >= 6 && ((start - bookListButton.size()) % 6 == 0)) {
 			currentPage--;
-			updateFrame(start - 6);
+			isRemoveState = false;
+			updateFrame((int) Math.ceil(start - bookListButton.size() % 6) - 6);
 		}
+
 		for (; start < bookListButton.size(); start++) {
 			if (countPerLine == 6) {
 				emptyLabel2.setBackground(new Color(180, 115, 73));
@@ -271,9 +293,17 @@ public class FolderPageUI implements Runnable {
 		bookFactory = BookFactory.getInstances();
 		bookListButton = new ArrayList<>();
 		bookList = bookFactory.getBookList();
-		Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
-		bookList = bookList.stream().filter(fil).collect(Collectors.toList());
-
+		if (filter.equalsIgnoreCase("favor")) {
+			List<Book> tempFavor = new ArrayList<>();
+			favorList = data.getFavorList();
+			for (String favorIndex : favorList) {
+				tempFavor.add(bookList.get(Integer.parseInt(favorIndex)));
+			}
+			bookList = tempFavor;
+		} else {
+			Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
+			bookList = bookList.stream().filter(fil).collect(Collectors.toList());
+		}
 		iconBook = new ImageIcon("Picture//sampleBook.jpg");
 		Image imgBook = iconBook.getImage();
 		Image newimg3 = imgBook.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
@@ -283,6 +313,7 @@ public class FolderPageUI implements Runnable {
 			createBookButton(book);
 		}
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
+
 	}
 
 	/**
@@ -335,9 +366,17 @@ public class FolderPageUI implements Runnable {
 	 * @param start
 	 */
 	public void updateFrame(int start) {
+		havePage = (int) Math.ceil(bookList.size() / 6.0);
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
 		panelCenter.add(createBookPerPage(start));
+
+		if (currentPage <= 1) {
+			preButton.setEnabled(false);
+		}
+		if (currentPage + 1 > havePage) {
+			nextButton.setEnabled(false);
+		}
 		frame.validate();
 	}
 
@@ -457,7 +496,7 @@ public class FolderPageUI implements Runnable {
 	 * @author Triwith Mutitakul
 	 *
 	 */
-	public class DropOnGarbage extends TransferHandler {
+	public class DropAction extends TransferHandler {
 		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
 
 		@Override
@@ -475,24 +514,36 @@ public class FolderPageUI implements Runnable {
 					if (value instanceof String) {
 						Component component = support.getComponent();
 						if (component instanceof JLabel) {
-							int choose = JOptionPane.showConfirmDialog(frame,
-									String.format("Remove %s?",
-											bookList.get(Integer.parseInt(value.toString())).getName()),
-									"Delete Book", JOptionPane.OK_CANCEL_OPTION);
-							if (choose == JOptionPane.OK_OPTION) {
-								bookListButton.remove(Integer.parseInt(value.toString()));
-								bookFactory.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
-										bookList.get(Integer.parseInt(value.toString())).getDescription());
-								data.close();
-								bookList.remove(Integer.parseInt(value.toString()));
-								data.close();
-								if (bookList.size() <= 6) {
-									nextButton.setEnabled(false);
+							if (support.getComponent().equals(garbageLabel)) {
+								int choose = JOptionPane.showConfirmDialog(frame,
+										String.format("Remove %s?",
+												bookList.get(Integer.parseInt(value.toString())).getName()),
+										"Delete Book", JOptionPane.OK_CANCEL_OPTION);
+								if (choose == JOptionPane.OK_OPTION) {
+									bookListButton.remove(Integer.parseInt(value.toString()));
+									bookFactory.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
+											bookList.get(Integer.parseInt(value.toString())).getDescription());
+									data.close();
+									bookList.remove(Integer.parseInt(value.toString()));
+									if (bookList.size() <= 6) {
+										nextButton.setEnabled(false);
+									}
+									isRemoveState = true;
+									updateFrame();
 								}
-								isRemoveState = true;
-								updateFrame();
+								accept = true;
+							} else {
+								int choose = JOptionPane.showConfirmDialog(frame,
+										String.format("Add %s to favourite?",
+												bookList.get(Integer.parseInt(value.toString())).getName()),
+										"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
+								if (choose == JOptionPane.OK_OPTION) {
+									data.addFavor(value.toString());
+									data.close();
+									updateFrame();
+								}
+								accept = true;
 							}
-							accept = true;
 						}
 					}
 
@@ -575,6 +626,10 @@ public class FolderPageUI implements Runnable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addType("", "", "", "");
+			if (bookList.size() % 6 == 1) {
+				currentPage++;
+				updateFrame(starterPage[currentPage] - 6);
+			}
 			data.close();
 		}
 

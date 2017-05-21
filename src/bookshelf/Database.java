@@ -19,12 +19,13 @@ import java.util.Scanner;
 public class Database {
 	private List<Book> bookList = new ArrayList<Book>();
 	private List<String> typeList = new ArrayList<String>();
+	private List<String> favoList = new ArrayList<>();
 	private InputStream input;
 	private InputStream inputForType;
 	private OutputStream output;
 	private OutputStream outputForType;
 	private File file = new File("database.txt");
-	private File typeFile = new File("TypeDatabase.txt");
+	private File typeFile = new File("TypeFavorDatabase.txt");
 	private String line;
 	private String[] temp;
 	private BookFactory bookFactory = BookFactory.getInstances();
@@ -56,15 +57,34 @@ public class Database {
 				}
 				bookFactory.add(temp[0], temp[1], temp[2], temp[3]);
 			}
-			while ((line = breaderForType.readLine()) != null) {
-				temp = line.split(",");
-				for (String type : temp) {
-					typeFactory.addType(type);
-				}
+			line = breaderForType.readLine();
+			temp = line.split(",");
+			for (String type : temp) {
+				typeFactory.addType(type);
 			}
-			bookList = bookFactory.getBookList();
+			line = breaderForType.readLine();
+			temp = line.split(",");
+			for (String favor : temp) {
+				favoList.add(favor);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public List<String> getFavorList() {
+		return favoList;
+	}
+
+	public void addFavor(String index) {
+		if (!favoList.contains(index)) {
+			favoList.add(index);
+		}
+	}
+
+	public void removeFavor(String index) {
+		if (favoList.contains(index)) {
+			favoList.remove(index);
 		}
 	}
 
@@ -76,7 +96,6 @@ public class Database {
 		try {
 			bookList = bookFactory.getBookList();
 			typeList = typeFactory.getTypeList();
-			System.out.println(typeList.size());
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
@@ -86,6 +105,11 @@ public class Database {
 			}
 			for (int x = 0; x < typeList.size(); x++) {
 				byte[] byteTypeTemp = (typeList.get(x) + ",").getBytes();
+				outputForType.write(byteTypeTemp);
+			}
+			outputForType.write("\n".getBytes());
+			for (int x = 0; x < favoList.size(); x++) {
+				byte[] byteTypeTemp = (favoList.get(x) + ",").getBytes();
 				outputForType.write(byteTypeTemp);
 			}
 		} catch (Exception e1) {

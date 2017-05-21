@@ -7,10 +7,15 @@ Amp,Comic,asdf,dsaf
 Amp2,Comic,asdf,dsaf
 Amp3,Comic,asdf,dsaf
 Amp4,Comic,asdf,dsaf
-Amp5,Comic,asdf,dsaf
+Fame8,Comic,dsafds,sds
+Jamie8,Novel,asdf,dsafd
+Paulo8,Novel,adsf,DSAF
+Dog8,Novel,asdf,asd
+Amp8,Comic,asdf,dsaf
+Amp88,Comic,asdf,dsaf
+Amp888,Comic,asdf,dsaf
+Amp77,Comic,asdf,dsaf
+HaHa,Comic,asdf,dsaf
 Lab13-1-Generics,Education,C:\Users\User\Downloads\Lab13-1-Generics.pdf,Lab13 is aboout generics in java
 Lab13-OCSF-Framework,Education,C:\Users\User\Downloads\Lab13-OCSF-Framework.pdf,Lab13 is OCSF in java
-PRESENT1.pptx,Comic,C:\Users\User\Downloads\PRESENT1.pptx,jb
-‚Œª∑’Ë Õß.docx,Comic,C:\Users\FAME\Documents\‚Œª∑’Ë Õß.docx,dd
-IT.docx,Comic,C:\Users\FAME\Documents\IT.docx,xx
-Recursion,Comic,C:\Users\FAME\Downloads\Recursion.ppt,Recursion
+‚Œª∑’Ë Õß.docx,Comic,C:\Users\FAME\Documents\‚Œª∑’Ë Õß.docx,dfg

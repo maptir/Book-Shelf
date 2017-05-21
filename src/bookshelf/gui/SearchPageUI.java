@@ -31,6 +31,7 @@ import bookshelf.TypeFactory;
 
 public class SearchPageUI {
 	private JFrame frame;
+	private Database data;
 	private List<Book> bookList;
 	private List<String> typeList;
 	private BookFactory bookFactory;
@@ -48,6 +49,7 @@ public class SearchPageUI {
 	private JButton searchButton;
 	private JButton nextButton;
 	private JButton preButton;
+	private JButton addFavorButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -77,6 +79,7 @@ public class SearchPageUI {
 		searchButton = new JButton();
 		preButton = new JButton();
 		nextButton = new JButton();
+		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -157,8 +160,8 @@ public class SearchPageUI {
 	}
 
 	private void databaseSetUp(String type, String name) {
-		bookList = new ArrayList<>();
-		bookFactory = bookFactory.getInstances();
+		data = new Database();
+		bookFactory = BookFactory.getInstances();
 		bookList = bookFactory.getBookList();
 		typeFactory = TypeFactory.getInstances();
 		typeList = typeFactory.getTypeList();
@@ -263,7 +266,7 @@ public class SearchPageUI {
 	public class ClickBookMouseAction extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			if (e.getClickCount() == 2) {
+			if (e.getClickCount() == 1) {
 				isDoubleClick = true;
 			}
 		}
