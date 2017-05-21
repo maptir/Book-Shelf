@@ -13,18 +13,21 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
-
 public class BookShelfUI extends JFrame {
 	Database data;
 	JTextField searchText;
-	JLabel searchLabel, logoLabel, backGroundLabel, binLabel;
-	JButton addFolder, addImageadd;
-	JPanel panel1, panel2, panelAdd, panelText, panelButton, panelAll;
-	JScrollPane scrollPane;
+	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel;
+	JButton addFolder, addImageadd, right, left;
+	JPanel panel1, panel2, panelAdd, panelText, panelButton, panelAll,
+			panelChange;
+	// JScrollPane scrollPane;
 	Image logo, backGround, addImage, addType, delete;
 	boolean direction = true;
 	String newFolder;
+	int numFol = 0;
+	boolean isRemoveState;
+	int currentPage = 1;
+	int havePage = 0;
 
 	public BookShelfUI() throws IOException {
 		super("Book-Shelf");
@@ -33,27 +36,38 @@ public class BookShelfUI extends JFrame {
 	}
 
 	public void initcomponents() throws IOException {
-		// this.setSize(850, 700);
 		this.setLocation(230, 20);
 		this.setLayout(new FlowLayout());
 
-		getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.orange));
+		getRootPane().setBorder(
+				BorderFactory.createMatteBorder(4, 4, 4, 4, Color.orange));
 		logo = ImageIO.read(new File("Picture//Logo.png"));
-		addImage = ImageIO.read(new File("Picture//Add.png"));
+		addImage = ImageIO.read(new File("add.png"));
 		addType = ImageIO.read(new File("Picture//AddBook.png"));
 		delete = ImageIO.read(new File("Picture//bin.png"));
 		backGround = ImageIO.read(new File("backG.jpg"));
 
-		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
+		addFolder = new JButton();
 		addImageadd = new JButton();
-		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(90, 70, Image.SCALE_DEFAULT)));
-		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
+		right = new JButton("RIGHT");
+		left = new JButton("LEFT");
+
+		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
+
+		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
+		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(100, 80,
+				Image.SCALE_DEFAULT)));
+		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
 
 		panel1 = new JPanel();
 		panel2 = new JPanel();
 		panelAdd = new JPanel();
 		panelText = new JPanel();
 		panelButton = new JPanel();
+		panelChange = new JPanel();
 		panelAll = new JPanel() {
 			@Override
 			protected void paintComponent(Graphics g) {
@@ -61,10 +75,11 @@ public class BookShelfUI extends JFrame {
 				g.drawImage(backGround, 0, 0, null);
 			};
 		};
-		scrollPane = new JScrollPane(panelButton);
+		// scrollPane = new JScrollPane(panelButton);
 
 		searchLabel = new JLabel("SEARCH : ");
-		searchLabel.setFont(new Font("Rockwell", 1, 29));
+		searchLabel.setFont(new Font("Apple Casual", 1, 20));
+		searchLabel.setForeground(Color.WHITE);
 		searchText = new JTextField(15);
 		searchText.addFocusListener(new FocusListener() {
 			String promptText = "What you need ?";
@@ -86,6 +101,7 @@ public class BookShelfUI extends JFrame {
 			}
 		});
 		panelText.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelText.setBackground(Color.BLACK);
 		panelText.add(logoLabel);
 		panelText.add(searchLabel);
 		panelText.add(searchText);
@@ -93,9 +109,6 @@ public class BookShelfUI extends JFrame {
 		data = new Database();
 		for (String type : data.getTypeList())
 			addNewFolder(type);
-
-		addFolder = new JButton();
-		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
 
 		addFolder.setBorder(BorderFactory.createEmptyBorder(60, 20, 60, 0));
 		addImageadd.setBorder(BorderFactory.createEmptyBorder(0, 20, 60, 0));
@@ -105,6 +118,8 @@ public class BookShelfUI extends JFrame {
 		panelAdd.add(addImageadd);
 		panelAdd.add(binLabel);
 		panelAdd.setLayout(new BoxLayout(panelAdd, BoxLayout.Y_AXIS));
+		// panelAdd.setLayout(new FlowLayout());
+		panelAdd.setBackground(Color.BLACK);
 		addImageadd.setBorderPainted(false);
 		addImageadd.setContentAreaFilled(false);
 		addFolder.setBorderPainted(false);
@@ -117,36 +132,49 @@ public class BookShelfUI extends JFrame {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
 				if (newFolder == null)
 					return;
-				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !data.getTypeList().stream()
-						.filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
-					addNewFolder(newFolder);
+				if (isAlphaNumeric(newFolder)
+						&& !newFolder.isEmpty()
+						&& !data.getTypeList().stream()
+								.filter((s) -> s.equalsIgnoreCase(newFolder))
+								.findFirst().isPresent()) {
 					data.addType(newFolder);
+					addNewFolder(newFolder);
 				}
 			}
 		});
 
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
-		panel1.setBorder(new EmptyBorder(30, 30, 30, 30));
-		panel2.setBorder(new EmptyBorder(30, 30, 30, 30));
-		panelButton.setLayout(new FlowLayout());
-		panelButton.add(panel1, BorderLayout.CENTER);
-		panelButton.add(panel2, BorderLayout.CENTER);
-		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
-		scrollPane.setPreferredSize(new Dimension(600, 500));
+		panel1.setBorder(new EmptyBorder(0, 30, 30, 30));
+		panel2.setBorder(new EmptyBorder(0, 30, 30, 30));
+		// panelButton.setLayout(new FlowLayout());
+		// panelButton.add(panel1, BorderLayout.CENTER);
+		// panelButton.add(panel2, BorderLayout.CENTER);
+		panelButton.setLayout(new GridLayout(4, 2));
+		// scrollPane.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3,
+		// Color.BLACK));
+		panelButton.setPreferredSize(new Dimension(600, 500));
 
-		panelText.setOpaque(false);
+		// panelText.setOpaque(false);
 		panelAdd.setOpaque(false);
 		panel1.setOpaque(false);
 		panel2.setOpaque(false);
 		panelButton.setOpaque(false);
-		scrollPane.getViewport().setOpaque(false);
-		scrollPane.setOpaque(false);
+		// scrollPane.getViewport().setOpaque(false);
+		// scrollPane.setOpaque(false);
+
+		right.addActionListener(changePage());
+		left.addActionListener(changePage());
+		panelChange.add(left);
+		pageLabel = new JLabel("Page : " + currentPage);
+		panelChange.add(pageLabel);
+		panelChange.add(right);
 
 		panelAll.setLayout(new BorderLayout());
 		panelAll.add(panelText, BorderLayout.NORTH);
-		panelAll.add(scrollPane, BorderLayout.CENTER);
+		panelAll.add(panelButton, BorderLayout.CENTER);
 		panelAll.add(panelAdd, BorderLayout.EAST);
+		panelAll.add(panelChange, BorderLayout.SOUTH);
 		panelAll.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 20));
 
 		this.add(panelAll);
@@ -154,23 +182,28 @@ public class BookShelfUI extends JFrame {
 	}
 
 	public void addNewFolder(String newFolder) {
+		if (numFol >= 8)
+			return;
 		JButton newButton = new JButton(newFolder);
 		newButton.setFont(new Font("Rockwell", 0, 20));
 		try {
-			Image img = ImageIO.read(new File("Picture//folder.png")).getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+			Image img = ImageIO.read(new File("Picture//folder.png"))
+					.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
 			newButton.setIcon(new ImageIcon(img));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		newButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		if (direction)
-			panel1.add(newButton);
-		else
-			panel2.add(newButton);
+		// if (direction)
+		// panel1.add(newButton);
+		// else
+		// panel2.add(newButton);
 		direction = !direction;
+		panelButton.add(newButton);
 		newButton.setBorderPainted(false);
 		newButton.setContentAreaFilled(false);
 		newButton.addActionListener(pressButton());
+		numFol++;
 	}
 
 	public ActionListener pressButton() {
@@ -185,9 +218,9 @@ public class BookShelfUI extends JFrame {
 		return action;
 	}
 
-	public void addType(String aName, String aType, String aLocation, String aDescription) {
-		String[] typeArr = {};
-		typeArr = data.getTypeList().toArray(typeArr);
+	public void addType(String aName, String aType, String aLocation,
+			String aDescription) {
+		String[] typeArr = (String[]) data.getTypeList().toArray();
 		JComboBox<String> cBox = new JComboBox<>(typeArr);
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
@@ -200,8 +233,9 @@ public class BookShelfUI extends JFrame {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+			chooser.setFileFilter(new FileNameExtensionFilter(
+					"PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+					"pptx"));
 			int result = chooser.showOpenDialog(BookShelfUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
@@ -230,7 +264,8 @@ public class BookShelfUI extends JFrame {
 		panel.add(panelLoca);
 		panel.add(panelDes);
 
-		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
+		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book",
+				JOptionPane.OK_CANCEL_OPTION);
 
 		if (JOptionPane.OK_OPTION == choose) {
 			String name = textName.getText();
@@ -239,13 +274,15 @@ public class BookShelfUI extends JFrame {
 			String description = textDesc.getText();
 
 			if (name.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "You forget to input a name !");
+				JOptionPane.showMessageDialog(null,
+						"You forget to input a name !");
 				addType(name, type, location, description);
 			} else if (location.trim().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Invalid Path File");
 				addType(name, type, location, description);
 			} else if (description.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "You forget to input a description !");
+				JOptionPane.showMessageDialog(null,
+						"You forget to input a description !");
 				addType(name, type, location, description);
 			} else
 				data.add(name, type, location, description);
@@ -257,6 +294,58 @@ public class BookShelfUI extends JFrame {
 			if (!(Character.isLetter(c) || Character.isDigit(c)))
 				return false;
 		return true;
+	}
+
+	public ActionListener changePage() {
+		return new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				isRemoveState = false;
+				numFol = 0;
+				JButton pressButton = (JButton) e.getSource();
+				if (pressButton == right) {
+					left.setEnabled(true);
+					currentPage++;
+					updateFrame();
+				} else if (pressButton == left) {
+					right.setEnabled(true);
+					currentPage--;
+					updateFrame();
+				}
+			}
+		};
+	}
+
+	public void updateFrame() {
+		havePage = (int) Math.ceil(data.getTypeList().size() / 8.0);
+		pageLabel.setText("Page : " + currentPage);
+		panelButton.removeAll();
+		panelButton.repaint();
+		boolean lastPage = currentPage * 8 + 7 >= data.getTypeList().size() - 1;
+		System.out.println(currentPage);
+		if (!lastPage) {
+			for (String nameType : data.getTypeList().subList(currentPage * 8,
+					currentPage * 8 + 7)) {
+				System.out.println(nameType);
+				addNewFolder(nameType);
+			}
+		} else {
+			for (String nameType : data.getTypeList().subList(
+					(currentPage - 1) * 8, data.getTypeList().size())) {
+				System.out.println(nameType);
+				addNewFolder(nameType);
+			}
+		}
+
+		if (currentPage <= 1) {
+			left.setEnabled(false);
+		}
+		if (currentPage + 1 > havePage) {
+			right.setEnabled(false);
+		}
+
+		this.pack();
 	}
 
 	public void run() {
