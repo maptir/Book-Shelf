@@ -45,6 +45,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import bookshelf.Book;
+import bookshelf.BookFactory;
 import bookshelf.Database;
 
 /**
@@ -55,6 +56,7 @@ import bookshelf.Database;
  */
 public class FolderPageUI implements Runnable {
 	private Database data;
+	private BookFactory bookFactory;
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
 	protected List<JLabel> eachPerPage;
@@ -91,7 +93,7 @@ public class FolderPageUI implements Runnable {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
-		frame = new JFrame("Search Result");
+		frame = new JFrame(filter + " Shelf");
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
 		frame.setSize(900, 700);
@@ -266,8 +268,9 @@ public class FolderPageUI implements Runnable {
 	 */
 	private void databaseSetUp() {
 		data = new Database();
+		bookFactory = BookFactory.getInstances();
 		bookListButton = new ArrayList<>();
-		bookList = data.getBookList();
+		bookList = bookFactory.getBookList();
 		Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
 		bookList = bookList.stream().filter(fil).collect(Collectors.toList());
 
@@ -304,7 +307,7 @@ public class FolderPageUI implements Runnable {
 		bookBut.setVerticalAlignment(SwingConstants.CENTER);
 		bookBut.setPreferredSize(new Dimension(140, 200));
 		String toolTip = String.format("<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>%s",
-				book.getName(), book.getType(), book.getLocation(), book.getLocation() + "</p></html>");
+				book.getName(), book.getType(), book.getLocation(), book.getDescription() + "</p></html>");
 		bookBut.setToolTipText(toolTip);
 		bookListButton.add(bookBut);
 	}
@@ -478,10 +481,11 @@ public class FolderPageUI implements Runnable {
 									"Delete Book", JOptionPane.OK_CANCEL_OPTION);
 							if (choose == JOptionPane.OK_OPTION) {
 								bookListButton.remove(Integer.parseInt(value.toString()));
-								data.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
+								bookFactory.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
 										bookList.get(Integer.parseInt(value.toString())).getDescription());
 								data.close();
 								bookList.remove(Integer.parseInt(value.toString()));
+								data.close();
 								if (bookList.size() <= 6) {
 									nextButton.setEnabled(false);
 								}
@@ -559,7 +563,7 @@ public class FolderPageUI implements Runnable {
 					description = " ";
 					addType(name, filter, location, description);
 				} else {
-					data.add(name, filter, location, description);
+					bookFactory.add(name, filter, location, description);
 					bookList.add(new Book(name, filter, location, description));
 					createBookButton(new Book(name, filter, location, description));
 					updateFrame();
@@ -571,6 +575,7 @@ public class FolderPageUI implements Runnable {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addType("", "", "", "");
+			data.close();
 		}
 
 	}

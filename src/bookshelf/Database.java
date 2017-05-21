@@ -27,7 +27,8 @@ public class Database {
 	private File typeFile = new File("TypeDatabase.txt");
 	private String line;
 	private String[] temp;
-	private BookFactory bookFactory = BookFactory.getInstances();;
+	private BookFactory bookFactory = BookFactory.getInstances();
+	private TypeFactory typeFactory = TypeFactory.getInstances();
 
 	public Database() {
 		readFromDatabase();
@@ -58,9 +59,7 @@ public class Database {
 			while ((line = breaderForType.readLine()) != null) {
 				temp = line.split(",");
 				for (String type : temp) {
-					if (!typeList.contains(type)) {
-						typeList.add(type);
-					}
+					typeFactory.addType(type);
 				}
 			}
 			bookList = bookFactory.getBookList();
@@ -70,40 +69,14 @@ public class Database {
 	}
 
 	/**
-	 * The method that use for add new book to the ArrayList of books.
-	 * 
-	 * @param filename
-	 * @param fileDescription
-	 * @param fileType
-	 * @param fileLocation
-	 */
-	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
-		bookFactory.add(filename, fileType, fileLocation, fileDescription);
-		close();
-	}
-
-	/**
-	 * The method that use for add new type of category.
-	 * 
-	 * @param type
-	 */
-	public void addType(String type) {
-		typeList.add(type);
-		close();
-	}
-
-	public void removeBook(String name, String des) {
-		bookFactory.removeBook(name, des);
-		close();
-	}
-
-	/**
 	 * The method that use for write the data to the database when the program
 	 * is closed.
 	 */
 	public void close() {
 		try {
 			bookList = bookFactory.getBookList();
+			typeList = typeFactory.getTypeList();
+			System.out.println(typeList.size());
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
 			for (int x = 0; x < bookList.size(); x++) {
@@ -118,14 +91,6 @@ public class Database {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-	}
-
-	public List<Book> getBookList() {
-		return bookList;
-	}
-
-	public List<String> getTypeList() {
-		return typeList;
 	}
 
 	public static void main(String[] args) {

@@ -7,7 +7,9 @@ import java.io.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import bookshelf.BookFactory;
 import bookshelf.Database;
+import bookshelf.TypeFactory;
 
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
@@ -91,7 +93,7 @@ public class BookShelfUI extends JFrame {
 		panelText.add(searchText);
 
 		data = new Database();
-		for (String type : data.getTypeList())
+		for (String type : TypeFactory.getInstances().getTypeList())
 			addNewFolder(type);
 
 		addFolder = new JButton();
@@ -117,10 +119,12 @@ public class BookShelfUI extends JFrame {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
 				if (newFolder == null)
 					return;
-				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !data.getTypeList().stream()
-						.filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
+				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !TypeFactory.getInstances().getTypeList()
+						.stream().filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
+
 					addNewFolder(newFolder);
-					data.addType(newFolder);
+					TypeFactory.getInstances().addType(newFolder);
+					data.close();
 				}
 			}
 		});
@@ -187,7 +191,7 @@ public class BookShelfUI extends JFrame {
 
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 		String[] typeArr = {};
-		typeArr = data.getTypeList().toArray(typeArr);
+		typeArr = TypeFactory.getInstances().getTypeList().toArray(typeArr);
 		JComboBox<String> cBox = new JComboBox<>(typeArr);
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
@@ -247,8 +251,10 @@ public class BookShelfUI extends JFrame {
 			} else if (description.isEmpty()) {
 				JOptionPane.showMessageDialog(null, "You forget to input a description !");
 				addType(name, type, location, description);
-			} else
-				data.add(name, type, location, description);
+			} else {
+				BookFactory.getInstances().add(name, type, location, description);
+				data.close();
+			}
 		}
 	}
 

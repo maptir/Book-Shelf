@@ -10,13 +10,11 @@ import bookshelf.gui.BookShelfUI;
 public class Main {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException {
-		String temp = "Hale";
-		System.out.println(temp.contains("Ha"));
 
-		// UIManager.setLookAndFeel(UIManager
-		// .getCrossPlatformLookAndFeelClassName());
-		//
-		// BookShelfUI ui = new BookShelfUI();
-		// ui.run();
+		 UIManager.setLookAndFeel(UIManager
+		 .getCrossPlatformLookAndFeelClassName());
+		
+		 BookShelfUI ui = new BookShelfUI();
+		 ui.run();
 	}
 }

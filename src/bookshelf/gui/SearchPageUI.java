@@ -25,13 +25,16 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import bookshelf.Book;
+import bookshelf.BookFactory;
 import bookshelf.Database;
+import bookshelf.TypeFactory;
 
 public class SearchPageUI {
 	private JFrame frame;
 	private List<Book> bookList;
 	private List<String> typeList;
-	private Database data;
+	private BookFactory bookFactory;
+	private TypeFactory typeFactory;
 	private String type = "";
 	private int havePage;
 	private JLabel searchLabel;
@@ -154,10 +157,11 @@ public class SearchPageUI {
 	}
 
 	private void databaseSetUp(String type, String name) {
-		data = new Database();
 		bookList = new ArrayList<>();
-		bookList = data.getBookList();
-		typeList = data.getTypeList();
+		bookFactory = bookFactory.getInstances();
+		bookList = bookFactory.getBookList();
+		typeFactory = TypeFactory.getInstances();
+		typeList = typeFactory.getTypeList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
 		bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
