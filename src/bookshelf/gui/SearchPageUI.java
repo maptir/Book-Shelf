@@ -15,8 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -33,7 +31,7 @@ public class SearchPageUI {
 	private JFrame frame;
 	private Database data;
 	private List<Book> bookList;
-	private List<String> typeList,favorList;
+	private List<String> typeList, favorList;
 	private BookFactory bookFactory;
 	private TypeFactory typeFactory;
 	private String type = "";
@@ -47,7 +45,7 @@ public class SearchPageUI {
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JButton searchButton;
-	private JButton nextButton,preButton,homeButton;
+	private JButton nextButton, preButton, homeButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -107,14 +105,12 @@ public class SearchPageUI {
 		Image imgPre = iconPre.getImage();
 		Image newimg5 = imgPre.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		iconPre = new ImageIcon(newimg5);
-		
-		//Add for Home Button
+
+		// Add for Home Button
 		ImageIcon iconHome = new ImageIcon("Picture//houseW.png");
 		Image imgHome = iconHome.getImage();
 		Image newimg7 = imgHome.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		iconHome = new ImageIcon(newimg7);
-		
-		
 
 		nextButton.setIcon(iconNext);
 		nextButton.setPreferredSize(new Dimension(35, 35));
@@ -133,8 +129,8 @@ public class SearchPageUI {
 		bgLabel.add(emptyLine);
 
 		pageLabel.setForeground(Color.WHITE);
-		
-		//Add for Home Button
+
+		// Add for Home Button
 		homeButton.setIcon(iconHome);
 		homeButton.setPreferredSize(new Dimension(35, 35));
 		homeButton.setBackground(Color.BLACK);
@@ -158,14 +154,15 @@ public class SearchPageUI {
 		northPanel.setBackground(Color.BLACK);
 
 		southPanel.setBackground(Color.BLACK);
-		southPanel.add(homeButton);  
-		//Fix for Home Button
-		southPanel.add(new JLabel("                                                                                  "));
+		southPanel.add(homeButton);
+		// Fix for Home Button
+		southPanel
+				.add(new JLabel("                                                                                  "));
 		southPanel.add(preButton);
 		southPanel.add(pageLabel);
 		southPanel.add(nextButton);
-		southPanel.add(new JLabel("                                                                                                "));
-
+		southPanel.add(new JLabel(
+				"                                                                                                "));
 
 		createPanelPerPage(0);
 		centerPanel.add(bgLabel);
@@ -213,9 +210,9 @@ public class SearchPageUI {
 			bookButton.setPreferredSize(new Dimension(150, 190));
 			bookButton.addActionListener(new BookClickAction());
 			bookButton.addMouseListener(new ClickBookMouseAction());
-			bookButton.setActionCommand("" + start);		
+			bookButton.setActionCommand("" + start);
 			bookButton.setLayout(new BorderLayout());
-			bookButton.add(addFavorButton,BorderLayout.SOUTH);
+			bookButton.add(addFavorButton, BorderLayout.SOUTH);
 			detailArea.setFont(new Font("Apple Casual", 3, 17));
 			detailArea.setLineWrap(true);
 			detailArea.setText(detail);
@@ -338,8 +335,9 @@ public class SearchPageUI {
 		public void keyReleased(KeyEvent e) {
 		}
 	}
-	//Add for Home Button
-	public class AddFavorAction implements ActionListener{
+
+	// Add for Home Button
+	public class AddFavorAction implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -364,9 +362,9 @@ public class SearchPageUI {
 					updateFrame();
 				}
 			}
-			
+
 		}
-		
+
 	}
 
 }
