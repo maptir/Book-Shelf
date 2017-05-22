@@ -1,21 +1,9 @@
-Fame,Comic,dsafds,sds
-ISP,Education,sd,asdf
-Jamie,Novel,asdf,dsafd
-Paulo,Novel,adsf,DSAF
-Dog,Novel,asdf,asd
-Amp,Comic,asdf,dsaf
-Amp2,Comic,asdf,dsaf
-Amp3,Comic,asdf,dsaf
-Amp4,Comic,asdf,dsaf
-Fame8,Comic,dsafds,sds
-Jamie8,Novel,asdf,dsafd
-Paulo8,Novel,adsf,DSAF
-Dog8,Novel,asdf,asd
-Amp8,Comic,asdf,dsaf
-Amp88,Comic,asdf,dsaf
-Amp888,Comic,asdf,dsaf
-Amp77,Comic,asdf,dsaf
-HaHa,Comic,asdf,dsaf
+Jacky,Comic,qwer,asd
+Fame,Comic,asdf,asdf
 Lab13-1-Generics,Education,C:\Users\User\Downloads\Lab13-1-Generics.pdf,Lab13 is aboout generics in java
 Lab13-OCSF-Framework,Education,C:\Users\User\Downloads\Lab13-OCSF-Framework.pdf,Lab13 is OCSF in java
-โฮปที่สอง.docx,Comic,C:\Users\FAME\Documents\โฮปที่สอง.docx,dfg
+PRESENT1.pptx,Comic,C:\Users\User\Downloads\PRESENT1.pptx,jb
+3ปัญหา 3 ข้อ.docx.docx.docx,Comic,C:\Users\User\Downloads\3ปัญหา 3 ข้อ.docx.docx.docx,dsfgf
+Generic-Types.pdf,Comic,C:\Users\User\Downloads\Generic-Types.pdf,qwerty
+PA4-Readability.pdf,Comic,C:\Users\User\Downloads\PA4-Readability.pdf,read
+2GAPandSWOT.docx.docx,Comic,C:\Users\User\Downloads\2GAPandSWOT.docx.docx,asd

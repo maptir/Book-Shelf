@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,11 +46,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.glass.ui.CommonDialogs.Type;
-
-import bookshelf.Book;
-import bookshelf.BookFactory;
-import bookshelf.Database;
+import bookshelf.*;
 
 /**
  * The folder page of this program.
@@ -96,6 +94,7 @@ public class FolderPageUI implements Runnable {
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
 		frame = new JFrame(filter + " Shelf");
+
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
 		frame.setSize(900, 700);
@@ -176,6 +175,7 @@ public class FolderPageUI implements Runnable {
 		addBookButton.setHorizontalAlignment(SwingConstants.CENTER);
 		addBookButton.setBackground(new Color(38, 30, 19));
 		addBookButton.addActionListener(new addBookAction());
+		addBookButton.setToolTipText("Click me for adding new book");
 
 		garbageLabel.setIcon(iconGarbage);
 		garbageLabel.setPreferredSize((new Dimension(70, 70)));
@@ -183,6 +183,7 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		garbageLabel.setBackground(new Color(38, 30, 19));
 		garbageLabel.setTransferHandler(new DropAction());
+		garbageLabel.setToolTipText("Drop Book on me for delete it.");
 
 		if (!filter.equalsIgnoreCase("favor")) {
 			favorText.setForeground(Color.WHITE);
@@ -293,6 +294,7 @@ public class FolderPageUI implements Runnable {
 		bookFactory = BookFactory.getInstances();
 		bookListButton = new ArrayList<>();
 		bookList = bookFactory.getBookList();
+		favorList = data.getFavorList();
 		if (filter.equalsIgnoreCase("favor")) {
 			List<Book> tempFavor = new ArrayList<>();
 			favorList = data.getFavorList();
@@ -459,7 +461,7 @@ public class FolderPageUI implements Runnable {
 	 * @author Triwith Mutitakul
 	 *
 	 */
-	public class DragBookAction extends TransferHandler {
+	public static class DragBookAction extends TransferHandler {
 		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
 		private String value;
 
@@ -533,14 +535,26 @@ public class FolderPageUI implements Runnable {
 								}
 								accept = true;
 							} else {
-								int choose = JOptionPane.showConfirmDialog(frame,
-										String.format("Add %s to favourite?",
-												bookList.get(Integer.parseInt(value.toString())).getName()),
-										"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
-								if (choose == JOptionPane.OK_OPTION) {
-									data.addFavor(value.toString());
-									data.close();
-									updateFrame();
+								if (!favorList.contains(value.toString())) {
+									int choose = JOptionPane.showConfirmDialog(frame,
+											String.format("Add %s to favourite?",
+													bookList.get(Integer.parseInt(value.toString())).getName()),
+											"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
+									if (choose == JOptionPane.OK_OPTION) {
+										data.addFavor(value.toString());
+										data.close();
+										updateFrame();
+									}
+								} else {
+									int choose = JOptionPane.showConfirmDialog(frame,
+											String.format("Remove %s from favourite?",
+													bookList.get(Integer.parseInt(value.toString())).getName()),
+											"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
+									if (choose == JOptionPane.OK_OPTION) {
+										data.removeFavor(value.toString());
+										data.close();
+										updateFrame();
+									}
 								}
 								accept = true;
 							}

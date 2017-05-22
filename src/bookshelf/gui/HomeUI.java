@@ -3,6 +3,8 @@ package bookshelf.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.TimerTask;
+import java.util.Timer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -10,32 +12,39 @@ import javax.swing.*;
 import bookshelf.BookFactory;
 import bookshelf.Database;
 import bookshelf.TypeFactory;
+import bookshelf.gui.FolderPageUI.DragBookAction;
 
-import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.java.swing.plaf.motif.MotifBorders.BevelBorder;
-
-public class BookShelfUI extends JFrame {
+public class HomeUI extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	Database data;
 	JTextField searchText;
-	JLabel searchLabel, logoLabel, backGroundLabel, binLabel;
-	JButton addFolder, addImageadd;
-	JPanel panel1, panel2, panelAdd, panelText, panelButton, panelAll;
-	JScrollPane scrollPane;
+	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel;
+	JButton addFolder, addImageadd, right, left;
+	JPanel panel1, panel2, panelAdd, panelText, panelButton, panelAll, panelChange;
 	Image logo, backGround, addImage, addType, delete;
+	TypeFactory typeFactory = TypeFactory.getInstances();
+	BookFactory bookFactory = BookFactory.getInstances();
 	boolean direction = true;
+	boolean isClick = false;
 	String newFolder;
+	int numFol = 0;
+	int currentPage = 1;
+	int havePage = 0;
+	final int MAX_FOLDER = 8;
 
-	public BookShelfUI() throws IOException {
+	public HomeUI() throws IOException {
 		super("Book-Shelf");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initcomponents();
 	}
 
 	public void initcomponents() throws IOException {
-		// this.setSize(850, 700);
 		this.setLocation(230, 20);
 		this.setLayout(new FlowLayout());
 
@@ -44,29 +53,58 @@ public class BookShelfUI extends JFrame {
 		addImage = ImageIO.read(new File("Picture//Add.png"));
 		addType = ImageIO.read(new File("Picture//AddBook.png"));
 		delete = ImageIO.read(new File("Picture//bin.png"));
-		backGround = ImageIO.read(new File("backG.jpg"));
+		backGround = ImageIO.read(new File("Picture//backG.jpg"));
+
+		addFolder = new JButton();
+		addImageadd = new JButton();
+		right = new JButton("NEXT");
+		left = new JButton("PREV");
 
 		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
-		addImageadd = new JButton();
-		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(90, 70, Image.SCALE_DEFAULT)));
+		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(120, 100, Image.SCALE_DEFAULT)));
+		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(100, 80, Image.SCALE_DEFAULT)));
 		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
+
+		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
+		Image imgPreButt = iconPre.getImage();
+		Image newimg = imgPreButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		iconPre = new ImageIcon(newimg);
+		left.setIcon(iconPre);
+		left.setHorizontalTextPosition(SwingConstants.LEFT);
+		left.setBorderPainted(false);
+		left.setContentAreaFilled(false);
+
+		ImageIcon iconNext = new ImageIcon("Picture//nextButton.png");
+		Image imgNextButt = iconNext.getImage();
+		Image newimg2 = imgNextButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		iconNext = new ImageIcon(newimg2);
+		right.setIcon(iconNext);
+		right.setHorizontalTextPosition(SwingConstants.RIGHT);
+		right.setBorderPainted(false);
+		right.setContentAreaFilled(false);
 
 		panel1 = new JPanel();
 		panel2 = new JPanel();
 		panelAdd = new JPanel();
 		panelText = new JPanel();
 		panelButton = new JPanel();
+		panelChange = new JPanel();
 		panelAll = new JPanel() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g.drawImage(backGround, 0, 0, null);
 			};
 		};
-		scrollPane = new JScrollPane(panelButton);
 
 		searchLabel = new JLabel("SEARCH : ");
-		searchLabel.setFont(new Font("Rockwell", 1, 29));
+		searchLabel.setFont(new Font("Apple Casual", 1, 20));
+		searchLabel.setForeground(Color.WHITE);
 		searchText = new JTextField(15);
 		searchText.addFocusListener(new FocusListener() {
 			String promptText = "What you need ?";
@@ -88,16 +126,14 @@ public class BookShelfUI extends JFrame {
 			}
 		});
 		panelText.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelText.setBackground(Color.BLACK);
 		panelText.add(logoLabel);
 		panelText.add(searchLabel);
 		panelText.add(searchText);
 
 		data = new Database();
-		for (String type : TypeFactory.getInstances().getTypeList())
+		for (String type : typeFactory.getTypeList())
 			addNewFolder(type);
-
-		addFolder = new JButton();
-		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
 
 		addFolder.setBorder(BorderFactory.createEmptyBorder(60, 20, 60, 0));
 		addImageadd.setBorder(BorderFactory.createEmptyBorder(0, 20, 60, 0));
@@ -107,6 +143,7 @@ public class BookShelfUI extends JFrame {
 		panelAdd.add(addImageadd);
 		panelAdd.add(binLabel);
 		panelAdd.setLayout(new BoxLayout(panelAdd, BoxLayout.Y_AXIS));
+		panelAdd.setBackground(Color.BLACK);
 		addImageadd.setBorderPainted(false);
 		addImageadd.setContentAreaFilled(false);
 		addFolder.setBorderPainted(false);
@@ -119,45 +156,57 @@ public class BookShelfUI extends JFrame {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
 				if (newFolder == null)
 					return;
-				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !TypeFactory.getInstances().getTypeList()
-						.stream().filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
-
+				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !typeFactory.getTypeList().stream()
+						.filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
+					typeFactory.addType(newFolder);
 					addNewFolder(newFolder);
-					TypeFactory.getInstances().addType(newFolder);
 					data.close();
+					havePage = (int) Math.ceil(typeFactory.getTypeList().size() / (double) MAX_FOLDER);
+					if (currentPage < havePage)
+						right.setEnabled(true);
 				}
 			}
 		});
 
 		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
 		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
-		panel1.setBorder(new EmptyBorder(30, 30, 30, 30));
-		panel2.setBorder(new EmptyBorder(30, 30, 30, 30));
-		panelButton.setLayout(new FlowLayout());
-		panelButton.add(panel1, BorderLayout.CENTER);
-		panelButton.add(panel2, BorderLayout.CENTER);
-		scrollPane.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.BLACK));
-		scrollPane.setPreferredSize(new Dimension(600, 500));
+		panel1.setBorder(new EmptyBorder(0, 30, 30, 30));
+		panel2.setBorder(new EmptyBorder(0, 30, 30, 30));
+		panelButton.setLayout(new GridLayout(4, 2));
+		panelButton.setPreferredSize(new Dimension(600, 500));
 
-		panelText.setOpaque(false);
 		panelAdd.setOpaque(false);
 		panel1.setOpaque(false);
 		panel2.setOpaque(false);
 		panelButton.setOpaque(false);
-		scrollPane.getViewport().setOpaque(false);
-		scrollPane.setOpaque(false);
+		panelChange.setOpaque(false);
+
+		right.addActionListener(changePage());
+		left.addActionListener(changePage());
+		panelChange.add(left);
+		pageLabel = new JLabel("Page : " + currentPage);
+		panelChange.add(pageLabel);
+		panelChange.add(right);
 
 		panelAll.setLayout(new BorderLayout());
 		panelAll.add(panelText, BorderLayout.NORTH);
-		panelAll.add(scrollPane, BorderLayout.CENTER);
+		panelAll.add(panelButton, BorderLayout.CENTER);
 		panelAll.add(panelAdd, BorderLayout.EAST);
+		panelAll.add(panelChange, BorderLayout.SOUTH);
 		panelAll.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 20));
 
+		havePage = (int) Math.ceil(typeFactory.getTypeList().size() / (double) MAX_FOLDER);
+		if (currentPage <= 1)
+			left.setEnabled(false);
+		if (currentPage + 1 > havePage)
+			right.setEnabled(false);
 		this.add(panelAll);
 		this.pack();
 	}
 
 	public void addNewFolder(String newFolder) {
+		if (numFol >= MAX_FOLDER)
+			return;
 		JButton newButton = new JButton(newFolder);
 		newButton.setFont(new Font("Rockwell", 0, 20));
 		try {
@@ -166,32 +215,64 @@ public class BookShelfUI extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		newButton.addMouseMotionListener(new MouseAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				JButton button = (JButton) e.getSource();
+				TransferHandler handle = button.getTransferHandler();
+				handle.exportAsDrag(button, e, TransferHandler.COPY);
+			}
+		});
 		newButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		if (direction)
-			panel1.add(newButton);
-		else
-			panel2.add(newButton);
-		direction = !direction;
-		newButton.setBorderPainted(false);
-		newButton.setContentAreaFilled(false);
-		newButton.addActionListener(pressButton());
-	}
-
-	public ActionListener pressButton() {
-		ActionListener action = new ActionListener() {
+		newButton.setTransferHandler(new DragBookAction(getIndexList(newFolder)));
+		newButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JButton button = (JButton) e.getSource();
 				FolderPageUI folder = new FolderPageUI(button.getText());
-				folder.run();
+				if (isClick) {
+					folder.run();
+					isClick = false;
+				}
 			}
-		};
-		return action;
+		});
+		newButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (isClick) {
+					isClick = false;
+				} else {
+					isClick = true;
+					Timer t = new Timer("", false);
+					t.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							isClick = false;
+						}
+					}, 500);
+				}
+			}
+		});
+		direction = !direction;
+		panelButton.add(newButton);
+		newButton.setBorderPainted(false);
+		newButton.setContentAreaFilled(false);
+		numFol++;
+	}
+
+	public String getIndexList(String name) {
+		int index = 0;
+		for (int i = 0; i < typeFactory.getTypeList().size(); i++) {
+			if (typeFactory.getTypeList().get(i).equals(name))
+				index = i;
+		}
+		String indexS = Integer.toString(index);
+		return indexS;
 	}
 
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 		String[] typeArr = {};
-		typeArr = TypeFactory.getInstances().getTypeList().toArray(typeArr);
+		typeArr = typeFactory.getTypeList().toArray(typeArr);
 		JComboBox<String> cBox = new JComboBox<>(typeArr);
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
@@ -206,7 +287,7 @@ public class BookShelfUI extends JFrame {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
-			int result = chooser.showOpenDialog(BookShelfUI.this);
+			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
 				textLoc.setText(file.getPath());
@@ -252,7 +333,7 @@ public class BookShelfUI extends JFrame {
 				JOptionPane.showMessageDialog(null, "You forget to input a description !");
 				addType(name, type, location, description);
 			} else {
-				BookFactory.getInstances().add(name, type, location, description);
+				bookFactory.add(name, type, location, description);
 				data.close();
 			}
 		}
@@ -263,6 +344,43 @@ public class BookShelfUI extends JFrame {
 			if (!(Character.isLetter(c) || Character.isDigit(c)))
 				return false;
 		return true;
+	}
+
+	public ActionListener changePage() {
+		return new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				numFol = 0;
+				JButton pressButton = (JButton) e.getSource();
+				if (pressButton == right) {
+					left.setEnabled(true);
+					currentPage++;
+					updateFrame();
+				} else if (pressButton == left) {
+					right.setEnabled(true);
+					currentPage--;
+					updateFrame();
+				}
+			}
+		};
+	}
+
+	public void updateFrame() {
+		pageLabel.setText("Page : " + currentPage);
+		panelButton.removeAll();
+		panelButton.repaint();
+		for (String nameType : typeFactory.getTypeList().subList((currentPage - 1) * MAX_FOLDER,
+				typeFactory.getTypeList().size())) {
+			addNewFolder(nameType);
+		}
+
+		if (currentPage <= 1)
+			left.setEnabled(false);
+
+		if (currentPage + 1 > havePage)
+			right.setEnabled(false);
+		this.pack();
 	}
 
 	public void run() {

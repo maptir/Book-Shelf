@@ -33,7 +33,7 @@ public class SearchPageUI {
 	private JFrame frame;
 	private Database data;
 	private List<Book> bookList;
-	private List<String> typeList;
+	private List<String> typeList,favorList;
 	private BookFactory bookFactory;
 	private TypeFactory typeFactory;
 	private String type = "";
@@ -47,7 +47,7 @@ public class SearchPageUI {
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JButton searchButton;
-	private JButton nextButton,preButton;
+	private JButton nextButton,preButton,homeButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -77,6 +77,7 @@ public class SearchPageUI {
 		searchButton = new JButton();
 		preButton = new JButton();
 		nextButton = new JButton();
+		homeButton = new JButton();
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -106,6 +107,14 @@ public class SearchPageUI {
 		Image imgPre = iconPre.getImage();
 		Image newimg5 = imgPre.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		iconPre = new ImageIcon(newimg5);
+		
+		//Add for Home Button
+		ImageIcon iconHome = new ImageIcon("Picture//houseW.png");
+		Image imgHome = iconHome.getImage();
+		Image newimg7 = imgHome.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		iconHome = new ImageIcon(newimg7);
+		
+		
 
 		nextButton.setIcon(iconNext);
 		nextButton.setPreferredSize(new Dimension(35, 35));
@@ -124,6 +133,11 @@ public class SearchPageUI {
 		bgLabel.add(emptyLine);
 
 		pageLabel.setForeground(Color.WHITE);
+		
+		//Add for Home Button
+		homeButton.setIcon(iconHome);
+		homeButton.setPreferredSize(new Dimension(35, 35));
+		homeButton.setBackground(Color.BLACK);
 
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);
@@ -144,9 +158,14 @@ public class SearchPageUI {
 		northPanel.setBackground(Color.BLACK);
 
 		southPanel.setBackground(Color.BLACK);
+		southPanel.add(homeButton);  
+		//Fix for Home Button
+		southPanel.add(new JLabel("                                                                                  "));
 		southPanel.add(preButton);
 		southPanel.add(pageLabel);
 		southPanel.add(nextButton);
+		southPanel.add(new JLabel("                                                                                                "));
+
 
 		createPanelPerPage(0);
 		centerPanel.add(bgLabel);
@@ -162,6 +181,7 @@ public class SearchPageUI {
 		bookList = bookFactory.getBookList();
 		typeFactory = TypeFactory.getInstances();
 		typeList = typeFactory.getTypeList();
+		favorList = data.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
 		bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
@@ -187,6 +207,9 @@ public class SearchPageUI {
 			JLabel emptyLabel = new JLabel("      ");
 			String detail = String.format("%s\nType : %s\nFile Location : %s\nDetail : %s", book.getName(),
 					book.getType(), book.getLocation(), book.getDescription());
+			addFavorButton.setBackground(Color.gray);
+			addFavorButton.setActionCommand("" + start);
+			addFavorButton.addActionListener(new AddFavorAction());
 			bookButton.setPreferredSize(new Dimension(150, 190));
 			bookButton.addActionListener(new BookClickAction());
 			bookButton.addMouseListener(new ClickBookMouseAction());
@@ -314,6 +337,36 @@ public class SearchPageUI {
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
+	}
+	//Add for Home Button
+	public class AddFavorAction implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (!favorList.contains(e.getActionCommand())) {
+				int choose = JOptionPane.showConfirmDialog(frame,
+						String.format("Add %s to favourite?",
+								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
+						"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
+				if (choose == JOptionPane.OK_OPTION) {
+					data.addFavor(e.getActionCommand());
+					data.close();
+					updateFrame();
+				}
+			} else {
+				int choose = JOptionPane.showConfirmDialog(frame,
+						String.format("Remove %s from favourite?",
+								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
+						"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
+				if (choose == JOptionPane.OK_OPTION) {
+					data.removeFavor(e.getActionCommand());
+					data.close();
+					updateFrame();
+				}
+			}
+			
+		}
+		
 	}
 
 }
