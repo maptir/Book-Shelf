@@ -1,2 +1,2 @@
-Comic,Novel,Education,Work,Mandy,d,a,hh,hjj,
+All,Comedy,Comic,Education,Novel,Work,
 4,0,
