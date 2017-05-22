@@ -268,18 +268,11 @@ public class SearchPageUI extends JPanel {
 		} else {
 			nextButton.setEnabled(true);
 		}
-
-		// frame.validate();
 	}
 
 	public void run() {
 		this.setVisible(true);
 	}
-
-	// public static void main(String[] args) {
-	// SearchPageUI s = new SearchPageUI("Comic");
-	// s.run();
-	// }
 
 	public class PageButtonAction implements ActionListener {
 

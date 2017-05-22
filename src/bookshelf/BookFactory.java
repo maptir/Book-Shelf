@@ -36,6 +36,14 @@ public class BookFactory {
 		}
 	}
 
+	public void removeBookByType(String type) {
+		for (int x = 0; x < bookList.size(); x++) {
+			if (bookList.get(x).getType().equals(type)) {
+				bookList.remove(x);
+			}
+		}
+	}
+
 	public List<Book> getBookList() {
 		return bookList;
 	}
