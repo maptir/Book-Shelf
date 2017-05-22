@@ -17,8 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -50,7 +48,10 @@ import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
+
 import bookshelf.*;
+import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
 
 /**
  * The folder page of this program.
@@ -273,7 +274,9 @@ public class FolderPageUI implements Runnable {
 			JButton but = bookListButton.get(start);
 			backGLabel.setLayout(new FlowLayout());
 			but.setHorizontalTextPosition(SwingConstants.CENTER);
-			but.setFont(new Font("Arial", 0, 35));
+			but.setFont(new Font("Arial", 0, 20));
+			but.setBackground(Color.BLACK);
+			but.setForeground(Color.WHITE);
 			but.setActionCommand("" + start);
 			but.addActionListener(new BookClickAction());
 			but.addMouseListener(new doubleClickAction());
@@ -316,11 +319,13 @@ public class FolderPageUI implements Runnable {
 				tempFavor.add(bookList.get(Integer.parseInt(favorIndex)));
 			}
 			bookList = tempFavor;
+		} else if (filter.equalsIgnoreCase("all")) {
+			// do nothing
 		} else {
 			Predicate<Book> fil = (s) -> (s.getType().equalsIgnoreCase(this.filter));
 			bookList = bookList.stream().filter(fil).collect(Collectors.toList());
 		}
-		iconBook = new ImageIcon("Picture//sampleBook.jpg");
+		iconBook = new ImageIcon("Picture//basicbook.png");
 		Image imgBook = iconBook.getImage();
 		Image newimg3 = imgBook.getScaledInstance(140, 200, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
@@ -343,7 +348,7 @@ public class FolderPageUI implements Runnable {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
 			} catch (IOException | IllegalArgumentException ex) {
-				System.out.println("File Not Found");
+				JOptionPane.showMessageDialog(frame, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -353,8 +358,9 @@ public class FolderPageUI implements Runnable {
 		bookBut.setHorizontalAlignment(SwingConstants.CENTER);
 		bookBut.setVerticalAlignment(SwingConstants.CENTER);
 		bookBut.setPreferredSize(new Dimension(140, 200));
-		String toolTip = String.format("<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>%s",
-				book.getName(), book.getType(), book.getLocation(), book.getDescription() + "</p></html>");
+		String toolTip = String.format(
+				"<html><p width=\"250\">" + "%s<br>Type : %s<br>File Location : %s<br>Detail : %s", book.getName(),
+				book.getType(), book.getLocation(), book.getDescription() + "</p></html>");
 		bookBut.setToolTipText(toolTip);
 		bookListButton.add(bookBut);
 	}

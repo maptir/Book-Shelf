@@ -16,7 +16,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -49,11 +48,10 @@ public class SearchPageUI extends JPanel {
 	private JButton nextButton;
 	private JButton preButton;
 	private JButton homeButton;
-	private JButton addFavorButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
-	private ImageIcon iconBook;
+	private ImageIcon iconBook, iconComicBook, iconWorkBook, iconEduBook, iconNovelBook;
 	private ImageIcon iconDesk;
 	private int[] starterPage = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36 };
 	private int currentPage = 1;
@@ -73,6 +71,8 @@ public class SearchPageUI extends JPanel {
 	}
 
 	private void initComponents() {
+		UIManager.put("ToolTip.background", Color.BLACK);
+		UIManager.put("ToolTip.foreground", Color.WHITE);
 		this.setPreferredSize(new Dimension(750, 580));
 		this.setBackground(Color.BLACK);
 		northPanel = new JPanel(new FlowLayout());
@@ -86,7 +86,6 @@ public class SearchPageUI extends JPanel {
 		preButton = new JButton();
 		nextButton = new JButton();
 		homeButton = new JButton();
-		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -102,10 +101,30 @@ public class SearchPageUI extends JPanel {
 		Image newimg2 = imgDesk.getScaledInstance(820, 600, Image.SCALE_SMOOTH);
 		iconDesk = new ImageIcon(newimg2);
 
-		iconBook = new ImageIcon("Picture//sampleBook.jpg");
+		iconBook = new ImageIcon("Picture//basicbook.png");
 		Image imgBook = iconBook.getImage();
-		Image newimg3 = imgBook.getScaledInstance(150, 190, Image.SCALE_SMOOTH);
+		Image newimg3 = imgBook.getScaledInstance(169, 215, Image.SCALE_SMOOTH);
 		iconBook = new ImageIcon(newimg3);
+
+		iconComicBook = new ImageIcon("Picture//comicbook.png");
+		Image imgCB = iconComicBook.getImage();
+		Image newimg6 = imgCB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
+		iconComicBook = new ImageIcon(newimg6);
+
+		iconNovelBook = new ImageIcon("Picture//novelbook.png");
+		Image imgNB = iconNovelBook.getImage();
+		Image newimg8 = imgCB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
+		iconNovelBook = new ImageIcon(newimg8);
+
+		iconEduBook = new ImageIcon("Picture//edubook.png");
+		Image imgEB = iconEduBook.getImage();
+		Image newimg9 = imgEB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
+		iconEduBook = new ImageIcon(newimg9);
+
+		iconWorkBook = new ImageIcon("Picture//workbook.png");
+		Image imgWB = iconWorkBook.getImage();
+		Image newimg10 = imgWB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
+		iconWorkBook = new ImageIcon(newimg10);
 
 		ImageIcon iconNext = new ImageIcon("Picture//nextButton.png");
 		Image imgNext = iconNext.getImage();
@@ -144,14 +163,13 @@ public class SearchPageUI extends JPanel {
 		homeButton.setIcon(iconHome);
 		homeButton.setPreferredSize(new Dimension(35, 35));
 		homeButton.setBackground(Color.BLACK);
+		homeButton.setToolTipText("Back to Home");
 		homeButton.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				BookShelfUI.setHomeLayOut();
 			}
 		});
-
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);
 		searchButton.setPreferredSize(new Dimension(25, 25));
@@ -172,13 +190,13 @@ public class SearchPageUI extends JPanel {
 
 		southPanel.setBackground(Color.BLACK);
 		southPanel.add(homeButton);
-		southPanel
-				.add(new JLabel("                                                                                  "));
+		southPanel.add(new JLabel(
+				"                                                                                                           "));
 		southPanel.add(preButton);
 		southPanel.add(pageLabel);
 		southPanel.add(nextButton);
 		southPanel.add(new JLabel(
-				"                                                                                                "));
+				"                                                                                                            "));
 
 		createPanelPerPage(0);
 		centerPanel.add(bgLabel);
@@ -196,7 +214,14 @@ public class SearchPageUI extends JPanel {
 		favorList = data.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
-		bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
+		if (!typeList.contains("All")) {
+			typeList.add(0, "All");
+		}
+		if (type.equalsIgnoreCase("all")) {
+			// do nothing
+		} else {
+			bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
+		}
 		if (!name.equals("")) {
 			bookList = bookList.stream().filter(filByName).collect(Collectors.toList());
 		}
@@ -213,16 +238,33 @@ public class SearchPageUI extends JPanel {
 			if (line == 2) {
 				break;
 			}
-			JButton bookButton = new JButton(iconBook);
+			JButton bookButton;
+
+			if (bookList.get(start).getType().equalsIgnoreCase("comic")) {
+				bookButton = new JButton(iconComicBook);
+			} else if (bookList.get(start).getType().equalsIgnoreCase("novel")) {
+				bookButton = new JButton(iconNovelBook);
+			} else if (bookList.get(start).getType().equalsIgnoreCase("work")) {
+				bookButton = new JButton(iconWorkBook);
+			} else if (bookList.get(start).getType().equalsIgnoreCase("education")) {
+				bookButton = new JButton(iconEduBook);
+			} else {
+				JLabel name = new JLabel(bookList.get(start).getName());
+				name.setForeground(Color.WHITE);
+				name.setBackground(Color.black);
+				bookButton = new JButton(iconBook);
+				bookButton.setHorizontalAlignment(SwingConstants.CENTER);
+				bookButton.setVerticalAlignment(SwingConstants.CENTER);
+			}
 			JTextArea detailArea = new JTextArea();
 			JButton addFavorButton = new JButton("Add Favourite");
-			JLabel emptyLabel = new JLabel("      ");
+			JLabel emptyLabel = new JLabel("                      ");
 			String detail = String.format("%s\nType : %s\nFile Location : %s\nDetail : %s", book.getName(),
 					book.getType(), book.getLocation(), book.getDescription());
 			addFavorButton.setBackground(Color.gray);
 			addFavorButton.setActionCommand("" + start);
 			addFavorButton.addActionListener(new AddFavorAction());
-			bookButton.setPreferredSize(new Dimension(150, 190));
+			bookButton.setPreferredSize(new Dimension(160, 215));
 			bookButton.addActionListener(new BookClickAction());
 			bookButton.addMouseListener(new ClickBookMouseAction());
 			bookButton.setActionCommand("" + start);
@@ -238,6 +280,8 @@ public class SearchPageUI extends JPanel {
 			bgLabel.add(bookButton);
 			bgLabel.add(emptyLabel);
 			bgLabel.add(detailArea);
+			bgLabel.add(new JLabel(
+					"                                                                                                                                                                                                                               "));
 			bgLabel.setLayout(new FlowLayout());
 			line++;
 		}
@@ -250,7 +294,7 @@ public class SearchPageUI extends JPanel {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
 			} catch (IOException | IllegalArgumentException ex) {
-				System.out.println("File Not Found");
+				JOptionPane.showMessageDialog(this, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}

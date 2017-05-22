@@ -1,6 +1,7 @@
 package bookshelf;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -25,6 +26,12 @@ public class BookFactory {
 		if (temp.size() == 0) {
 			bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
 		}
+		bookList.sort(new Comparator<Book>() {
+			@Override
+			public int compare(Book b1, Book b2) {
+				return b1.getName().compareTo(b2.getName());
+			}
+		});
 	}
 
 	public void removeBook(String name, String des) {

@@ -1,6 +1,7 @@
 package bookshelf;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class TypeFactory {
@@ -20,6 +21,12 @@ public class TypeFactory {
 	public void addType(String type) {
 		if (!typeList.contains(type)) {
 			typeList.add(type);
+			typeList.sort(new Comparator<String>() {
+				@Override
+				public int compare(String t1, String t2) {
+					return t1.compareTo(t2);
+				}
+			});
 		}
 	}
 

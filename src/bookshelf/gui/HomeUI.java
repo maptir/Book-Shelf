@@ -146,7 +146,6 @@ public class HomeUI extends JPanel {
 		searchButton.addActionListener(searchPage(cBox.getSelectedItem().toString(), searchText.getText()));
 		searchText.addActionListener(searchPage(cBox.getSelectedItem().toString(), searchText.getText()));
 		panelText.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		// panelText.setBackground(new Color(189, 140, 82));
 		panelText.setBackground(Color.BLACK);
 
 		panelText.add(logoLabel);
