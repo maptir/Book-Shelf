@@ -107,7 +107,7 @@ public class FolderPageUI implements Runnable {
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
 		favorLabel = new JLabel();
-		favorText = new JLabel("                       Add Favourite");
+		favorText = new JLabel("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
 		img = new ImageIcon("Picture//backGR.jpg");
 		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
@@ -201,7 +201,7 @@ public class FolderPageUI implements Runnable {
 		}
 
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                                                   "));
+		panelSouth.add(new JLabel("                                                                              "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);

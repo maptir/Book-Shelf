@@ -47,9 +47,7 @@ public class SearchPageUI {
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JButton searchButton;
-	private JButton nextButton;
-	private JButton preButton;
-	private JButton addFavorButton;
+	private JButton nextButton,preButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -79,7 +77,6 @@ public class SearchPageUI {
 		searchButton = new JButton();
 		preButton = new JButton();
 		nextButton = new JButton();
-		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -186,13 +183,16 @@ public class SearchPageUI {
 			}
 			JButton bookButton = new JButton(iconBook);
 			JTextArea detailArea = new JTextArea();
+			JButton addFavorButton = new JButton("Add Favourite");
 			JLabel emptyLabel = new JLabel("      ");
 			String detail = String.format("%s\nType : %s\nFile Location : %s\nDetail : %s", book.getName(),
 					book.getType(), book.getLocation(), book.getDescription());
 			bookButton.setPreferredSize(new Dimension(150, 190));
 			bookButton.addActionListener(new BookClickAction());
 			bookButton.addMouseListener(new ClickBookMouseAction());
-			bookButton.setActionCommand("" + start);
+			bookButton.setActionCommand("" + start);		
+			bookButton.setLayout(new BorderLayout());
+			bookButton.add(addFavorButton,BorderLayout.SOUTH);
 			detailArea.setFont(new Font("Apple Casual", 3, 17));
 			detailArea.setLineWrap(true);
 			detailArea.setText(detail);
