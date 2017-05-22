@@ -14,10 +14,9 @@ import bookshelf.Database;
 import bookshelf.TypeFactory;
 import bookshelf.gui.FolderPageUI.DragBookAction;
 
-import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class HomeUI extends JFrame {
+public class HomeUI extends JPanel {
 	/**
 	 * 
 	 */
@@ -26,11 +25,10 @@ public class HomeUI extends JFrame {
 	JTextField searchText;
 	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel;
 	JButton addFolder, addImageadd, right, left;
-	JPanel panel1, panel2, panelAdd, panelText, panelButton, panelAll, panelChange;
+	JPanel panelAdd, panelText, panelButton, panelAll, panelChange;
 	Image logo, backGround, addImage, addType, delete;
 	TypeFactory typeFactory = TypeFactory.getInstances();
 	BookFactory bookFactory = BookFactory.getInstances();
-	boolean direction = true;
 	boolean isClick = false;
 	String newFolder;
 	int numFol = 0;
@@ -39,8 +37,6 @@ public class HomeUI extends JFrame {
 	final int MAX_FOLDER = 8;
 
 	public HomeUI() throws IOException {
-		super("Book-Shelf");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		initcomponents();
 	}
 
@@ -48,7 +44,6 @@ public class HomeUI extends JFrame {
 		this.setLocation(230, 20);
 		this.setLayout(new FlowLayout());
 
-		getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.orange));
 		logo = ImageIO.read(new File("Picture//Logo.png"));
 		addImage = ImageIO.read(new File("Picture//Add.png"));
 		addType = ImageIO.read(new File("Picture//AddBook.png"));
@@ -60,9 +55,9 @@ public class HomeUI extends JFrame {
 		right = new JButton("NEXT");
 		left = new JButton("PREV");
 
-		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
 		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(120, 100, Image.SCALE_DEFAULT)));
 		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(100, 80, Image.SCALE_DEFAULT)));
+		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
 		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
 
 		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
@@ -73,6 +68,7 @@ public class HomeUI extends JFrame {
 		left.setHorizontalTextPosition(SwingConstants.LEFT);
 		left.setBorderPainted(false);
 		left.setContentAreaFilled(false);
+		left.addActionListener(changePage());
 
 		ImageIcon iconNext = new ImageIcon("Picture//nextButton.png");
 		Image imgNextButt = iconNext.getImage();
@@ -82,9 +78,8 @@ public class HomeUI extends JFrame {
 		right.setHorizontalTextPosition(SwingConstants.RIGHT);
 		right.setBorderPainted(false);
 		right.setContentAreaFilled(false);
+		right.addActionListener(changePage());
 
-		panel1 = new JPanel();
-		panel2 = new JPanel();
 		panelAdd = new JPanel();
 		panelText = new JPanel();
 		panelButton = new JPanel();
@@ -102,10 +97,17 @@ public class HomeUI extends JFrame {
 			};
 		};
 
+		data = new Database();
+		for (String type : typeFactory.getTypeList())
+			addNewFolder(type);
+
 		searchLabel = new JLabel("SEARCH : ");
 		searchLabel.setFont(new Font("Apple Casual", 1, 20));
 		searchLabel.setForeground(Color.WHITE);
 		searchText = new JTextField(15);
+		String[] typeArr = {};
+		typeArr = typeFactory.getTypeList().toArray(typeArr);
+		JComboBox<String> cBox = new JComboBox<>(typeArr);
 		searchText.addFocusListener(new FocusListener() {
 			String promptText = "What you need ?";
 
@@ -125,25 +127,32 @@ public class HomeUI extends JFrame {
 				}
 			}
 		});
+		searchText.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BookShelfUI.setLayOut(searchText.getText(), cBox.getSelectedItem().toString());
+			}
+		});
 		panelText.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelText.setBackground(Color.BLACK);
+
 		panelText.add(logoLabel);
 		panelText.add(searchLabel);
 		panelText.add(searchText);
+		panelText.add(cBox);
+		panelText.setPreferredSize(new Dimension(820, 100));
 
-		data = new Database();
-		for (String type : typeFactory.getTypeList())
-			addNewFolder(type);
-
-		addFolder.setBorder(BorderFactory.createEmptyBorder(60, 20, 60, 0));
-		addImageadd.setBorder(BorderFactory.createEmptyBorder(0, 20, 60, 0));
-		binLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 30, 0));
+		addFolder.setBorder(BorderFactory.createEmptyBorder(60, 20, 60, 10));
+		addImageadd.setBorder(BorderFactory.createEmptyBorder(0, 20, 60, 10));
+		binLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 30, 10));
 
 		panelAdd.add(addFolder);
 		panelAdd.add(addImageadd);
 		panelAdd.add(binLabel);
 		panelAdd.setLayout(new BoxLayout(panelAdd, BoxLayout.Y_AXIS));
 		panelAdd.setBackground(Color.BLACK);
+
 		addImageadd.setBorderPainted(false);
 		addImageadd.setContentAreaFilled(false);
 		addFolder.setBorderPainted(false);
@@ -168,23 +177,14 @@ public class HomeUI extends JFrame {
 			}
 		});
 
-		panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));
-		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
-		panel1.setBorder(new EmptyBorder(0, 30, 30, 30));
-		panel2.setBorder(new EmptyBorder(0, 30, 30, 30));
-		panelButton.setLayout(new GridLayout(4, 2));
-		panelButton.setPreferredSize(new Dimension(600, 500));
+		panelButton.setPreferredSize(new Dimension(600, 520));
 
 		panelAdd.setOpaque(false);
-		panel1.setOpaque(false);
-		panel2.setOpaque(false);
 		panelButton.setOpaque(false);
 		panelChange.setOpaque(false);
 
-		right.addActionListener(changePage());
-		left.addActionListener(changePage());
-		panelChange.add(left);
 		pageLabel = new JLabel("Page : " + currentPage);
+		panelChange.add(left);
 		panelChange.add(pageLabel);
 		panelChange.add(right);
 
@@ -193,7 +193,7 @@ public class HomeUI extends JFrame {
 		panelAll.add(panelButton, BorderLayout.CENTER);
 		panelAll.add(panelAdd, BorderLayout.EAST);
 		panelAll.add(panelChange, BorderLayout.SOUTH);
-		panelAll.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 20));
+		panelAll.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
 		havePage = (int) Math.ceil(typeFactory.getTypeList().size() / (double) MAX_FOLDER);
 		if (currentPage <= 1)
@@ -201,7 +201,6 @@ public class HomeUI extends JFrame {
 		if (currentPage + 1 > havePage)
 			right.setEnabled(false);
 		this.add(panelAll);
-		this.pack();
 	}
 
 	public void addNewFolder(String newFolder) {
@@ -253,7 +252,7 @@ public class HomeUI extends JFrame {
 				}
 			}
 		});
-		direction = !direction;
+		panelButton.add(new JLabel("                                           "));
 		panelButton.add(newButton);
 		newButton.setBorderPainted(false);
 		newButton.setContentAreaFilled(false);
@@ -277,7 +276,7 @@ public class HomeUI extends JFrame {
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
 		JTextField textLoc = new JTextField(10);
-		JTextArea textDesc = new JTextArea(5, 20);
+		JTextArea textDesc = new JTextArea(5, 17);
 		textName.setText(aName);
 		textDesc.setText(aDescription);
 		textLoc.setText(aLocation);
@@ -380,7 +379,6 @@ public class HomeUI extends JFrame {
 
 		if (currentPage + 1 > havePage)
 			right.setEnabled(false);
-		this.pack();
 	}
 
 	public void run() {

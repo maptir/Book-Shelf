@@ -29,8 +29,7 @@ import bookshelf.BookFactory;
 import bookshelf.Database;
 import bookshelf.TypeFactory;
 
-public class SearchPageUI {
-	private JFrame frame;
+public class SearchPageUI extends JPanel {
 	private Database data;
 	private List<Book> bookList;
 	private List<String> typeList;
@@ -49,6 +48,7 @@ public class SearchPageUI {
 	private JButton searchButton;
 	private JButton nextButton;
 	private JButton preButton;
+	private JButton homeButton;
 	private JButton addFavorButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
@@ -65,10 +65,16 @@ public class SearchPageUI {
 		initComponents();
 	}
 
+	public SearchPageUI(String name, String type) {
+		this.type = type;
+		databaseSetUp(type, "");
+		initComponents();
+		typeComboBox.setSelectedItem(type);
+	}
+
 	private void initComponents() {
-		frame = new JFrame("Search Result");
-		frame.setPreferredSize(new Dimension(750, 580));
-		frame.setBackground(Color.BLACK);
+		this.setPreferredSize(new Dimension(750, 580));
+		this.setBackground(Color.BLACK);
 		northPanel = new JPanel(new FlowLayout());
 		centerPanel = new JPanel(new FlowLayout());
 		southPanel = new JPanel(new FlowLayout());
@@ -79,6 +85,7 @@ public class SearchPageUI {
 		searchButton = new JButton();
 		preButton = new JButton();
 		nextButton = new JButton();
+		homeButton = new JButton();
 		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
@@ -92,7 +99,7 @@ public class SearchPageUI {
 
 		iconDesk = new ImageIcon("Picture//desk.jpg");
 		Image imgDesk = iconDesk.getImage();
-		Image newimg2 = imgDesk.getScaledInstance(750, 600, Image.SCALE_SMOOTH);
+		Image newimg2 = imgDesk.getScaledInstance(820, 600, Image.SCALE_SMOOTH);
 		iconDesk = new ImageIcon(newimg2);
 
 		iconBook = new ImageIcon("Picture//sampleBook.jpg");
@@ -109,6 +116,11 @@ public class SearchPageUI {
 		Image imgPre = iconPre.getImage();
 		Image newimg5 = imgPre.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		iconPre = new ImageIcon(newimg5);
+
+		ImageIcon iconHome = new ImageIcon("Picture//houseW.png");
+		Image imgHome = iconHome.getImage();
+		Image newimg7 = imgHome.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		iconHome = new ImageIcon(newimg7);
 
 		nextButton.setIcon(iconNext);
 		nextButton.setPreferredSize(new Dimension(35, 35));
@@ -127,6 +139,10 @@ public class SearchPageUI {
 		bgLabel.add(emptyLine);
 
 		pageLabel.setForeground(Color.WHITE);
+
+		homeButton.setIcon(iconHome);
+		homeButton.setPreferredSize(new Dimension(35, 35));
+		homeButton.setBackground(Color.BLACK);
 
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);
@@ -147,16 +163,20 @@ public class SearchPageUI {
 		northPanel.setBackground(Color.BLACK);
 
 		southPanel.setBackground(Color.BLACK);
+		southPanel.add(homeButton);
+		southPanel
+				.add(new JLabel("                                                                                  "));
 		southPanel.add(preButton);
 		southPanel.add(pageLabel);
 		southPanel.add(nextButton);
+		southPanel.add(new JLabel(
+				"                                                                                                "));
 
 		createPanelPerPage(0);
 		centerPanel.add(bgLabel);
-		frame.add(northPanel, BorderLayout.NORTH);
-		frame.add(centerPanel, BorderLayout.CENTER);
-		frame.add(southPanel, BorderLayout.SOUTH);
-		frame.pack();
+		this.add(northPanel, BorderLayout.NORTH);
+		this.add(centerPanel, BorderLayout.CENTER);
+		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
 	private void databaseSetUp(String type, String name) {
@@ -234,17 +254,17 @@ public class SearchPageUI {
 			nextButton.setEnabled(true);
 		}
 
-		frame.validate();
+		// frame.validate();
 	}
 
 	public void run() {
-		frame.setVisible(true);
+		this.setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		SearchPageUI s = new SearchPageUI("Comic");
-		s.run();
-	}
+	// public static void main(String[] args) {
+	// SearchPageUI s = new SearchPageUI("Comic");
+	// s.run();
+	// }
 
 	public class PageButtonAction implements ActionListener {
 
