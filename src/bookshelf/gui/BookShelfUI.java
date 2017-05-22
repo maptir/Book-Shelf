@@ -26,15 +26,18 @@ public class BookShelfUI extends JFrame {
 		bsPanel = new JPanel(c);
 
 		bsPanel.add(home, "home");
-		bsPanel.add(search, "search");
 		c.show(bsPanel, "home");
 
 		this.add(bsPanel);
 		this.pack();
 	}
 
-	public static void setLayOut(String book, String type) {
-		search = new SearchPageUI(book, type);
+	public static void setHomeLayOut() {
+		c.show(bsPanel, "home");
+	}
+
+	public static void setSearchLayOut(String type, String name) {
+		search = new SearchPageUI(type, name);
 		bsPanel.add(search, "search");
 		c.show(bsPanel, "search");
 	}

@@ -65,9 +65,9 @@ public class SearchPageUI extends JPanel {
 		initComponents();
 	}
 
-	public SearchPageUI(String name, String type) {
+	public SearchPageUI(String type, String name) {
 		this.type = type;
-		databaseSetUp(type, "");
+		databaseSetUp(type, name);
 		initComponents();
 		typeComboBox.setSelectedItem(type);
 	}
@@ -141,14 +141,16 @@ public class SearchPageUI extends JPanel {
 
 		pageLabel.setForeground(Color.WHITE);
 
-		// Add for Home Button
 		homeButton.setIcon(iconHome);
 		homeButton.setPreferredSize(new Dimension(35, 35));
 		homeButton.setBackground(Color.BLACK);
+		homeButton.addActionListener(new ActionListener() {
 
-		homeButton.setIcon(iconHome);
-		homeButton.setPreferredSize(new Dimension(35, 35));
-		homeButton.setBackground(Color.BLACK);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BookShelfUI.setHomeLayOut();
+			}
+		});
 
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);

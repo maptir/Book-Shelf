@@ -131,7 +131,7 @@ public class HomeUI extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BookShelfUI.setLayOut(searchText.getText(), cBox.getSelectedItem().toString());
+				BookShelfUI.setSearchLayOut(searchText.getText(), cBox.getSelectedItem().toString());
 			}
 		});
 		panelText.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
