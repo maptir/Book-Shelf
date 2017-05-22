@@ -106,7 +106,7 @@ public class FolderPageUI implements Runnable {
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
 		favorLabel = new JLabel();
-		favorText = new JLabel("                       Add Favourite");
+		favorText = new JLabel("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
 		img = new ImageIcon("Picture//backGR.jpg");
 		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
@@ -175,6 +175,7 @@ public class FolderPageUI implements Runnable {
 		addBookButton.setHorizontalAlignment(SwingConstants.CENTER);
 		addBookButton.setBackground(new Color(38, 30, 19));
 		addBookButton.addActionListener(new addBookAction());
+		addBookButton.setToolTipText("Click me for adding new book");
 
 		garbageLabel.setIcon(iconGarbage);
 		garbageLabel.setPreferredSize((new Dimension(70, 70)));
@@ -182,6 +183,7 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		garbageLabel.setBackground(new Color(38, 30, 19));
 		garbageLabel.setTransferHandler(new DropAction());
+		garbageLabel.setToolTipText("Drop Book on me for delete it.");
 
 		if (!filter.equalsIgnoreCase("favor")) {
 			favorText.setForeground(Color.WHITE);
@@ -200,7 +202,7 @@ public class FolderPageUI implements Runnable {
 		}
 
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                                                   "));
+		panelSouth.add(new JLabel("                                                                              "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
@@ -292,6 +294,7 @@ public class FolderPageUI implements Runnable {
 		bookFactory = BookFactory.getInstances();
 		bookListButton = new ArrayList<>();
 		bookList = bookFactory.getBookList();
+		favorList = data.getFavorList();
 		if (filter.equalsIgnoreCase("favor")) {
 			List<Book> tempFavor = new ArrayList<>();
 			favorList = data.getFavorList();
@@ -532,14 +535,26 @@ public class FolderPageUI implements Runnable {
 								}
 								accept = true;
 							} else {
-								int choose = JOptionPane.showConfirmDialog(frame,
-										String.format("Add %s to favourite?",
-												bookList.get(Integer.parseInt(value.toString())).getName()),
-										"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
-								if (choose == JOptionPane.OK_OPTION) {
-									data.addFavor(value.toString());
-									data.close();
-									updateFrame();
+								if (!favorList.contains(value.toString())) {
+									int choose = JOptionPane.showConfirmDialog(frame,
+											String.format("Add %s to favourite?",
+													bookList.get(Integer.parseInt(value.toString())).getName()),
+											"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
+									if (choose == JOptionPane.OK_OPTION) {
+										data.addFavor(value.toString());
+										data.close();
+										updateFrame();
+									}
+								} else {
+									int choose = JOptionPane.showConfirmDialog(frame,
+											String.format("Remove %s from favourite?",
+													bookList.get(Integer.parseInt(value.toString())).getName()),
+											"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
+									if (choose == JOptionPane.OK_OPTION) {
+										data.removeFavor(value.toString());
+										data.close();
+										updateFrame();
+									}
 								}
 								accept = true;
 							}

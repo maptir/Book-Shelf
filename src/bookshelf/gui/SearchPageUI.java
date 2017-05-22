@@ -32,7 +32,7 @@ import bookshelf.TypeFactory;
 public class SearchPageUI extends JPanel {
 	private Database data;
 	private List<Book> bookList;
-	private List<String> typeList;
+	private List<String> typeList, favorList;
 	private BookFactory bookFactory;
 	private TypeFactory typeFactory;
 	private String type = "";
@@ -117,6 +117,7 @@ public class SearchPageUI extends JPanel {
 		Image newimg5 = imgPre.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
 		iconPre = new ImageIcon(newimg5);
 
+		// Add for Home Button
 		ImageIcon iconHome = new ImageIcon("Picture//houseW.png");
 		Image imgHome = iconHome.getImage();
 		Image newimg7 = imgHome.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
@@ -139,6 +140,11 @@ public class SearchPageUI extends JPanel {
 		bgLabel.add(emptyLine);
 
 		pageLabel.setForeground(Color.WHITE);
+
+		// Add for Home Button
+		homeButton.setIcon(iconHome);
+		homeButton.setPreferredSize(new Dimension(35, 35));
+		homeButton.setBackground(Color.BLACK);
 
 		homeButton.setIcon(iconHome);
 		homeButton.setPreferredSize(new Dimension(35, 35));
@@ -185,6 +191,7 @@ public class SearchPageUI extends JPanel {
 		bookList = bookFactory.getBookList();
 		typeFactory = TypeFactory.getInstances();
 		typeList = typeFactory.getTypeList();
+		favorList = data.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
 		bookList = bookList.stream().filter(filByType).collect(Collectors.toList());
@@ -206,13 +213,19 @@ public class SearchPageUI extends JPanel {
 			}
 			JButton bookButton = new JButton(iconBook);
 			JTextArea detailArea = new JTextArea();
+			JButton addFavorButton = new JButton("Add Favourite");
 			JLabel emptyLabel = new JLabel("      ");
 			String detail = String.format("%s\nType : %s\nFile Location : %s\nDetail : %s", book.getName(),
 					book.getType(), book.getLocation(), book.getDescription());
+			addFavorButton.setBackground(Color.gray);
+			addFavorButton.setActionCommand("" + start);
+			addFavorButton.addActionListener(new AddFavorAction());
 			bookButton.setPreferredSize(new Dimension(150, 190));
 			bookButton.addActionListener(new BookClickAction());
 			bookButton.addMouseListener(new ClickBookMouseAction());
 			bookButton.setActionCommand("" + start);
+			bookButton.setLayout(new BorderLayout());
+			bookButton.add(addFavorButton, BorderLayout.SOUTH);
 			detailArea.setFont(new Font("Apple Casual", 3, 17));
 			detailArea.setLineWrap(true);
 			detailArea.setText(detail);
@@ -334,6 +347,37 @@ public class SearchPageUI extends JPanel {
 		@Override
 		public void keyReleased(KeyEvent e) {
 		}
+	}
+
+	// Add for Home Button
+	public class AddFavorAction implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (!favorList.contains(e.getActionCommand())) {
+				int choose = JOptionPane.showConfirmDialog(null,
+						String.format("Add %s to favourite?",
+								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
+						"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
+				if (choose == JOptionPane.OK_OPTION) {
+					data.addFavor(e.getActionCommand());
+					data.close();
+					updateFrame();
+				}
+			} else {
+				int choose = JOptionPane.showConfirmDialog(null,
+						String.format("Remove %s from favourite?",
+								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
+						"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
+				if (choose == JOptionPane.OK_OPTION) {
+					data.removeFavor(e.getActionCommand());
+					data.close();
+					updateFrame();
+				}
+			}
+
+		}
+
 	}
 
 }
