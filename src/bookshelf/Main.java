@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import bookshelf.gui.HomeUI;
+import bookshelf.gui.BookShelfUI;
 
 public class Main {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException,
@@ -13,7 +13,7 @@ public class Main {
 
 		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
-		HomeUI ui = new HomeUI();
+		BookShelfUI ui = new BookShelfUI();
 		ui.run();
 	}
 }

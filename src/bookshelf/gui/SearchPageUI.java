@@ -27,8 +27,7 @@ import bookshelf.BookFactory;
 import bookshelf.Database;
 import bookshelf.TypeFactory;
 
-public class SearchPageUI {
-	private JFrame frame;
+public class SearchPageUI extends JPanel {
 	private Database data;
 	private List<Book> bookList;
 	private List<String> typeList, favorList;
@@ -45,7 +44,10 @@ public class SearchPageUI {
 	private JPanel centerPanel;
 	private JPanel southPanel;
 	private JButton searchButton;
-	private JButton nextButton, preButton, homeButton;
+	private JButton nextButton;
+	private JButton preButton;
+	private JButton homeButton;
+	private JButton addFavorButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
 	private JLabel searchResult = new JLabel();;
@@ -61,10 +63,16 @@ public class SearchPageUI {
 		initComponents();
 	}
 
+	public SearchPageUI(String name, String type) {
+		this.type = type;
+		databaseSetUp(type, "");
+		initComponents();
+		typeComboBox.setSelectedItem(type);
+	}
+
 	private void initComponents() {
-		frame = new JFrame("Search Result");
-		frame.setPreferredSize(new Dimension(750, 580));
-		frame.setBackground(Color.BLACK);
+		this.setPreferredSize(new Dimension(750, 580));
+		this.setBackground(Color.BLACK);
 		northPanel = new JPanel(new FlowLayout());
 		centerPanel = new JPanel(new FlowLayout());
 		southPanel = new JPanel(new FlowLayout());
@@ -76,6 +84,7 @@ public class SearchPageUI {
 		preButton = new JButton();
 		nextButton = new JButton();
 		homeButton = new JButton();
+		addFavorButton = new JButton("add to Favourite");
 		bgLabel = new JLabel();
 		pageLabel = new JLabel("Page : " + currentPage);
 		emptyLine = new JLabel(
@@ -88,7 +97,7 @@ public class SearchPageUI {
 
 		iconDesk = new ImageIcon("Picture//desk.jpg");
 		Image imgDesk = iconDesk.getImage();
-		Image newimg2 = imgDesk.getScaledInstance(750, 600, Image.SCALE_SMOOTH);
+		Image newimg2 = imgDesk.getScaledInstance(820, 600, Image.SCALE_SMOOTH);
 		iconDesk = new ImageIcon(newimg2);
 
 		iconBook = new ImageIcon("Picture//sampleBook.jpg");
@@ -155,7 +164,6 @@ public class SearchPageUI {
 
 		southPanel.setBackground(Color.BLACK);
 		southPanel.add(homeButton);
-		// Fix for Home Button
 		southPanel
 				.add(new JLabel("                                                                                  "));
 		southPanel.add(preButton);
@@ -166,10 +174,9 @@ public class SearchPageUI {
 
 		createPanelPerPage(0);
 		centerPanel.add(bgLabel);
-		frame.add(northPanel, BorderLayout.NORTH);
-		frame.add(centerPanel, BorderLayout.CENTER);
-		frame.add(southPanel, BorderLayout.SOUTH);
-		frame.pack();
+		this.add(northPanel, BorderLayout.NORTH);
+		this.add(centerPanel, BorderLayout.CENTER);
+		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
 	private void databaseSetUp(String type, String name) {
@@ -201,7 +208,7 @@ public class SearchPageUI {
 			JButton bookButton = new JButton(iconBook);
 			JTextArea detailArea = new JTextArea();
 			JButton addFavorButton = new JButton("Add Favourite");
-			JLabel emptyLabel = new JLabel("      ");
+			JLabel emptyLabel = new JLabel("                      ");
 			String detail = String.format("%s\nType : %s\nFile Location : %s\nDetail : %s", book.getName(),
 					book.getType(), book.getLocation(), book.getDescription());
 			addFavorButton.setBackground(Color.gray);
@@ -223,6 +230,8 @@ public class SearchPageUI {
 			bgLabel.add(bookButton);
 			bgLabel.add(emptyLabel);
 			bgLabel.add(detailArea);
+			bgLabel.add(new JLabel(
+					"                                                                                                                                                                                                                               "));
 			bgLabel.setLayout(new FlowLayout());
 			line++;
 		}
@@ -254,17 +263,17 @@ public class SearchPageUI {
 			nextButton.setEnabled(true);
 		}
 
-		frame.validate();
+		// frame.validate();
 	}
 
 	public void run() {
-		frame.setVisible(true);
+		this.setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		SearchPageUI s = new SearchPageUI("Comic");
-		s.run();
-	}
+	// public static void main(String[] args) {
+	// SearchPageUI s = new SearchPageUI("Comic");
+	// s.run();
+	// }
 
 	public class PageButtonAction implements ActionListener {
 
@@ -342,7 +351,7 @@ public class SearchPageUI {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (!favorList.contains(e.getActionCommand())) {
-				int choose = JOptionPane.showConfirmDialog(frame,
+				int choose = JOptionPane.showConfirmDialog(null,
 						String.format("Add %s to favourite?",
 								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
 						"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
@@ -352,7 +361,7 @@ public class SearchPageUI {
 					updateFrame();
 				}
 			} else {
-				int choose = JOptionPane.showConfirmDialog(frame,
+				int choose = JOptionPane.showConfirmDialog(null,
 						String.format("Remove %s from favourite?",
 								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
 						"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
