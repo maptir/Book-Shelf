@@ -16,6 +16,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,11 +46,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.glass.ui.CommonDialogs.Type;
-
-import bookshelf.Book;
-import bookshelf.BookFactory;
-import bookshelf.Database;
+import bookshelf.*;
 
 /**
  * The folder page of this program.
@@ -96,6 +94,7 @@ public class FolderPageUI implements Runnable {
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
 		frame = new JFrame(filter + " Shelf");
+
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
 		frame.setSize(900, 700);
@@ -109,16 +108,14 @@ public class FolderPageUI implements Runnable {
 		favorLabel = new JLabel();
 		favorText = new JLabel("                       Add Favourite");
 		img = new ImageIcon("Picture//backGR.jpg");
-		img = new ImageIcon(img.getImage().getScaledInstance(900, 650,
-				Image.SCALE_SMOOTH));
+		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
 		panelSouth = new JPanel();
 		nextButton = new JButton();
 		preButton = new JButton();
 		addBookButton = new JButton();
 		try {
-			Image woodImg = ImageIO.read(new File("Picture//wood.png"))
-					.getScaledInstance(1200, 20, Image.SCALE_SMOOTH);
+			Image woodImg = ImageIO.read(new File("Picture//wood.png")).getScaledInstance(1200, 20, Image.SCALE_SMOOTH);
 			woodPic = new JLabel(new ImageIcon(woodImg));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -132,8 +129,7 @@ public class FolderPageUI implements Runnable {
 
 		ImageIcon iconNext = new ImageIcon("Picture//nextButton.png");
 		Image imgNextButt = iconNext.getImage();
-		Image newimg2 = imgNextButt.getScaledInstance(50, 50,
-				Image.SCALE_SMOOTH);
+		Image newimg2 = imgNextButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 		iconNext = new ImageIcon(newimg2);
 
 		ImageIcon iconAddBook = new ImageIcon("Picture//AddBook.png");
@@ -143,8 +139,7 @@ public class FolderPageUI implements Runnable {
 
 		ImageIcon iconGarbage = new ImageIcon("Picture//bin.png");
 		Image imgGarbage = iconGarbage.getImage();
-		Image newimg4 = imgGarbage
-				.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
+		Image newimg4 = imgGarbage.getScaledInstance(45, 45, Image.SCALE_SMOOTH);
 		iconGarbage = new ImageIcon(newimg4);
 
 		ImageIcon iconFavor = new ImageIcon("Picture//star3.png");
@@ -250,15 +245,13 @@ public class FolderPageUI implements Runnable {
 			if (countPerLine == 6) {
 				emptyLabel2.setBackground(new Color(180, 115, 73));
 				emptyLabel2.setEditable(false);
-				emptyLabel2.setBorder(BorderFactory
-						.createLineBorder(Color.BLACK));
+				emptyLabel2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				backGLabel.add(emptyLabel2);
 				break;
 			} else if (countPerLine == 3) {
 				emptyLabel4.setBackground(new Color(180, 115, 73));
 				emptyLabel4.setEditable(false);
-				emptyLabel4.setBorder(BorderFactory
-						.createLineBorder(Color.BLACK));
+				emptyLabel4.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				backGLabel.add(emptyLabel4);
 			}
 			JButton but = bookListButton.get(start);
@@ -284,8 +277,7 @@ public class FolderPageUI implements Runnable {
 			if (start == bookListButton.size() - 1) {
 				emptyLabel5.setBackground(new Color(180, 115, 73));
 				emptyLabel5.setEditable(false);
-				emptyLabel5.setBorder(BorderFactory
-						.createLineBorder(Color.BLACK));
+				emptyLabel5.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 				backGLabel.add(emptyLabel5);
 			}
 		}
@@ -395,11 +387,9 @@ public class FolderPageUI implements Runnable {
 		frame.setVisible(true);
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException,
-			InstantiationException, IllegalAccessException,
-			UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(UIManager
-				.getCrossPlatformLookAndFeelClassName());
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 		FolderPageUI r = new FolderPageUI("Comic");
 		r.run();
 	}
@@ -440,8 +430,7 @@ public class FolderPageUI implements Runnable {
 		public void actionPerformed(ActionEvent e) {
 			isRemoveState = false;
 			if (isDoubleClick) {
-				String fileLocation = bookList.get(
-						Integer.parseInt(e.getActionCommand())).getLocation();
+				String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
 				openFile(fileLocation);
 				isDoubleClick = false;
 			}
@@ -469,7 +458,7 @@ public class FolderPageUI implements Runnable {
 	 * @author Triwith Mutitakul
 	 *
 	 */
-	public class DragBookAction extends TransferHandler {
+	public static class DragBookAction extends TransferHandler {
 		public final DataFlavor SUPPORTED_DATE_FLAVOR = DataFlavor.stringFlavor;
 		private String value;
 
@@ -493,8 +482,7 @@ public class FolderPageUI implements Runnable {
 		}
 
 		@Override
-		protected void exportDone(JComponent source, Transferable data,
-				int action) {
+		protected void exportDone(JComponent source, Transferable data, int action) {
 			super.exportDone(source, data, action);
 			// Decide what to do after the drop has been accepted
 		}
@@ -567,8 +555,7 @@ public class FolderPageUI implements Runnable {
 	}
 
 	public class addBookAction implements ActionListener {
-		public void addType(String aName, String aType, String aLocation,
-				String aDescription) {
+		public void addType(String aName, String aType, String aLocation, String aDescription) {
 
 			JButton browse = new JButton("BROWSE");
 			JTextField textName = new JTextField(20);
@@ -581,9 +568,8 @@ public class FolderPageUI implements Runnable {
 			textDesc.setLineWrap(true);
 			browse.addActionListener((s) -> {
 				JFileChooser chooser = new JFileChooser();
-				chooser.setFileFilter(new FileNameExtensionFilter(
-						"PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
-						"pptx"));
+				chooser.setFileFilter(
+						new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
 				int result = chooser.showOpenDialog(frame);
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File file = chooser.getSelectedFile();
@@ -611,16 +597,14 @@ public class FolderPageUI implements Runnable {
 			panel.add(panelLoca);
 			panel.add(panelDes);
 
-			int choose = JOptionPane.showConfirmDialog(null, panel,
-					"Add a Book", JOptionPane.OK_CANCEL_OPTION);
+			int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
 
 			if (JOptionPane.OK_OPTION == choose) {
 				String name = textName.getText();
 				String location = textLoc.getText();
 				String description = textDesc.getText();
 				if (name.length() == 0) {
-					JOptionPane.showMessageDialog(null,
-							"You forget to input a name !");
+					JOptionPane.showMessageDialog(null, "You forget to input a name !");
 					addType(name, filter, location, description);
 				} else if (location.trim().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "Invalid Path File");
@@ -631,8 +615,7 @@ public class FolderPageUI implements Runnable {
 				} else {
 					bookFactory.add(name, filter, location, description);
 					bookList.add(new Book(name, filter, location, description));
-					createBookButton(new Book(name, filter, location,
-							description));
+					createBookButton(new Book(name, filter, location, description));
 					updateFrame();
 				}
 			}
