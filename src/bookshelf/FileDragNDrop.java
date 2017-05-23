@@ -10,7 +10,7 @@ import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
 public abstract class FileDragNDrop extends TransferHandler {
-	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx" };
+	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx" , "xls" };
 
 	public int getSourceActions(JComponent c) {
 		return COPY_OR_MOVE;

@@ -35,7 +35,7 @@ public class BookFactory {
 			}
 		});
 	}
-	
+
 	public List<String> getFavorList() {
 		return favorList;
 	}
@@ -51,32 +51,29 @@ public class BookFactory {
 			favorList.remove(index);
 		}
 	}
-	
-
 
 	public void removeBook(String name, String des) {
 		for (int x = 0; x < bookList.size(); x++) {
 			if (bookList.get(x).getName().equalsIgnoreCase(name)
 					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
 				bookList.remove(x);
-				removeFavor(x+"");
+				removeFavor(x + "");
 			}
 		}
 	}
 
 	public void removeBookByType(String type) {
-		for (int x = 0; x < bookList.size(); x++) {
-			if (bookList.get(x).getType().equals(type)) {
+		for (int x = bookList.size() - 1; x >= 0; x--) {
+			if (bookList.get(x).getType().equals(type))
 				bookList.remove(x);
-			}
 		}
 	}
 
 	public List<Book> getBookList() {
 		return bookList;
 	}
-	
-	public Book getBook(int index){
+
+	public Book getBook(int index) {
 		return bookList.get(index);
 	}
 
