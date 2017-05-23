@@ -15,7 +15,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -213,7 +212,7 @@ public class SearchPageUI extends JPanel {
 		bookList = bookFactory.getBookList();
 		typeFactory = TypeFactory.getInstances();
 		typeList = typeFactory.getTypeList();
-		favorList = data.getFavorList();
+		favorList = bookFactory.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
 		if (type.equalsIgnoreCase("all")) {
@@ -311,6 +310,7 @@ public class SearchPageUI extends JPanel {
 		} else {
 			nextButton.setEnabled(true);
 		}
+		this.validate();
 	}
 
 	public void run() {
@@ -398,7 +398,7 @@ public class SearchPageUI extends JPanel {
 								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
 						"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
 				if (choose == JOptionPane.OK_OPTION) {
-					data.addFavor(e.getActionCommand());
+					bookFactory.addFavor(e.getActionCommand());
 					data.close();
 					updateFrame();
 				}
@@ -408,7 +408,7 @@ public class SearchPageUI extends JPanel {
 								bookList.get(Integer.parseInt(e.getActionCommand())).getName()),
 						"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
 				if (choose == JOptionPane.OK_OPTION) {
-					data.removeFavor(e.getActionCommand());
+					bookFactory.removeFavor(e.getActionCommand());
 					data.close();
 					updateFrame();
 				}

@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 public class BookFactory {
 	private static BookFactory factory = null;
 	private List<Book> bookList = new ArrayList<Book>();
+	private Database data;
+	private List<String> favorList = new ArrayList<>();
 
 	protected BookFactory() {
 	}
@@ -33,12 +35,31 @@ public class BookFactory {
 			}
 		});
 	}
+	
+	public List<String> getFavorList() {
+		return favorList;
+	}
+
+	public void addFavor(String index) {
+		if (!favorList.contains(index)) {
+			favorList.add(index);
+		}
+	}
+
+	public void removeFavor(String index) {
+		if (favorList.contains(index)) {
+			favorList.remove(index);
+		}
+	}
+	
+
 
 	public void removeBook(String name, String des) {
 		for (int x = 0; x < bookList.size(); x++) {
 			if (bookList.get(x).getName().equalsIgnoreCase(name)
 					&& bookList.get(x).getDescription().equalsIgnoreCase(des)) {
 				bookList.remove(x);
+				removeFavor(x+"");
 			}
 		}
 	}

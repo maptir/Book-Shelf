@@ -15,7 +15,7 @@ public class PdfToImage {
 		argss[3] = "1";
 		argss[4] = "-outputPrefix";
 		argss[5] = "MyJpgFile";
-		argss[6] = "ServiceTimetable.pdf";
+		argss[6] = "css.pdf";
 		try {
 			PDFToImage.main(argss);
 		} catch (IOException e) {

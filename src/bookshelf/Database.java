@@ -63,28 +63,14 @@ public class Database {
 				typeFactory.addType(type);
 			}
 			line = breaderForType.readLine();
-			temp = line.split(",");
-			for (String favor : temp) {
-				favoList.add(favor);
+			if (line != null) {
+				temp = line.split(",");
+				for (String favor : temp) {
+					bookFactory.addFavor(favor);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	public List<String> getFavorList() {
-		return favoList;
-	}
-
-	public void addFavor(String index) {
-		if (!favoList.contains(index)) {
-			favoList.add(index);
-		}
-	}
-
-	public void removeFavor(String index) {
-		if (favoList.contains(index)) {
-			favoList.remove(index);
 		}
 	}
 
