@@ -328,11 +328,12 @@ public class FolderPageUI implements Runnable {
 	 * 
 	 * @param fileLocation
 	 */
-	private void openFile(String fileLocation) {
+	private void openFile(String fileLocation,int index) {
 		if (Desktop.isDesktopSupported()) {
 			try {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
+				
 			} catch (IOException | IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(frame, "File not found", "Warning",JOptionPane.WARNING_MESSAGE);
 			}
@@ -433,7 +434,7 @@ public class FolderPageUI implements Runnable {
 			isRemoveState = false;
 			if (isDoubleClick) {
 				String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
-				openFile(fileLocation);
+				openFile(fileLocation,Integer.parseInt(e.getActionCommand()));
 				isDoubleClick = false;
 			}
 		}
