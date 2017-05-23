@@ -40,27 +40,19 @@ public class SearchPageUI extends JPanel {
 	private BookFactory bookFactory;
 	private TypeFactory typeFactory;
 	private String type = "";
+	private ImageIcon iconBook, iconComicBook, iconWorkBook, iconEduBook, iconNovelBook, iconDesk;
 	private int havePage;
-	private JLabel searchLabel;
-	private JLabel typeLabel;
-	private JLabel emptyLine;
-	private JTextField searchField;
-	private JComboBox<Object> typeComboBox;
-	private JPanel northPanel;
-	private JPanel centerPanel;
-	private JPanel southPanel;
-	private JButton searchButton;
-	private JButton nextButton;
-	private JButton preButton;
-	private JButton homeButton;
-	private JLabel bgLabel;
-	private JLabel pageLabel;
-	private JLabel searchResult = new JLabel();
-	private ImageIcon iconBook, iconComicBook, iconWorkBook, iconEduBook, iconNovelBook;
-	private ImageIcon iconDesk;
 	private int[] starterPage = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36 };
 	private int currentPage = 1;
 	private boolean isDoubleClick = false;
+
+	private JLabel searchLabel, emptyLine, typeLabel;
+	private JTextField searchField;
+	private JComboBox<Object> typeComboBox;
+	private JPanel northPanel, southPanel, centerPanel;
+	private JButton searchButton, homeButton, nextButton, preButton;
+	private JLabel bgLabel, pageLabel;
+	private JLabel searchResult = new JLabel();
 
 	/**
 	 * The constructor.

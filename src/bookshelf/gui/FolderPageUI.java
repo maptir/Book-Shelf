@@ -50,13 +50,12 @@ import bookshelf.*;
  * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
-public class FolderPageUI extends JPanel implements Runnable {
+public class FolderPageUI extends JPanel {
 	private Database data;
 	private BookFactory bookFactory;
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
 	protected List<String> favorList;
-	// Add Drag & Drop file
 	protected List<File> fileDrop;
 	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
 	private int currentPage = 1;
@@ -424,14 +423,6 @@ public class FolderPageUI extends JPanel implements Runnable {
 			nextButton.setEnabled(true);
 		}
 		this.validate();
-	}
-
-	/**
-	 * This method is use for run the program.
-	 */
-	@Override
-	public void run() {
-		this.setVisible(true);
 	}
 
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
