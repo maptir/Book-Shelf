@@ -5,7 +5,3 @@ C3ปัญหา 3 ข้อ.docx.docx.docx,Comic,C:\Users\User\Downloads\3ปัญหา 3 ข้อ.docx.doc
 CASE4.pdf,Education,C:\Users\Administrator\Downloads\CASE4.pdf,qwdeaqwdasd
 DtacEngacct.pdf,Comic,C:\Users\Administrator\Downloads\DtacEngacct.pdf,sdkfskldfn
 Fame,Comic,asdf,asdf
-HaHa,Comedy,C:\Users\FAME\Documents\IT.docx,sdfgfdsg
-Lab13-1-Generics,Education,C:\Users\User\Downloads\Lab13-1-Generics.pdf,Lab13 is aboout generics in java
-Lab13-OCSF-Framework,Education,C:\Users\User\Downloads\Lab13-OCSF-Framework.pdf,Lab13 is OCSF in java
-assignment_for_saturday_14_may_2017_sec_100_(morning).pdf,Comic,C:\Users\Administrator\Downloads\assignment_for_saturday_14_may_2017_sec_100_(morning).pdf,qwwwwerttyy
