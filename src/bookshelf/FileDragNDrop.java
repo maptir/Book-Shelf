@@ -9,8 +9,15 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.TransferHandler;
 
+/**
+ * The Drag n drop file that want to add into the home page and the folder page.
+ * 
+ * @author Archawin Tirugsapun
+ *
+ */
 public abstract class FileDragNDrop extends TransferHandler {
-	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx" , "xls" };
+	// The file type that can add into the app.
+	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls" };
 
 	public int getSourceActions(JComponent c) {
 		return COPY_OR_MOVE;
@@ -20,6 +27,12 @@ public abstract class FileDragNDrop extends TransferHandler {
 		return ts.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
 	}
 
+	/**
+	 * The data that you drag n drop into the app.
+	 * 
+	 * @return false if the drop file are not thing if it have a file return
+	 *         true.
+	 */
 	public boolean importData(TransferSupport ts) {
 		try {
 			@SuppressWarnings("rawtypes")
@@ -43,6 +56,15 @@ public abstract class FileDragNDrop extends TransferHandler {
 		}
 	}
 
+	/**
+	 * True if the file are correct to the file that can add to the app else
+	 * false.
+	 * 
+	 * @param name
+	 *            of the file that you drag into the app.
+	 * @return true if the file are correct to the file that can add to the app
+	 *         else false.
+	 */
 	public boolean isReadFile(String name) {
 		String[] split = name.split("\\.");
 		for (String file : file) {
@@ -52,5 +74,11 @@ public abstract class FileDragNDrop extends TransferHandler {
 		return false;
 	}
 
+	/**
+	 * Abstract method so that you can handle the file.
+	 * 
+	 * @param file
+	 *            that you drag n drop it.
+	 */
 	public abstract void importData(File file);
 }

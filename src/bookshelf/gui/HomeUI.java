@@ -19,6 +19,13 @@ import bookshelf.gui.FolderPageUI.DragBookAction;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+/**
+ * This is the home page of the application that can search, add, remove the
+ * file that you want to deal with.
+ * 
+ * @author Archawin Tirugsapun
+ *
+ */
 public class HomeUI extends JPanel {
 	/**
 	 * 
@@ -45,6 +52,11 @@ public class HomeUI extends JPanel {
 		initcomponents();
 	}
 
+	/**
+	 * Initialize all the components in the frame.
+	 * 
+	 * @throws IOException
+	 */
 	public void initcomponents() throws IOException {
 		this.setLocation(230, 20);
 		this.setLayout(new FlowLayout());
@@ -232,6 +244,12 @@ public class HomeUI extends JPanel {
 		this.add(panelAll);
 	}
 
+	/**
+	 * Add a new folder button into the page.
+	 * 
+	 * @param newFolder
+	 *            is the text that show in the middle of the folder.
+	 */
 	public void addNewFolder(String newFolder) {
 		if (numFol >= MAX_FOLDER)
 			return;
@@ -324,6 +342,13 @@ public class HomeUI extends JPanel {
 		numFol++;
 	}
 
+	/**
+	 * Get index in the database by name of the folder.
+	 * 
+	 * @param name
+	 *            of the folder that want its index.
+	 * @return the index of the folder in string.
+	 */
 	public String getIndexList(String name) {
 		int index = 0;
 		for (int i = 0; i < typeFactory.getTypeList().size(); i++) {
@@ -334,6 +359,20 @@ public class HomeUI extends JPanel {
 		return indexS;
 	}
 
+	/**
+	 * Add the file into a folder.
+	 * 
+	 * @param aName
+	 *            is the name that you want to name the file in the app.
+	 * @param aType
+	 *            is the folder name that selected by the combobox.
+	 * @param aLocation
+	 *            is the location of the file that you want to add from your
+	 *            computer.
+	 * @param aDescription
+	 *            is the description of the file that you want to describe the
+	 *            file in the app.
+	 */
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 		String[] typeArr = {};
 		typeArr = typeFactory.getTypeList().toArray(typeArr);
@@ -351,7 +390,7 @@ public class HomeUI extends JPanel {
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx","xls"));
+					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls"));
 			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
@@ -404,6 +443,13 @@ public class HomeUI extends JPanel {
 		}
 	}
 
+	/**
+	 * Return true if the string are have only a letter or digit else false.
+	 * 
+	 * @param s
+	 *            is the string that want to check.
+	 * @return true if the string are have only a letter or digit else false.
+	 */
 	public boolean isAlphaNumeric(String s) {
 		for (char c : s.toCharArray())
 			if (!(Character.isLetter(c) || Character.isDigit(c)))
@@ -411,6 +457,11 @@ public class HomeUI extends JPanel {
 		return true;
 	}
 
+	/**
+	 * The ActionListener for the button that use to change the page of the app.
+	 * 
+	 * @return ActionLister
+	 */
 	public ActionListener changePage() {
 		return new ActionListener() {
 			@Override
@@ -429,6 +480,12 @@ public class HomeUI extends JPanel {
 		};
 	}
 
+	/**
+	 * The ActionListener for the button and textfield that use to search from
+	 * name and type.
+	 * 
+	 * @return ActionListener
+	 */
 	public ActionListener searchPage() {
 		return new ActionListener() {
 			@Override
@@ -438,6 +495,9 @@ public class HomeUI extends JPanel {
 		};
 	}
 
+	/**
+	 * Reset the page in UI.
+	 */
 	public void updateFrame() {
 		numFol = 0;
 		setNewComboBox();
@@ -457,16 +517,21 @@ public class HomeUI extends JPanel {
 			right.setEnabled(false);
 	}
 
+	/**
+	 * Set the new combobox that use to search.
+	 */
 	public void setNewComboBox() {
 		cBox.removeAllItems();
 		for (String type : typeFactory.getTypeList())
 			cBox.addItem(type);
 	}
 
-	public void run() {
-		this.setVisible(true);
-	}
-
+	/**
+	 * The transferhandler that drop the file to delete it from the app.
+	 * 
+	 * @author Archawin Tirugsapun
+	 *
+	 */
 	public class DropAction extends TransferHandler {
 		/**
 		 * 
