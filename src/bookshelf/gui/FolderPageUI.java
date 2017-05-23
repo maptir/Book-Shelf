@@ -11,7 +11,6 @@ import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
-import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,14 +26,12 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -44,14 +41,12 @@ import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
+import com.sun.xml.internal.bind.v2.runtime.Location;
 
 import bookshelf.*;
-import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
 
 /**
  * The folder page of this program.
@@ -59,7 +54,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
  * @author Triwith Mutitakul
  *
  */
-public class FolderPageUI implements Runnable {
+public class FolderPageUI extends JPanel implements Runnable {
 	private Database data;
 	private BookFactory bookFactory;
 	protected List<JButton> bookListButton;
@@ -75,11 +70,11 @@ public class FolderPageUI implements Runnable {
 	private boolean isDoubleClick = false;
 	private boolean isRemoveState = false;
 
-	private JFrame frame;
 	private JFrame detailFrame;
 	private JLabel backGLabel;
 	private JPanel panelCenter;
 	private JPanel panelSouth;
+	private JButton homeButton;
 	private JButton preButton;
 	private JButton nextButton;
 	private JButton addBookButton;
@@ -93,31 +88,31 @@ public class FolderPageUI implements Runnable {
 		this.filter = filter;
 		databaseSetUp();
 		initComponents();
-		frame.setResizable(false);
 	}
 
 	private void initComponents() {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
-		frame = new JFrame(filter + " Shelf");
+		// frame = new JFrame(filter + " Shelf");
 
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
-		frame.setSize(900, 700);
-		frame.setPreferredSize(new Dimension(900, 700));
+		// frame.setSize(900, 700);
+		this.setPreferredSize(new Dimension(830, 700));
 		emptyLabel = new JLabel("Page : " + currentPage);
 		emptyLabel2 = new JTextField(100);
 		emptyLabel3 = new JTextField(100);
 		emptyLabel4 = new JTextField(100);
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
-		favorLabel = new JLabel();
-		favorText = new JLabel("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
+		favorLabel = new JLabel("                                  ");
+		favorText = new JLabel();
 		img = new ImageIcon("Picture//backGR.jpg");
-		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
+		img = new ImageIcon(img.getImage().getScaledInstance(830, 600, Image.SCALE_SMOOTH));
 		panelCenter = new JPanel();
 		panelSouth = new JPanel();
+		homeButton = new JButton();
 		nextButton = new JButton();
 		preButton = new JButton();
 		addBookButton = new JButton();
@@ -153,6 +148,24 @@ public class FolderPageUI implements Runnable {
 		Image imgstar = iconFavor.getImage();
 		Image newimg6 = imgstar.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		iconFavor = new ImageIcon(newimg6);
+
+		ImageIcon iconHome = new ImageIcon("Picture//houseW.png");
+		Image imgHome = iconHome.getImage();
+		Image newimg7 = imgHome.getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+		iconHome = new ImageIcon(newimg7);
+
+		homeButton.setIcon(iconHome);
+		homeButton.setBorderPainted(false);
+		homeButton.setContentAreaFilled(false);
+		homeButton.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+		homeButton.setBackground(Color.BLACK);
+		homeButton.setToolTipText("Back to Home");
+		homeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BookShelfUI.setHomeLayOut();
+			}
+		});
 
 		emptyLabel.setPreferredSize(new Dimension(90, 40));
 		emptyLabel.setFont(new Font("Arial", 0, 20));
@@ -193,6 +206,7 @@ public class FolderPageUI implements Runnable {
 		garbageLabel.setToolTipText("Drop Book on me for delete it.");
 
 		if (!filter.equalsIgnoreCase("favor")) {
+			favorText.setText("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
 			favorText.setForeground(Color.WHITE);
 			favorText.setBackground(new Color(38, 30, 19));
 			favorLabel.setIcon(iconFavor);
@@ -208,8 +222,9 @@ public class FolderPageUI implements Runnable {
 			nextButton.setEnabled(false);
 		}
 
+		panelSouth.add(homeButton);
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                                                              "));
+		panelSouth.add(new JLabel("                                        "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
@@ -218,8 +233,6 @@ public class FolderPageUI implements Runnable {
 		panelSouth.add(addBookButton);
 		panelSouth.setLayout(new FlowLayout());
 		panelSouth.setBackground(new Color(38, 30, 19));
-		panelSouth.setPreferredSize(new Dimension(80, 80));
-		panelSouth.setLocation(200, 200);
 		nextButton.addActionListener(new ButtonAction());
 		preButton.addActionListener(new ButtonAction());
 
@@ -233,8 +246,8 @@ public class FolderPageUI implements Runnable {
 			}
 		});
 
-		frame.add(panelCenter, BorderLayout.CENTER);
-		frame.add(panelSouth, BorderLayout.SOUTH);
+		this.add(panelCenter, BorderLayout.CENTER);
+		this.add(panelSouth, BorderLayout.SOUTH);
 	}
 
 	/**
@@ -348,7 +361,7 @@ public class FolderPageUI implements Runnable {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
 			} catch (IOException | IllegalArgumentException ex) {
-				JOptionPane.showMessageDialog(frame, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(null, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -379,7 +392,6 @@ public class FolderPageUI implements Runnable {
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
 		}
-		frame.validate();
 	}
 
 	/**
@@ -399,7 +411,6 @@ public class FolderPageUI implements Runnable {
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
 		}
-		frame.validate();
 	}
 
 	/**
@@ -407,7 +418,7 @@ public class FolderPageUI implements Runnable {
 	 */
 	@Override
 	public void run() {
-		frame.setVisible(true);
+		this.setVisible(true);
 	}
 
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
@@ -425,7 +436,7 @@ public class FolderPageUI implements Runnable {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter(
 					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
-			int result = chooser.showOpenDialog(frame);
+			int result = chooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
 				textLoc.setText(file.getPath());
@@ -604,7 +615,7 @@ public class FolderPageUI implements Runnable {
 						Component component = support.getComponent();
 						if (component instanceof JLabel) {
 							if (support.getComponent().equals(garbageLabel)) {
-								int choose = JOptionPane.showConfirmDialog(frame,
+								int choose = JOptionPane.showConfirmDialog(null,
 										String.format("Remove %s?",
 												bookList.get(Integer.parseInt(value.toString())).getName()),
 										"Delete Book", JOptionPane.OK_CANCEL_OPTION);
@@ -623,7 +634,7 @@ public class FolderPageUI implements Runnable {
 								accept = true;
 							} else {
 								if (!favorList.contains(value.toString())) {
-									int choose = JOptionPane.showConfirmDialog(frame,
+									int choose = JOptionPane.showConfirmDialog(null,
 											String.format("Add %s to favourite?",
 													bookList.get(Integer.parseInt(value.toString())).getName()),
 											"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
@@ -633,7 +644,7 @@ public class FolderPageUI implements Runnable {
 										updateFrame();
 									}
 								} else {
-									int choose = JOptionPane.showConfirmDialog(frame,
+									int choose = JOptionPane.showConfirmDialog(null,
 											String.format("Remove %s from favourite?",
 													bookList.get(Integer.parseInt(value.toString())).getName()),
 											"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);

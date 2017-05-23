@@ -1,7 +1,6 @@
 package bookshelf.gui;
 
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.io.IOException;
 
 import javax.swing.JFrame;
@@ -10,19 +9,20 @@ import javax.swing.JPanel;
 public class BookShelfUI extends JFrame {
 	static JPanel bsPanel;
 	static HomeUI home;
-	static CardLayout c;
 	static SearchPageUI search;
+	static FolderPageUI folder;
+	static CardLayout c;
 
 	public BookShelfUI() throws IOException {
 		super("Book-Shelf");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(230, 20);
+		this.setResizable(false);
 		initscomponents();
 	}
 
 	public void initscomponents() throws IOException {
 		home = new HomeUI();
-		search = new SearchPageUI("");
 		c = new CardLayout();
 		bsPanel = new JPanel(c);
 
@@ -41,6 +41,12 @@ public class BookShelfUI extends JFrame {
 		search = new SearchPageUI(type, name);
 		bsPanel.add(search, "search");
 		c.show(bsPanel, "search");
+	}
+
+	public static void setFolderLayOut(String type) {
+		folder = new FolderPageUI(type);
+		bsPanel.add(folder, "folder");
+		c.show(bsPanel, "folder");
 	}
 
 	public void run() {

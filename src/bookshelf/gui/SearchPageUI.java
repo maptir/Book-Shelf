@@ -50,7 +50,7 @@ public class SearchPageUI extends JPanel {
 	private JButton homeButton;
 	private JLabel bgLabel;
 	private JLabel pageLabel;
-	private JLabel searchResult = new JLabel();;
+	private JLabel searchResult = new JLabel();
 	private ImageIcon iconBook, iconComicBook, iconWorkBook, iconEduBook, iconNovelBook;
 	private ImageIcon iconDesk;
 	private int[] starterPage = { 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36 };
@@ -113,7 +113,7 @@ public class SearchPageUI extends JPanel {
 
 		iconNovelBook = new ImageIcon("Picture//novelbook.png");
 		Image imgNB = iconNovelBook.getImage();
-		Image newimg8 = imgCB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
+		Image newimg8 = imgNB.getScaledInstance(160, 215, Image.SCALE_SMOOTH);
 		iconNovelBook = new ImageIcon(newimg8);
 
 		iconEduBook = new ImageIcon("Picture//edubook.png");
@@ -161,6 +161,8 @@ public class SearchPageUI extends JPanel {
 		pageLabel.setForeground(Color.WHITE);
 
 		homeButton.setIcon(iconHome);
+		homeButton.setBorderPainted(false);
+		homeButton.setContentAreaFilled(false);
 		homeButton.setPreferredSize(new Dimension(35, 35));
 		homeButton.setBackground(Color.BLACK);
 		homeButton.setToolTipText("Back to Home");
@@ -214,9 +216,6 @@ public class SearchPageUI extends JPanel {
 		favorList = data.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
-		if (!typeList.contains("All")) {
-			typeList.add(0, "All");
-		}
 		if (type.equalsIgnoreCase("all")) {
 			// do nothing
 		} else {
