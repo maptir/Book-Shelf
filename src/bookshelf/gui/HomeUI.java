@@ -20,9 +20,7 @@ import bookshelf.gui.FolderPageUI.DragBookAction;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class HomeUI extends JPanel {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	Database data;
 	JTextField searchText;
@@ -92,7 +90,7 @@ public class HomeUI extends JPanel {
 		Image imgSearch = iconSearch.getImage();
 		Image newimg3 = imgSearch.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		iconSearch = new ImageIcon(newimg3);
-		
+
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);
 		searchButton.setPreferredSize(new Dimension(25, 25));
@@ -493,7 +491,7 @@ public class HomeUI extends JPanel {
 								int choose = JOptionPane.showConfirmDialog(null,
 										String.format("Remove %s?",
 												typeFactory.getTypeList().get(Integer.parseInt(value.toString()))),
-										"Delete Book", JOptionPane.OK_CANCEL_OPTION);
+										"Delete Shelf", JOptionPane.OK_CANCEL_OPTION);
 								if (choose == JOptionPane.OK_OPTION) {
 									typeFactory.removeType(
 											typeFactory.getTypeList().get(Integer.parseInt(value.toString())));

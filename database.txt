@@ -2,7 +2,5 @@ Fame,Comic,haha,eiei
 Fame2,Comic,haha,eiei
 Fame3,Comic,haha,eiei
 Fame4,Comic,haha,eiei
-Jame,Novel,HHH,dd
 Jame2,Novel,HHH,dd
-Jame3,Novel,HHH,dd
 Jame4,Novel,HHH,dd

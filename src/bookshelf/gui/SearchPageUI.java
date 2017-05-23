@@ -189,6 +189,7 @@ public class SearchPageUI extends JPanel {
 		northPanel.add(searchResult);
 		northPanel.setBackground(Color.BLACK);
 
+		southPanel.setPreferredSize(new Dimension(1400, 500));
 		southPanel.setBackground(Color.BLACK);
 		southPanel.add(homeButton);
 		southPanel.add(new JLabel(
