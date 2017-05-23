@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -40,15 +39,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sun.xml.internal.bind.v2.runtime.Location;
-
 import bookshelf.*;
-import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
-import sun.util.resources.cldr.ur.CurrencyNames_ur;
 
 /**
  * The folder page of this program.
@@ -81,9 +75,8 @@ public class FolderPageUI extends JPanel implements Runnable {
 	private JButton nextButton;
 	private JButton addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel, favorLabel, favorText, settingLabel;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
 	private ImageIcon img;
-	private JLabel woodPic;
 	private ImageIcon iconBook;
 
 	public FolderPageUI(String filter) {
@@ -109,24 +102,16 @@ public class FolderPageUI extends JPanel implements Runnable {
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
 		favorLabel = new JLabel();
-		favorText = new JLabel("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
-		settingLabel = new JLabel();
+		favorText = new JLabel();
 		img = new ImageIcon("Picture//backGR.jpg");
 		img = new ImageIcon(img.getImage().getScaledInstance(830, 600, Image.SCALE_SMOOTH));
-		panelCenter = new JPanel();
-		panelSouth = new JPanel();
+		panelCenter = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+		panelSouth = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		homeButton = new JButton();
 		nextButton = new JButton();
 		preButton = new JButton();
 		addBookButton = new JButton();
-		try {
-			Image woodImg = ImageIO.read(new File("Picture//wood.png")).getScaledInstance(1200, 20, Image.SCALE_SMOOTH);
-			woodPic = new JLabel(new ImageIcon(woodImg));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		woodPic.setPreferredSize(new Dimension(400, 25));
 		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
 		Image imgPreButt = iconPre.getImage();
 		Image newimg = imgPreButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -226,20 +211,23 @@ public class FolderPageUI extends JPanel implements Runnable {
 
 		panelSouth.add(homeButton);
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                        "));
+		panelSouth.add(new JLabel("                                "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
-		panelSouth.add(new JLabel("                         "));
+		panelSouth.add(new JLabel("                      "));
 		panelSouth.add(favorText);
 		panelSouth.add(favorLabel);
 		panelSouth.add(addBookButton);
-		panelSouth.setLayout(new FlowLayout());
 		panelSouth.setBackground(new Color(38, 30, 19));
+		panelSouth.setPreferredSize(new Dimension(870, 100));
+		panelSouth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 		nextButton.addActionListener(new ButtonAction());
 		preButton.addActionListener(new ButtonAction());
 
+		panelCenter.setPreferredSize(new Dimension(850, 600));
 		panelCenter.add(createBookPerPage(starterPageNum));
+		panelCenter.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
 		panelCenter.setTransferHandler(new FileDragNDrop() {
 			@Override
@@ -327,10 +315,10 @@ public class FolderPageUI extends JPanel implements Runnable {
 		bookFactory = BookFactory.getInstances();
 		bookListButton = new ArrayList<>();
 		bookList = bookFactory.getBookList();
-		favorList = data.getFavorList();
+		favorList = bookFactory.getFavorList();
 		if (filter.equalsIgnoreCase("favor")) {
 			List<Book> tempFavor = new ArrayList<>();
-			favorList = data.getFavorList();
+			favorList = bookFactory.getFavorList();
 			for (String favorIndex : favorList) {
 				tempFavor.add(bookList.get(Integer.parseInt(favorIndex)));
 			}
@@ -401,6 +389,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 		} else {
 			nextButton.setEnabled(true);
 		}
+		this.validate();
 	}
 
 	/**
@@ -424,6 +413,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 		} else {
 			nextButton.setEnabled(true);
 		}
+		this.validate();
 	}
 
 	/**
@@ -493,7 +483,6 @@ public class FolderPageUI extends JPanel implements Runnable {
 				addType(name, filter, location, description);
 			} else {
 				bookFactory.add(name, filter, location, description);
-				bookList.add(new Book(name, filter, location, description));
 				createBookButton(new Book(name, filter, location, description));
 			}
 		}
@@ -629,7 +618,6 @@ public class FolderPageUI extends JPanel implements Runnable {
 									bookFactory.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
 											bookList.get(Integer.parseInt(value.toString())).getDescription());
 									data.close();
-									bookList.remove(Integer.parseInt(value.toString()));
 									if (bookList.size() <= 6) {
 										nextButton.setEnabled(false);
 									}
@@ -644,7 +632,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 													bookList.get(Integer.parseInt(value.toString())).getName()),
 											"Add to Favourite", JOptionPane.OK_CANCEL_OPTION);
 									if (choose == JOptionPane.OK_OPTION) {
-										data.addFavor(value.toString());
+										bookFactory.addFavor(value.toString());
 										data.close();
 										updateFrame();
 									}
@@ -654,7 +642,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 													bookList.get(Integer.parseInt(value.toString())).getName()),
 											"Remove from Favourite", JOptionPane.OK_CANCEL_OPTION);
 									if (choose == JOptionPane.OK_OPTION) {
-										data.removeFavor(value.toString());
+										bookFactory.removeFavor(value.toString());
 										data.close();
 										updateFrame();
 									}

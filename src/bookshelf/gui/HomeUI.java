@@ -92,6 +92,7 @@ public class HomeUI extends JPanel {
 		Image imgSearch = iconSearch.getImage();
 		Image newimg3 = imgSearch.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		iconSearch = new ImageIcon(newimg3);
+		
 		searchButton.setIcon(iconSearch);
 		searchButton.setBackground(Color.WHITE);
 		searchButton.setPreferredSize(new Dimension(25, 25));
