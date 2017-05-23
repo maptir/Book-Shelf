@@ -54,5 +54,9 @@ public class BookFactory {
 	public List<Book> getBookList() {
 		return bookList;
 	}
+	
+	public Book getBook(int index){
+		return bookList.get(index);
+	}
 
 }

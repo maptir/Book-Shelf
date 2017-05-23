@@ -1,10 +1,13 @@
 package bookshelf;
 
+import java.util.Date;
+
 public class Book {
 	private String name = "";
 	private String description = "";
 	private String type = "";
 	private String location = "";
+	private Date lastOpenTime;
 
 	public Book(String name, String type, String location, String description) {
 		this.name = name;
@@ -43,6 +46,12 @@ public class Book {
 
 	public void setLocation(String location) {
 		this.location = location;
+	}
+	public void setTime(long time){
+		this.lastOpenTime = new Date(time);
+	}
+	public Date getTime(){
+		return this.lastOpenTime;
 	}
 
 }

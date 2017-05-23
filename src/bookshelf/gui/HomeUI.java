@@ -229,7 +229,6 @@ public class HomeUI extends JPanel {
 
 		updateFrame();
 		this.add(panelAll);
-		System.out.println(this.getPreferredSize());
 	}
 
 	public void addNewFolder(String newFolder) {

@@ -47,6 +47,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import com.sun.xml.internal.bind.v2.runtime.Location;
 
 import bookshelf.*;
+import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
+import sun.util.resources.cldr.ur.CurrencyNames_ur;
 
 /**
  * The folder page of this program.
@@ -79,7 +81,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	private JButton nextButton;
 	private JButton addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText, settingLabel;
 	private ImageIcon img;
 	private JLabel woodPic;
 	private ImageIcon iconBook;
@@ -166,7 +168,6 @@ public class FolderPageUI extends JPanel implements Runnable {
 				BookShelfUI.setHomeLayOut();
 			}
 		});
-
 		emptyLabel.setPreferredSize(new Dimension(90, 40));
 		emptyLabel.setFont(new Font("Arial", 0, 20));
 		emptyLabel.setForeground(Color.WHITE);
@@ -228,6 +229,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
+		panelSouth.add(new JLabel("                         "));
 		panelSouth.add(favorText);
 		panelSouth.add(favorLabel);
 		panelSouth.add(addBookButton);
@@ -355,11 +357,12 @@ public class FolderPageUI extends JPanel implements Runnable {
 	 * 
 	 * @param fileLocation
 	 */
-	private void openFile(String fileLocation) {
+	private void openFile(String fileLocation, int index) {
 		if (Desktop.isDesktopSupported()) {
 			try {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
+
 			} catch (IOException | IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(null, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
@@ -386,11 +389,16 @@ public class FolderPageUI extends JPanel implements Runnable {
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
 		panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
+
 		if (currentPage <= 1) {
 			preButton.setEnabled(false);
+		} else {
+			preButton.setEnabled(true);
 		}
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
+		} else {
+			nextButton.setEnabled(true);
 		}
 	}
 
@@ -407,9 +415,13 @@ public class FolderPageUI extends JPanel implements Runnable {
 
 		if (currentPage <= 1) {
 			preButton.setEnabled(false);
+		} else {
+			preButton.setEnabled(true);
 		}
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
+		} else {
+			nextButton.setEnabled(true);
 		}
 	}
 
@@ -482,17 +494,9 @@ public class FolderPageUI extends JPanel implements Runnable {
 				bookFactory.add(name, filter, location, description);
 				bookList.add(new Book(name, filter, location, description));
 				createBookButton(new Book(name, filter, location, description));
-				updateFrame();
 			}
 		}
 
-	}
-
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		FolderPageUI r = new FolderPageUI("Comic");
-		r.run();
 	}
 
 	/**
@@ -532,7 +536,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 			isRemoveState = false;
 			if (isDoubleClick) {
 				String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
-				openFile(fileLocation);
+				openFile(fileLocation, Integer.parseInt(e.getActionCommand()));
 				isDoubleClick = false;
 			}
 		}
@@ -675,6 +679,8 @@ public class FolderPageUI extends JPanel implements Runnable {
 			if (bookList.size() % 6 == 1) {
 				currentPage++;
 				updateFrame(starterPage[currentPage] - 6);
+			} else {
+				updateFrame();
 			}
 			data.close();
 		}
