@@ -12,7 +12,7 @@ import javax.swing.TransferHandler;
 /**
  * The Drag n drop file that want to add into the home page and the folder page.
  * 
- * @author Archawin Tirugsapun
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
 public abstract class FileDragNDrop extends TransferHandler {
