@@ -31,7 +31,7 @@ public class HomeUI extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Database data;
 	JTextField searchText;
-	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel;
+	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel, programName;
 	JButton searchButton, addFolder, addImageadd, right, left, favor;
 	JPanel panelAdd, panelText, panelButton, panelAll, panelChange;
 	JComboBox<String> cBox;
@@ -77,6 +77,7 @@ public class HomeUI extends JPanel {
 		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(100, 80, Image.SCALE_DEFAULT)));
 		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(80, 60, Image.SCALE_DEFAULT)));
 		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(90, 70, Image.SCALE_DEFAULT)));
+		programName = new JLabel("The Book-Shelf 1.0");
 
 		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
 		Image imgPreButt = iconPre.getImage();
@@ -233,9 +234,12 @@ public class HomeUI extends JPanel {
 		panelChange.setOpaque(false);
 
 		pageLabel = new JLabel("Page : " + currentPage);
+		panelChange.add(new JLabel("                                                                       "));
 		panelChange.add(left);
 		panelChange.add(pageLabel);
 		panelChange.add(right);
+		panelChange.add(new JLabel("                                          "));
+		panelChange.add(programName);
 		panelChange.setBackground(Color.BLACK);
 
 		panelAll.setLayout(new BorderLayout());
