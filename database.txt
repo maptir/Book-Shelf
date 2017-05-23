@@ -1,2 +1,4 @@
+CASE-IT.docx,Comic,C:\Users\Administrator\Downloads\CASE-IT.docx,case2
+CASE4.pdf,Comic,C:\Users\Administrator\Downloads\CASE4.pdf,case
 Sample Book,All,Not in your computer,this is a sample book of the book shelf 1.0.
-
+bow.docx,Comic,C:\Users\Administrator\Downloads\bow.docx,bow
