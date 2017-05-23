@@ -6,7 +6,11 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import bookshelf.gui.BookShelfUI;
-
+/**
+ * 
+ * @author Archawin Tirugsapun,Triwith Mutitakul
+ *
+ */
 public class Main {
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InstantiationException,
 			IllegalAccessException, UnsupportedLookAndFeelException {

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 /**
  * The UI that use to switch page in the application by CardLayout.
  * 
- * @author Archawin Tirugsapun
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
 public class BookShelfUI extends JFrame {

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 public class BookFactory {
 	private static BookFactory factory = null;
 	private List<Book> bookList = new ArrayList<Book>();
-	private Database data;
 	private List<String> favorList = new ArrayList<>();
 
 	protected BookFactory() {

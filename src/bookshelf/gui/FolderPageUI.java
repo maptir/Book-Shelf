@@ -47,16 +47,15 @@ import bookshelf.*;
 /**
  * The folder page of this program.
  * 
- * @author Triwith Mutitakul
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
-public class FolderPageUI extends JPanel implements Runnable {
+public class FolderPageUI extends JPanel {
 	private Database data;
 	private BookFactory bookFactory;
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
 	protected List<String> favorList;
-	// Add Drag & Drop file
 	protected List<File> fileDrop;
 	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
 	private int currentPage = 1;
@@ -67,24 +66,27 @@ public class FolderPageUI extends JPanel implements Runnable {
 	private boolean isRemoveState = false;
 
 	private JFrame detailFrame;
-	private JLabel backGLabel;
-	private JPanel panelCenter;
-	private JPanel panelSouth;
-	private JButton homeButton;
-	private JButton preButton;
-	private JButton nextButton;
-	private JButton addBookButton;
+	private JPanel panelCenter, panelSouth;
+	private JButton homeButton, preButton, nextButton, addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
-	private ImageIcon img;
-	private ImageIcon iconBook;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText, backGLabel;
+	private ImageIcon img, iconBook;
 
+	/**
+	 * The constructor.
+	 * 
+	 * @param filter
+	 *            is the type of book.
+	 */
 	public FolderPageUI(String filter) {
 		this.filter = filter;
 		databaseSetUp();
 		initComponents();
 	}
 
+	/**
+	 * The method that use for create the component of the GUI.
+	 */
 	private void initComponents() {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
@@ -205,17 +207,27 @@ public class FolderPageUI extends JPanel implements Runnable {
 		} else {
 			nextButton.setEnabled(false);
 		}
+		if (filter.equalsIgnoreCase("favor")) {
+			panelSouth.add(homeButton);
+			panelSouth.add(garbageLabel);
+			panelSouth.add(new JLabel("                                                "));
+			panelSouth.add(preButton);
+			panelSouth.add(emptyLabel);
+			panelSouth.add(nextButton);
+			panelSouth.add(new JLabel("                                                                    "));
+		} else {
+			panelSouth.add(homeButton);
+			panelSouth.add(garbageLabel);
+			panelSouth.add(new JLabel("                                "));
+			panelSouth.add(preButton);
+			panelSouth.add(emptyLabel);
+			panelSouth.add(nextButton);
+			panelSouth.add(new JLabel("                      "));
+			panelSouth.add(favorText);
+			panelSouth.add(favorLabel);
+			panelSouth.add(addBookButton);
+		}
 
-		panelSouth.add(homeButton);
-		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                "));
-		panelSouth.add(preButton);
-		panelSouth.add(emptyLabel);
-		panelSouth.add(nextButton);
-		panelSouth.add(new JLabel("                      "));
-		panelSouth.add(favorText);
-		panelSouth.add(favorLabel);
-		panelSouth.add(addBookButton);
 		panelSouth.setBackground(new Color(38, 30, 19));
 		panelSouth.setPreferredSize(new Dimension(870, 100));
 		panelSouth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
@@ -413,14 +425,6 @@ public class FolderPageUI extends JPanel implements Runnable {
 		this.validate();
 	}
 
-	/**
-	 * This method is use for run the program.
-	 */
-	@Override
-	public void run() {
-		this.setVisible(true);
-	}
-
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 
 		JButton browse = new JButton("BROWSE");
@@ -489,7 +493,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener of next and previous button.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class ButtonAction implements ActionListener {
@@ -513,7 +517,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener of each book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class BookClickAction implements ActionListener {
@@ -532,7 +536,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the Mouse action of each book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class doubleClickAction extends MouseAdapter {
@@ -547,7 +551,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener that use for drag the book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public static class DragBookAction extends TransferHandler {
@@ -584,7 +588,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener that use for drop the book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class DropAction extends TransferHandler {
@@ -657,6 +661,12 @@ public class FolderPageUI extends JPanel implements Runnable {
 		}
 	}
 
+	/**
+	 * The ActionListener class of add book button.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class addBookAction implements ActionListener {
 
 		@Override
