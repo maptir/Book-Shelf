@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.dnd.DnDConstants;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,12 +27,14 @@ import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -41,6 +44,7 @@ import javax.swing.SwingConstants;
 import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.TransferHandler.TransferSupport;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -61,6 +65,8 @@ public class FolderPageUI implements Runnable {
 	protected List<JButton> bookListButton;
 	protected List<Book> bookList;
 	protected List<String> favorList;
+	// Add Drag & Drop file
+	protected List<File> fileDrop;
 	private int[] starterPage = { 0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72 };
 	private int currentPage = 1;
 	private int havePage = 0;
@@ -219,6 +225,14 @@ public class FolderPageUI implements Runnable {
 
 		panelCenter.add(createBookPerPage(starterPageNum));
 
+		panelCenter.setTransferHandler(new FileDragNDrop() {
+			@Override
+			public void importData(File file) {
+				addType(file.getName(), "", file.getAbsolutePath(), "");
+				updateFrame();
+			}
+		});
+
 		frame.add(panelCenter, BorderLayout.CENTER);
 		frame.add(panelSouth, BorderLayout.SOUTH);
 	}
@@ -335,7 +349,7 @@ public class FolderPageUI implements Runnable {
 				Desktop.getDesktop().open(myFile);
 				
 			} catch (IOException | IllegalArgumentException ex) {
-				JOptionPane.showMessageDialog(frame, "File not found", "Warning",JOptionPane.WARNING_MESSAGE);
+				JOptionPane.showMessageDialog(frame, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
 		}
 	}
@@ -395,6 +409,80 @@ public class FolderPageUI implements Runnable {
 	@Override
 	public void run() {
 		frame.setVisible(true);
+	}
+
+	public void addType(String aName, String aType, String aLocation, String aDescription) {
+
+		JButton browse = new JButton("BROWSE");
+		JTextField textName = new JTextField(20);
+		JTextField textLoc = new JTextField(10);
+		JTextArea textDesc = new JTextArea(5, 20);
+		textName.setText(aName);
+		textDesc.setText(aDescription);
+		textLoc.setText(aLocation);
+		JScrollPane scrollPane = new JScrollPane(textDesc);
+		textDesc.setLineWrap(true);
+		browse.addActionListener((s) -> {
+			JFileChooser chooser = new JFileChooser();
+			chooser.setFileFilter(
+					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+			int result = chooser.showOpenDialog(frame);
+			if (result == JFileChooser.APPROVE_OPTION) {
+				File file = chooser.getSelectedFile();
+				textLoc.setText(file.getPath());
+				textName.setText(file.getName());
+			}
+		});
+		JPanel panel = new JPanel();
+		JPanel panelName = new JPanel();
+		JPanel panelLoca = new JPanel();
+		JPanel panelDes = new JPanel();
+
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		panelName.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelLoca.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelDes.setLayout(new FlowLayout(FlowLayout.LEFT));
+		panelName.add(new JLabel("Name:"));
+		panelName.add(textName);
+		panelLoca.add(new JLabel("Location:"));
+		panelLoca.add(textLoc);
+		panelLoca.add(browse);
+		panelDes.add(new JLabel("Description:"));
+		panelDes.add(scrollPane);
+		panel.add(panelName);
+		panel.add(panelLoca);
+		panel.add(panelDes);
+
+		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
+
+		if (JOptionPane.OK_OPTION == choose) {
+			String name = textName.getText();
+			String location = textLoc.getText();
+			String description = textDesc.getText();
+			if (name.length() == 0) {
+				JOptionPane.showMessageDialog(null, "You forget to input a name !");
+				addType(name, filter, location, description);
+			} else if (location.trim().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Invalid Path File");
+				addType(name, filter, location, description);
+			} else if (description.length() == 0) {
+				description = " ";
+				addType(name, filter, location, description);
+			} else {
+				bookFactory.add(name, filter, location, description);
+				bookList.add(new Book(name, filter, location, description));
+				createBookButton(new Book(name, filter, location, description));
+				updateFrame();
+			}
+		}
+
+	}
+
+	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
+			IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		FolderPageUI r = new FolderPageUI("Comic");
+		r.run();
 	}
 
 	/**
@@ -570,72 +658,6 @@ public class FolderPageUI implements Runnable {
 	}
 
 	public class addBookAction implements ActionListener {
-		public void addType(String aName, String aType, String aLocation, String aDescription) {
-
-			JButton browse = new JButton("BROWSE");
-			JTextField textName = new JTextField(20);
-			JTextField textLoc = new JTextField(10);
-			JTextArea textDesc = new JTextArea(5, 20);
-			textName.setText(aName);
-			textDesc.setText(aDescription);
-			textLoc.setText(aLocation);
-			JScrollPane scrollPane = new JScrollPane(textDesc);
-			textDesc.setLineWrap(true);
-			browse.addActionListener((s) -> {
-				JFileChooser chooser = new JFileChooser();
-				chooser.setFileFilter(
-						new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
-				int result = chooser.showOpenDialog(frame);
-				if (result == JFileChooser.APPROVE_OPTION) {
-					File file = chooser.getSelectedFile();
-					textLoc.setText(file.getPath());
-					textName.setText(file.getName());
-				}
-			});
-			JPanel panel = new JPanel();
-			JPanel panelName = new JPanel();
-			JPanel panelLoca = new JPanel();
-			JPanel panelDes = new JPanel();
-
-			panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-			panelName.setLayout(new FlowLayout(FlowLayout.LEFT));
-			panelLoca.setLayout(new FlowLayout(FlowLayout.LEFT));
-			panelDes.setLayout(new FlowLayout(FlowLayout.LEFT));
-			panelName.add(new JLabel("Name:"));
-			panelName.add(textName);
-			panelLoca.add(new JLabel("Location:"));
-			panelLoca.add(textLoc);
-			panelLoca.add(browse);
-			panelDes.add(new JLabel("Description:"));
-			panelDes.add(scrollPane);
-			panel.add(panelName);
-			panel.add(panelLoca);
-			panel.add(panelDes);
-
-			int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
-
-			if (JOptionPane.OK_OPTION == choose) {
-				String name = textName.getText();
-				String location = textLoc.getText();
-				String description = textDesc.getText();
-				if (name.length() == 0) {
-					JOptionPane.showMessageDialog(null, "You forget to input a name !");
-					addType(name, filter, location, description);
-				} else if (location.trim().isEmpty()) {
-					JOptionPane.showMessageDialog(null, "Invalid Path File");
-					addType(name, filter, location, description);
-				} else if (description.length() == 0) {
-					description = " ";
-					addType(name, filter, location, description);
-				} else {
-					bookFactory.add(name, filter, location, description);
-					bookList.add(new Book(name, filter, location, description));
-					createBookButton(new Book(name, filter, location, description));
-					updateFrame();
-				}
-			}
-
-		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -648,4 +670,5 @@ public class FolderPageUI implements Runnable {
 		}
 
 	}
+
 }

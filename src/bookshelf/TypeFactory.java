@@ -33,6 +33,7 @@ public class TypeFactory {
 	public void removeType(String type) {
 		if (typeList.contains(type)) {
 			typeList.remove(type);
+			BookFactory.getInstances().removeBookByType(type);
 		}
 	}
 
