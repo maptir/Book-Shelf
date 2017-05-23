@@ -13,6 +13,10 @@ import javax.swing.JPanel;
  *
  */
 public class BookShelfUI extends JFrame {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	static JPanel bsPanel;
 	static HomeUI home;
 	static SearchPageUI search;

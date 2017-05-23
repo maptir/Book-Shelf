@@ -1,8 +1,7 @@
 package bookshelf.gui;
 
 import java.awt.*;
-import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.TimerTask;
@@ -11,10 +10,7 @@ import java.util.Timer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-import bookshelf.BookFactory;
-import bookshelf.Database;
-import bookshelf.FileDragNDrop;
-import bookshelf.TypeFactory;
+import bookshelf.*;
 import bookshelf.gui.FolderPageUI.DragBookAction;
 
 import javax.swing.filechooser.FileNameExtensionFilter;

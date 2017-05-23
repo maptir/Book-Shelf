@@ -16,6 +16,10 @@ import javax.swing.TransferHandler;
  *
  */
 public abstract class FileDragNDrop extends TransferHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// The file type that can add into the app.
 	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls" };
 

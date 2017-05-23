@@ -89,11 +89,8 @@ public class FolderPageUI extends JPanel implements Runnable {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
-		// frame = new JFrame(filter + " Shelf");
-
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
-		// frame.setSize(900, 700);
 		this.setPreferredSize(new Dimension(830, 700));
 		emptyLabel = new JLabel("Page : " + currentPage);
 		emptyLabel2 = new JTextField(100);
