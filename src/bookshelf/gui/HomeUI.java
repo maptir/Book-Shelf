@@ -99,6 +99,12 @@ public class HomeUI extends JPanel {
 		Image imgstar = iconFavor.getImage();
 		Image newimg6 = imgstar.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		iconFavor = new ImageIcon(newimg6);
+		
+		ImageIcon iconEdit = new ImageIcon("Picture//edit.png");
+		Image imgEdit = iconEdit.getImage();
+		Image newimg8 = imgEdit.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		iconEdit = new ImageIcon(newimg8);
+		
 		favor.setIcon(iconFavor);
 		favor.setBorderPainted(false);
 		favor.setContentAreaFilled(false);
@@ -335,8 +341,8 @@ public class HomeUI extends JPanel {
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 		String[] typeArr = {};
 		typeArr = typeFactory.getTypeList().toArray(typeArr);
-		cBox = new JComboBox<>(typeArr);
-		cBox.setSelectedItem(aType);
+		JComboBox<String> comboBox = new JComboBox<>(typeArr);
+		comboBox.setSelectedItem(aType);
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
 		JTextField textLoc = new JTextField(10);
@@ -349,7 +355,7 @@ public class HomeUI extends JPanel {
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
 			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx","xls"));
 			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
@@ -366,7 +372,7 @@ public class HomeUI extends JPanel {
 		panelName.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLoca.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelDes.setLayout(new FlowLayout(FlowLayout.LEFT));
-		panel.add(cBox);
+		panel.add(comboBox);
 		panelName.add(new JLabel("Name:"));
 		panelName.add(textName);
 		panelLoca.add(new JLabel("Location:"));
@@ -382,7 +388,7 @@ public class HomeUI extends JPanel {
 
 		if (JOptionPane.OK_OPTION == choose) {
 			String name = textName.getText();
-			String type = cBox.getSelectedItem().toString();
+			String type = comboBox.getSelectedItem().toString();
 			String location = textLoc.getText();
 			String description = textDesc.getText();
 
@@ -489,9 +495,9 @@ public class HomeUI extends JPanel {
 						if (component instanceof JLabel) {
 							if (support.getComponent().equals(binLabel)) {
 								int choose = JOptionPane.showConfirmDialog(null,
-										String.format("Remove %s?",
+										String.format("Remove %s? This will remove all of the book inside this folder",
 												typeFactory.getTypeList().get(Integer.parseInt(value.toString()))),
-										"Delete Shelf", JOptionPane.OK_CANCEL_OPTION);
+										"Delete The Folder", JOptionPane.OK_CANCEL_OPTION);
 								if (choose == JOptionPane.OK_OPTION) {
 									typeFactory.removeType(
 											typeFactory.getTypeList().get(Integer.parseInt(value.toString())));

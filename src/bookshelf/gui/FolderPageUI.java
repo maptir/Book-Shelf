@@ -208,17 +208,27 @@ public class FolderPageUI extends JPanel implements Runnable {
 		} else {
 			nextButton.setEnabled(false);
 		}
+		if (filter.equalsIgnoreCase("favor")) {
+			panelSouth.add(homeButton);
+			panelSouth.add(garbageLabel);
+			panelSouth.add(new JLabel("                                                "));
+			panelSouth.add(preButton);
+			panelSouth.add(emptyLabel);
+			panelSouth.add(nextButton);
+			panelSouth.add(new JLabel("                                                                    "));
+		} else {
+			panelSouth.add(homeButton);
+			panelSouth.add(garbageLabel);
+			panelSouth.add(new JLabel("                                "));
+			panelSouth.add(preButton);
+			panelSouth.add(emptyLabel);
+			panelSouth.add(nextButton);
+			panelSouth.add(new JLabel("                      "));
+			panelSouth.add(favorText);
+			panelSouth.add(favorLabel);
+			panelSouth.add(addBookButton);
+		}
 
-		panelSouth.add(homeButton);
-		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                "));
-		panelSouth.add(preButton);
-		panelSouth.add(emptyLabel);
-		panelSouth.add(nextButton);
-		panelSouth.add(new JLabel("                      "));
-		panelSouth.add(favorText);
-		panelSouth.add(favorLabel);
-		panelSouth.add(addBookButton);
 		panelSouth.setBackground(new Color(38, 30, 19));
 		panelSouth.setPreferredSize(new Dimension(870, 100));
 		panelSouth.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
