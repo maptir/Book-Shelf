@@ -214,9 +214,6 @@ public class SearchPageUI extends JPanel {
 		favorList = data.getFavorList();
 		Predicate<Book> filByType = (s) -> (s.getType().equalsIgnoreCase(type));
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(name.toLowerCase()));
-		if (!typeList.contains("All")) {
-			typeList.add(0, "All");
-		}
 		if (type.equalsIgnoreCase("all")) {
 			// do nothing
 		} else {

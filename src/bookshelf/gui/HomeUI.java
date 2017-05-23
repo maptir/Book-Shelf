@@ -217,7 +217,6 @@ public class HomeUI extends JPanel {
 		if (currentPage + 1 > havePage)
 			right.setEnabled(false);
 		this.add(panelAll);
-		System.out.println(this.getPreferredSize());
 	}
 
 	public void addNewFolder(String newFolder) {

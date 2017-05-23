@@ -52,6 +52,7 @@ import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 import bookshelf.*;
 import jdk.nashorn.internal.runtime.regexp.joni.Warnings;
+import sun.util.resources.cldr.ur.CurrencyNames_ur;
 
 /**
  * The folder page of this program.
@@ -84,7 +85,7 @@ public class FolderPageUI implements Runnable {
 	private JButton nextButton;
 	private JButton addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText,settingLabel;
 	private ImageIcon img;
 	private JLabel woodPic;
 	private ImageIcon iconBook;
@@ -113,6 +114,7 @@ public class FolderPageUI implements Runnable {
 		emptyLabel5 = new JTextField(100);
 		garbageLabel = new JLabel();
 		favorLabel = new JLabel();
+		settingLabel = new JLabel();
 		favorText = new JLabel("<html><p>                     Add Favourite<br>           by drop on star</p></html>");
 		img = new ImageIcon("Picture//backGR.jpg");
 		img = new ImageIcon(img.getImage().getScaledInstance(900, 650, Image.SCALE_SMOOTH));
@@ -153,7 +155,7 @@ public class FolderPageUI implements Runnable {
 		Image imgstar = iconFavor.getImage();
 		Image newimg6 = imgstar.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		iconFavor = new ImageIcon(newimg6);
-
+		
 		emptyLabel.setPreferredSize(new Dimension(90, 40));
 		emptyLabel.setFont(new Font("Arial", 0, 20));
 		emptyLabel.setForeground(Color.WHITE);
@@ -209,10 +211,11 @@ public class FolderPageUI implements Runnable {
 		}
 
 		panelSouth.add(garbageLabel);
-		panelSouth.add(new JLabel("                                                                              "));
+		panelSouth.add(new JLabel("                                                 "));
 		panelSouth.add(preButton);
 		panelSouth.add(emptyLabel);
 		panelSouth.add(nextButton);
+		panelSouth.add(new JLabel("                         "));
 		panelSouth.add(favorText);
 		panelSouth.add(favorLabel);
 		panelSouth.add(addBookButton);
@@ -342,12 +345,12 @@ public class FolderPageUI implements Runnable {
 	 * 
 	 * @param fileLocation
 	 */
-	private void openFile(String fileLocation,int index) {
+	private void openFile(String fileLocation, int index) {
 		if (Desktop.isDesktopSupported()) {
 			try {
 				File myFile = new File(fileLocation);
 				Desktop.getDesktop().open(myFile);
-				
+
 			} catch (IOException | IllegalArgumentException ex) {
 				JOptionPane.showMessageDialog(frame, "File not found", "Warning", JOptionPane.WARNING_MESSAGE);
 			}
@@ -374,11 +377,16 @@ public class FolderPageUI implements Runnable {
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
 		panelCenter.add(createBookPerPage(starterPage[currentPage - 1]));
+
 		if (currentPage <= 1) {
 			preButton.setEnabled(false);
+		} else {
+			preButton.setEnabled(true);
 		}
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
+		} else {
+			nextButton.setEnabled(true);
 		}
 		frame.validate();
 	}
@@ -396,9 +404,13 @@ public class FolderPageUI implements Runnable {
 
 		if (currentPage <= 1) {
 			preButton.setEnabled(false);
+		} else {
+			preButton.setEnabled(true);
 		}
 		if (currentPage + 1 > havePage) {
 			nextButton.setEnabled(false);
+		} else {
+			nextButton.setEnabled(true);
 		}
 		frame.validate();
 	}
@@ -472,17 +484,9 @@ public class FolderPageUI implements Runnable {
 				bookFactory.add(name, filter, location, description);
 				bookList.add(new Book(name, filter, location, description));
 				createBookButton(new Book(name, filter, location, description));
-				updateFrame();
 			}
 		}
 
-	}
-
-	public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
-			IllegalAccessException, UnsupportedLookAndFeelException {
-		UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		FolderPageUI r = new FolderPageUI("Comic");
-		r.run();
 	}
 
 	/**
@@ -522,7 +526,7 @@ public class FolderPageUI implements Runnable {
 			isRemoveState = false;
 			if (isDoubleClick) {
 				String fileLocation = bookList.get(Integer.parseInt(e.getActionCommand())).getLocation();
-				openFile(fileLocation,Integer.parseInt(e.getActionCommand()));
+				openFile(fileLocation, Integer.parseInt(e.getActionCommand()));
 				isDoubleClick = false;
 			}
 		}
@@ -665,6 +669,8 @@ public class FolderPageUI implements Runnable {
 			if (bookList.size() % 6 == 1) {
 				currentPage++;
 				updateFrame(starterPage[currentPage] - 6);
+			} else {
+				updateFrame();
 			}
 			data.close();
 		}

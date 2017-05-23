@@ -1,13 +1,9 @@
-A2GAPandSWOT.docx.docx,Comic,C:\Users\User\Downloads\2GAPandSWOT.docx.docx,asd
+2-2016-ITCS208-P3_UPDATED.pdf,Comic,C:\Users\Administrator\Downloads\2-2016-ITCS208-P3_UPDATED.pdf,qweqwersdfvxcvb
 BPA4-Readability.pdf,Comic,C:\Users\User\Downloads\PA4-Readability.pdf,read
 C3ปัญหา 3 ข้อ.docx.docx.docx,Comic,C:\Users\User\Downloads\3ปัญหา 3 ข้อ.docx.docx.docx,dsfgf
-Fame,Comic,asdf,asdf
-Generic-Types.pdf,Comic,C:\Users\User\Downloads\Generic-Types.pdf,qwerty
-HaHa,Comedy,C:\Users\FAME\Documents\IT.docx,sdfgfdsg
-Jacky,Comic,qwer,asd
+CASE4.pdf,Education,C:\Users\Administrator\Downloads\CASE4.pdf,qwdeaqwdasd
+IT.docx,Comic,C:\Users\FAME\Documents\IT.docx,g
+Josh,Education,C:\Users\FAME\Documents\IT.docx,g
 Lab13-1-Generics,Education,C:\Users\User\Downloads\Lab13-1-Generics.pdf,Lab13 is aboout generics in java
 Lab13-OCSF-Framework,Education,C:\Users\User\Downloads\Lab13-OCSF-Framework.pdf,Lab13 is OCSF in java
-3ปัญหา 3 ข้อ.docx.docx.docx,Comic,C:\Users\User\Downloads\3ปัญหา 3 ข้อ.docx.docx.docx,dsfgf
-PA4-Readability.pdf,Comic,C:\Users\User\Downloads\PA4-Readability.pdf,read
-CASE4.pdf,Education,C:\Users\Administrator\Downloads\CASE4.pdf,qwdeaqwdasd
-2-2016-ITCS208-P3_UPDATED.pdf,Comic,C:\Users\Administrator\Downloads\2-2016-ITCS208-P3_UPDATED.pdf,qweqwersdfvxcvb
+S.docx,Work,C:\Users\FAME\Desktop\S.docx,DDss
