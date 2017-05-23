@@ -23,7 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * This is the home page of the application that can search, add, remove the
  * file that you want to deal with.
  * 
- * @author Archawin Tirugsapun
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
 public class HomeUI extends JPanel {
@@ -111,12 +111,12 @@ public class HomeUI extends JPanel {
 		Image imgstar = iconFavor.getImage();
 		Image newimg6 = imgstar.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		iconFavor = new ImageIcon(newimg6);
-		
+
 		ImageIcon iconEdit = new ImageIcon("Picture//edit.png");
 		Image imgEdit = iconEdit.getImage();
 		Image newimg8 = imgEdit.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		iconEdit = new ImageIcon(newimg8);
-		
+
 		favor.setIcon(iconFavor);
 		favor.setBorderPainted(false);
 		favor.setContentAreaFilled(false);
@@ -533,7 +533,7 @@ public class HomeUI extends JPanel {
 	/**
 	 * The transferhandler that drop the file to delete it from the app.
 	 * 
-	 * @author Archawin Tirugsapun
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class DropAction extends TransferHandler {

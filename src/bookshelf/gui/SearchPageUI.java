@@ -27,6 +27,12 @@ import bookshelf.BookFactory;
 import bookshelf.Database;
 import bookshelf.TypeFactory;
 
+/**
+ * The class of SearchPage.
+ * 
+ * @author Archawin Tirugsapun,Triwith Mutitakul
+ *
+ */
 public class SearchPageUI extends JPanel {
 	private Database data;
 	private List<Book> bookList;
@@ -56,12 +62,23 @@ public class SearchPageUI extends JPanel {
 	private int currentPage = 1;
 	private boolean isDoubleClick = false;
 
+	/**
+	 * The constructor.
+	 * 
+	 * @param type
+	 */
 	public SearchPageUI(String type) {
 		this.type = type;
 		databaseSetUp(type, "");
 		initComponents();
 	}
 
+	/**
+	 * The constructor.
+	 * 
+	 * @param type
+	 * @param name
+	 */
 	public SearchPageUI(String type, String name) {
 		this.type = type;
 		databaseSetUp(type, name);
@@ -69,6 +86,9 @@ public class SearchPageUI extends JPanel {
 		typeComboBox.setSelectedItem(type);
 	}
 
+	/**
+	 * The method that use for create the components of the SearchPage GUI.
+	 */
 	private void initComponents() {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
@@ -207,6 +227,12 @@ public class SearchPageUI extends JPanel {
 		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * The method that use for read and write the data from the database.
+	 * 
+	 * @param type
+	 * @param name
+	 */
 	private void databaseSetUp(String type, String name) {
 		data = new Database();
 		bookFactory = BookFactory.getInstances();
@@ -287,6 +313,11 @@ public class SearchPageUI extends JPanel {
 		return bgLabel;
 	}
 
+	/**
+	 * The method that use for open the file.
+	 * 
+	 * @param fileLocation
+	 */
 	private void openFile(String fileLocation) {
 		if (Desktop.isDesktopSupported()) {
 			try {
@@ -298,6 +329,9 @@ public class SearchPageUI extends JPanel {
 		}
 	}
 
+	/**
+	 * The method that use for update the change of this panel.
+	 */
 	public void updateFrame() {
 		havePage = (int) Math.ceil(bookList.size() / 2.0);
 		pageLabel.setText("Page : " + currentPage);
@@ -314,10 +348,12 @@ public class SearchPageUI extends JPanel {
 		this.validate();
 	}
 
-	public void run() {
-		this.setVisible(true);
-	}
-
+	/**
+	 * The ActionListener class of next/previous button.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class PageButtonAction implements ActionListener {
 
 		@Override
@@ -335,6 +371,12 @@ public class SearchPageUI extends JPanel {
 
 	}
 
+	/**
+	 * The MouseAdapter class of each book.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class ClickBookMouseAction extends MouseAdapter {
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -344,6 +386,12 @@ public class SearchPageUI extends JPanel {
 		}
 	}
 
+	/**
+	 * The ActionListener class of each book.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class BookClickAction implements ActionListener {
 
 		@Override
@@ -356,6 +404,12 @@ public class SearchPageUI extends JPanel {
 		}
 	}
 
+	/**
+	 * The ActionListener class of search fuction.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class SearchAction implements ActionListener, KeyListener {
 		private void doSearchAction() {
 			currentPage = 1;
@@ -388,7 +442,12 @@ public class SearchPageUI extends JPanel {
 		}
 	}
 
-	// Add for Home Button
+	/**
+	 * The ActionListener class of add favorite button.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class AddFavorAction implements ActionListener {
 
 		@Override

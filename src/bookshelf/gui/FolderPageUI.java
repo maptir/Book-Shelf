@@ -47,7 +47,7 @@ import bookshelf.*;
 /**
  * The folder page of this program.
  * 
- * @author Triwith Mutitakul
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
 public class FolderPageUI extends JPanel implements Runnable {
@@ -67,33 +67,33 @@ public class FolderPageUI extends JPanel implements Runnable {
 	private boolean isRemoveState = false;
 
 	private JFrame detailFrame;
-	private JLabel backGLabel;
-	private JPanel panelCenter;
-	private JPanel panelSouth;
-	private JButton homeButton;
-	private JButton preButton;
-	private JButton nextButton;
-	private JButton addBookButton;
+	private JPanel panelCenter, panelSouth;
+	private JButton homeButton, preButton, nextButton, addBookButton;
 	private JTextField emptyLabel2, emptyLabel3, emptyLabel4, emptyLabel5;
-	private JLabel emptyLabel, garbageLabel, favorLabel, favorText;
-	private ImageIcon img;
-	private ImageIcon iconBook;
+	private JLabel emptyLabel, garbageLabel, favorLabel, favorText, backGLabel;
+	private ImageIcon img, iconBook;
 
+	/**
+	 * The constructor.
+	 * 
+	 * @param filter
+	 *            is the type of book.
+	 */
 	public FolderPageUI(String filter) {
 		this.filter = filter;
 		databaseSetUp();
 		initComponents();
 	}
 
+	/**
+	 * The method that use for create the component of the GUI.
+	 */
 	private void initComponents() {
 		UIManager.put("ToolTip.background", Color.BLACK);
 		UIManager.put("ToolTip.foreground", Color.WHITE);
 
-		// frame = new JFrame(filter + " Shelf");
-
 		detailFrame = new JFrame();
 		detailFrame.setUndecorated(true);
-		// frame.setSize(900, 700);
 		this.setPreferredSize(new Dimension(830, 700));
 		emptyLabel = new JLabel("Page : " + currentPage);
 		emptyLabel2 = new JTextField(100);
@@ -502,7 +502,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener of next and previous button.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class ButtonAction implements ActionListener {
@@ -526,7 +526,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener of each book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class BookClickAction implements ActionListener {
@@ -545,7 +545,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the Mouse action of each book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class doubleClickAction extends MouseAdapter {
@@ -560,7 +560,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener that use for drag the book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public static class DragBookAction extends TransferHandler {
@@ -597,7 +597,7 @@ public class FolderPageUI extends JPanel implements Runnable {
 	/**
 	 * This class is the ActionListener that use for drop the book.
 	 * 
-	 * @author Triwith Mutitakul
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
 	 *
 	 */
 	public class DropAction extends TransferHandler {
@@ -670,6 +670,12 @@ public class FolderPageUI extends JPanel implements Runnable {
 		}
 	}
 
+	/**
+	 * The ActionListener class of add book button.
+	 * 
+	 * @author Archawin Tirugsapun,Triwith Mutitakul
+	 *
+	 */
 	public class addBookAction implements ActionListener {
 
 		@Override

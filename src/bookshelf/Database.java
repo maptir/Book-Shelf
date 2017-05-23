@@ -14,7 +14,7 @@ import java.util.Scanner;
 /**
  * The Class that use for manage the database of this program.
  * 
- * @author Triwith Mutitakul
+ * @author Archawin Tirugsapun,Triwith Mutitakul
  */
 public class Database {
 	private List<Book> bookList = new ArrayList<Book>();
@@ -103,24 +103,4 @@ public class Database {
 		}
 	}
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		Database d = new Database();
-		while (true) {
-			System.out.println("Add ? : ");
-			if (sc.nextLine().equals("q")) {
-				break;
-			}
-			System.out.println("File name : ");
-			String name = sc.nextLine();
-			System.out.println("File Type : ");
-			String type = sc.nextLine();
-			System.out.println("File Location : ");
-			String loca = sc.nextLine();
-			System.out.println("File Description :");
-			String des = sc.nextLine();
-			BookFactory.getInstances().add(name, type, loca, des);
-			d.close();
-		}
-	}
 }
