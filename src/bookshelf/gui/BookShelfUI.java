@@ -12,11 +12,8 @@ import javax.swing.JPanel;
  * @author Archawin Tirugsapun,Triwith Mutitakul
  *
  */
-public class BookShelfUI extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class BookShelfUI {
+	static JFrame frame;
 	static JPanel bsPanel;
 	static HomeUI home;
 	static SearchPageUI search;
@@ -29,10 +26,10 @@ public class BookShelfUI extends JFrame {
 	 * @throws IOException
 	 */
 	public BookShelfUI() throws IOException {
-		super("Book-Shelf");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setLocation(230, 20);
-		this.setResizable(false);
+		frame = new JFrame("Book-Shelf");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocation(230, 20);
+		frame.setResizable(false);
 		initscomponents();
 	}
 
@@ -46,17 +43,19 @@ public class BookShelfUI extends JFrame {
 		c = new CardLayout();
 		bsPanel = new JPanel(c);
 
+		frame.setTitle("Book-Shelf");
 		bsPanel.add(home, "home");
 		c.show(bsPanel, "home");
 
-		this.add(bsPanel);
-		this.pack();
+		frame.add(bsPanel);
+		frame.pack();
 	}
 
 	/**
 	 * Set change of the layout to the home page.
 	 */
 	public static void setHomeLayOut() {
+		frame.setTitle("Book-Shelf");
 		c.show(bsPanel, "home");
 	}
 
@@ -83,6 +82,7 @@ public class BookShelfUI extends JFrame {
 	 *            is the type that you want to see.
 	 */
 	public static void setFolderLayOut(String type) {
+		frame.setTitle(type + "-Shelf");
 		folder = new FolderPageUI(type);
 		bsPanel.add(folder, "folder");
 		c.show(bsPanel, "folder");
@@ -92,6 +92,6 @@ public class BookShelfUI extends JFrame {
 	 * Set visible to the JFrame.
 	 */
 	public void run() {
-		this.setVisible(true);
+		frame.setVisible(true);
 	}
 }

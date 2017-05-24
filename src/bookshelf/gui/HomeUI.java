@@ -25,22 +25,23 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class HomeUI extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	Database data;
-	JTextField searchText;
-	JLabel searchLabel, logoLabel, backGroundLabel, binLabel, pageLabel, programName;
-	JButton searchButton, addFolder, addImageadd, right, left, favor;
-	JPanel panelAdd, panelText, panelButton, panelAll, panelChange;
-	JComboBox<String> cBox;
-	Image logo, backGround, addImage, addType, delete;
-	TypeFactory typeFactory = TypeFactory.getInstances();
-	BookFactory bookFactory = BookFactory.getInstances();
-	boolean isClick = false;
-	String newFolder;
-	String[] typeArr = {};
-	int numFol = 0;
-	int currentPage = 1;
-	int havePage = 0;
-	final int MAX_FOLDER = 8;
+	private Database data;
+	private JTextField searchText;
+	private JLabel searchLabel, logoLabel, binLabel, pageLabel, programName;
+	private JButton searchButton, addFolder, addImageadd, right, left, favor;
+	private JPanel panelAdd, panelText, panelButton, panelAll, panelChange;
+	private JComboBox<String> cBox;
+	private Image logo, backGround, addImage, addType, delete;
+	private TypeFactory typeFactory = TypeFactory.getInstances();
+	private BookFactory bookFactory = BookFactory.getInstances();
+
+	private boolean isClick = false;
+	private String newFolder;
+	private String[] typeArr = {};
+	private int numFol = 0;
+	private int currentPage = 1;
+	private int havePage = 0;
+	private final int MAX_FOLDER = 8;
 
 	public HomeUI() throws IOException {
 		initcomponents();
@@ -402,8 +403,8 @@ public class HomeUI extends JPanel {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls"));
+			chooser.setFileFilter(new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+					"pptx", "xls", "rtf"));
 			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
