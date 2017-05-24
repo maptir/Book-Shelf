@@ -47,10 +47,12 @@ public class Book {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public void setTime(long time){
+
+	public void setTime(long time) {
 		this.lastOpenTime = new Date(time);
 	}
-	public Date getTime(){
+
+	public Date getTime() {
 		return this.lastOpenTime;
 	}
 

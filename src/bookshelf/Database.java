@@ -83,6 +83,7 @@ public class Database {
 			typeList = typeFactory.getTypeList();
 			output = new FileOutputStream(file);
 			outputForType = new FileOutputStream(typeFile);
+			favoList = bookFactory.getFavorList();
 			for (int x = 0; x < bookList.size(); x++) {
 				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getType() + ","
 						+ bookList.get(x).getLocation() + "," + bookList.get(x).getDescription() + "\n").getBytes();
