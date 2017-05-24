@@ -439,8 +439,8 @@ public class FolderPageUI extends JPanel {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((s) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx"));
+			chooser.setFileFilter(new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+					"pptx", "xls", "rtf"));
 			int result = chooser.showOpenDialog(null);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();

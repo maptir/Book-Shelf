@@ -402,8 +402,8 @@ public class HomeUI extends JPanel {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(
-					new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls"));
+			chooser.setFileFilter(new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+					"pptx", "xls", "rtf"));
 			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File file = chooser.getSelectedFile();
