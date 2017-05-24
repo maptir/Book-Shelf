@@ -648,6 +648,7 @@ public class FolderPageUI extends JPanel {
 										updateFrame();
 									}
 								}
+
 								accept = true;
 							}
 						}
