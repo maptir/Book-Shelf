@@ -193,6 +193,8 @@ public class SearchPageUI extends JPanel {
 
 		searchField.addKeyListener(new SearchAction());
 
+		typeComboBox.setPrototypeDisplayValue("                              ");
+
 		northPanel.add(searchLabel);
 		northPanel.add(searchField);
 		northPanel.add(typeLabel);
