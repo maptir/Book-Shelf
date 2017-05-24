@@ -2,6 +2,9 @@
 
 
 
+To use our application you need all of folder call "Book-Shelfv1.0"
+and double click to Book-Shelf.jar to run the program.
+
 The application that help to organize the file in your computer
 into this application you can add such as power point, text, excel,
 word and you can open that from this app. For default we give you
