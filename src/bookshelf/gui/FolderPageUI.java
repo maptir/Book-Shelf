@@ -201,6 +201,13 @@ public class FolderPageUI extends JPanel {
 			favorLabel.setHorizontalAlignment(SwingConstants.CENTER);
 			favorLabel.setBackground(new Color(38, 30, 19));
 			favorLabel.setTransferHandler(new DropAction());
+			panelCenter.setTransferHandler(new FileDragNDrop() {
+				@Override
+				public void importData(File file) {
+					addType(file.getName(), "", file.getAbsolutePath(), "");
+					updateFrame();
+				}
+			});
 		}
 		if (bookList.size() > 6) {
 			nextButton.setEnabled(true);
@@ -237,14 +244,6 @@ public class FolderPageUI extends JPanel {
 		panelCenter.setPreferredSize(new Dimension(850, 600));
 		panelCenter.add(createBookPerPage(starterPageNum));
 		panelCenter.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
-
-		panelCenter.setTransferHandler(new FileDragNDrop() {
-			@Override
-			public void importData(File file) {
-				addType(file.getName(), "", file.getAbsolutePath(), "");
-				updateFrame();
-			}
-		});
 
 		this.add(panelCenter, BorderLayout.CENTER);
 		this.add(panelSouth, BorderLayout.SOUTH);
