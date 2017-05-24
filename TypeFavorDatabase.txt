@@ -1,1 +1,1 @@
-All,Comic,Education,Novel,Work,
+All,Comic,Education,Novel,Work
