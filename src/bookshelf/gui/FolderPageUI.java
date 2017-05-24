@@ -382,6 +382,7 @@ public class FolderPageUI extends JPanel {
 	 * This method is use for update the frame.
 	 */
 	public void updateFrame() {
+		bookList = bookFactory.getBookList();
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
@@ -648,6 +649,7 @@ public class FolderPageUI extends JPanel {
 										updateFrame();
 									}
 								}
+
 								accept = true;
 							}
 						}
