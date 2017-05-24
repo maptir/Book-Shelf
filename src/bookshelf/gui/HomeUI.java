@@ -151,6 +151,7 @@ public class HomeUI extends JPanel {
 		searchText = new JTextField(15);
 		typeArr = typeFactory.getTypeList().toArray(typeArr);
 		cBox = new JComboBox<>(typeArr);
+		cBox.setPrototypeDisplayValue("                              ");
 		searchText.addFocusListener(new FocusListener() {
 			String promptText = "What you need ?";
 
@@ -339,10 +340,11 @@ public class HomeUI extends JPanel {
 				updateFrame();
 			}
 		});
-		panelButton.add(new JLabel("                                           "));
-		panelButton.add(newButton);
 		newButton.setBorderPainted(false);
 		newButton.setContentAreaFilled(false);
+		newButton.setToolTipText(newFolder);
+		panelButton.add(new JLabel("                                           "));
+		panelButton.add(newButton);
 		numFol++;
 	}
 
@@ -380,8 +382,14 @@ public class HomeUI extends JPanel {
 	public void addType(String aName, String aType, String aLocation, String aDescription) {
 		String[] typeArr = {};
 		typeArr = typeFactory.getTypeList().toArray(typeArr);
-		JComboBox<String> comboBox = new JComboBox<>(typeArr);
+		JComboBox<String> comboBox = new JComboBox<>();
+
+		for (String type : typeFactory.getTypeList())
+			if (!type.equalsIgnoreCase("all"))
+				comboBox.addItem(type);
+
 		comboBox.setSelectedItem(aType);
+		comboBox.setPrototypeDisplayValue("                              ");
 		JButton browse = new JButton("BROWSE");
 		JTextField textName = new JTextField(20);
 		JTextField textLoc = new JTextField(10);
@@ -389,6 +397,7 @@ public class HomeUI extends JPanel {
 		textName.setText(aName);
 		textDesc.setText(aDescription);
 		textLoc.setText(aLocation);
+		textLoc.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textDesc);
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
@@ -411,6 +420,7 @@ public class HomeUI extends JPanel {
 		panelName.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelLoca.setLayout(new FlowLayout(FlowLayout.LEFT));
 		panelDes.setLayout(new FlowLayout(FlowLayout.LEFT));
+
 		panel.add(comboBox);
 		panelName.add(new JLabel("Name:"));
 		panelName.add(textName);

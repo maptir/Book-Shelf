@@ -434,6 +434,7 @@ public class FolderPageUI extends JPanel {
 		textName.setText(aName);
 		textDesc.setText(aDescription);
 		textLoc.setText(aLocation);
+		textLoc.setEditable(false);
 		JScrollPane scrollPane = new JScrollPane(textDesc);
 		textDesc.setLineWrap(true);
 		browse.addActionListener((s) -> {
