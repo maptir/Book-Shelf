@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
  *
  */
 public class BookFactory {
+	private boolean isAdd = false;
 	private static BookFactory factory = null;
 	private List<Book> bookList = new ArrayList<Book>();
 	private List<String> favorList = new ArrayList<>();
@@ -44,9 +45,11 @@ public class BookFactory {
 	 * @param fileDescription
 	 */
 	public void add(String filename, String fileType, String fileLocation, String fileDescription) {
+		isAdd = false;
 		Predicate<Book> filByName = (s) -> (s.getName().toLowerCase().contains(filename.toLowerCase()));
 		List<Book> temp = bookList.stream().filter(filByName).collect(Collectors.toList());
 		if (temp.size() == 0) {
+			isAdd = true;
 			bookList.add(new Book(filename, fileType, fileLocation, fileDescription));
 		}
 		bookList.sort(new Comparator<Book>() {
@@ -56,6 +59,16 @@ public class BookFactory {
 			}
 		});
 	}
+
+	/**
+	 * Get if can add file to a book return true else false.
+	 * 
+	 * @return 
+	 */
+	public boolean isAdd() {
+		return isAdd;
+	}
+
 
 	/**
 	 * The method that use for return the favor list.

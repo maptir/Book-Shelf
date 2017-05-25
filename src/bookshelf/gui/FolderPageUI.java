@@ -382,7 +382,6 @@ public class FolderPageUI extends JPanel {
 	 * This method is use for update the frame.
 	 */
 	public void updateFrame() {
-		bookList = bookFactory.getBookList();
 		havePage = (int) Math.ceil(bookList.size() / 6.0);
 		emptyLabel.setText("Page : " + currentPage);
 		panelCenter.removeAll();
@@ -485,7 +484,12 @@ public class FolderPageUI extends JPanel {
 				addType(name, filter, location, description);
 			} else {
 				bookFactory.add(name, filter, location, description);
-				createBookButton(new Book(name, filter, location, description));
+				if (bookFactory.isAdd()){
+					createBookButton(new Book(name, filter, location, description));
+					bookList.add(new Book(name, filter, location, description));
+				}else
+					JOptionPane.showMessageDialog(this, "This file is already in shelf!");
+				data.close();
 			}
 		}
 
@@ -619,6 +623,7 @@ public class FolderPageUI extends JPanel {
 									bookListButton.remove(Integer.parseInt(value.toString()));
 									bookFactory.removeBook(bookList.get(Integer.parseInt(value.toString())).getName(),
 											bookList.get(Integer.parseInt(value.toString())).getDescription());
+									bookList.remove(Integer.parseInt(value.toString()));
 									data.close();
 									if (bookList.size() <= 6) {
 										nextButton.setEnabled(false);

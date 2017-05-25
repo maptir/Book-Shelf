@@ -454,6 +454,8 @@ public class HomeUI extends JPanel {
 			} else {
 				bookFactory.add(name, type, location, description);
 				data.close();
+				if (!bookFactory.isAdd())
+					JOptionPane.showMessageDialog(this, "This file is already in shelf!");
 			}
 		}
 	}
