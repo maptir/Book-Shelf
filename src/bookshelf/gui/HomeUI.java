@@ -61,7 +61,8 @@ public class HomeUI extends JPanel {
 		addType = ImageIO.read(new File("Picture//AddBook.png"));
 		delete = ImageIO.read(new File("Picture//bin.png"));
 		backGround = ImageIO.read(new File("Picture//bg1.jpg"));
-		backGround = backGround.getScaledInstance(820, 700, Image.SCALE_DEFAULT);
+		backGround = backGround
+				.getScaledInstance(820, 700, Image.SCALE_DEFAULT);
 
 		searchButton = new JButton();
 		addFolder = new JButton();
@@ -70,10 +71,14 @@ public class HomeUI extends JPanel {
 		left = new JButton("PREV");
 		favor = new JButton();
 
-		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90, Image.SCALE_DEFAULT)));
-		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(100, 80, Image.SCALE_DEFAULT)));
-		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(80, 60, Image.SCALE_DEFAULT)));
-		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(90, 70, Image.SCALE_DEFAULT)));
+		logoLabel = new JLabel(new ImageIcon(logo.getScaledInstance(110, 90,
+				Image.SCALE_DEFAULT)));
+		addFolder.setIcon(new ImageIcon(addImage.getScaledInstance(100, 80,
+				Image.SCALE_DEFAULT)));
+		addImageadd.setIcon(new ImageIcon(addType.getScaledInstance(80, 60,
+				Image.SCALE_DEFAULT)));
+		binLabel = new JLabel(new ImageIcon(delete.getScaledInstance(90, 70,
+				Image.SCALE_DEFAULT)));
 		programName = new JLabel("The Book-Shelf 1.0");
 
 		ImageIcon iconPre = new ImageIcon("Picture//previousButton.png");
@@ -88,7 +93,8 @@ public class HomeUI extends JPanel {
 
 		ImageIcon iconNext = new ImageIcon("Picture//nextButton.png");
 		Image imgNextButt = iconNext.getImage();
-		Image newimg2 = imgNextButt.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+		Image newimg2 = imgNextButt.getScaledInstance(50, 50,
+				Image.SCALE_SMOOTH);
 		iconNext = new ImageIcon(newimg2);
 		right.setIcon(iconNext);
 		right.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -170,7 +176,8 @@ public class HomeUI extends JPanel {
 				if (searchText.getText().equals(promptText)) {
 					searchText.setText("");
 					searchText.setForeground(Color.BLACK);
-					searchText.setBorder(BorderFactory.createLineBorder(new Color(95, 206, 243), 2));
+					searchText.setBorder(BorderFactory.createLineBorder(
+							new Color(95, 206, 243), 2));
 				}
 			}
 		});
@@ -212,13 +219,17 @@ public class HomeUI extends JPanel {
 				newFolder = JOptionPane.showInputDialog("Folder Name");
 				if (newFolder == null)
 					return;
-				if (isAlphaNumeric(newFolder) && !newFolder.isEmpty() && !typeFactory.getTypeList().stream()
-						.filter((s) -> s.equalsIgnoreCase(newFolder)).findFirst().isPresent()) {
+				if (isAlphaNumeric(newFolder)
+						&& !newFolder.isEmpty()
+						&& !typeFactory.getTypeList().stream()
+								.filter((s) -> s.equalsIgnoreCase(newFolder))
+								.findFirst().isPresent()) {
 					typeFactory.addType(newFolder);
 					addNewFolder(newFolder);
 					data.close();
 					setNewComboBox();
-					havePage = (int) Math.ceil(typeFactory.getTypeList().size() / (double) MAX_FOLDER);
+					havePage = (int) Math.ceil(typeFactory.getTypeList().size()
+							/ (double) MAX_FOLDER);
 					if (currentPage < havePage)
 						right.setEnabled(true);
 				}
@@ -232,11 +243,14 @@ public class HomeUI extends JPanel {
 		panelChange.setOpaque(false);
 
 		pageLabel = new JLabel("Page : " + currentPage);
-		panelChange.add(new JLabel("                                                                       "));
+		panelChange
+				.add(new JLabel(
+						"                                                                       "));
 		panelChange.add(left);
 		panelChange.add(pageLabel);
 		panelChange.add(right);
-		panelChange.add(new JLabel("                                          "));
+		panelChange
+				.add(new JLabel("                                          "));
 		panelChange.add(programName);
 		panelChange.setBackground(Color.BLACK);
 
@@ -266,7 +280,8 @@ public class HomeUI extends JPanel {
 			newButton = new JButton(newFolder.substring(0, 7) + "...");
 		newButton.setFont(new Font("Rockwell", 0, 20));
 		try {
-			Image img = ImageIO.read(new File("Picture//folder.png")).getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+			Image img = ImageIO.read(new File("Picture//folder.png"))
+					.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
 			newButton.setIcon(new ImageIcon(img));
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -310,7 +325,8 @@ public class HomeUI extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				super.mousePressed(e);
-				newButton.setTransferHandler(new DragBookAction(getIndexList(newFolder)));
+				newButton.setTransferHandler(new DragBookAction(
+						getIndexList(newFolder)));
 			}
 
 			@Override
@@ -323,7 +339,8 @@ public class HomeUI extends JPanel {
 
 					@Override
 					public void importData(File file) {
-						addType(file.getName(), newFolder, file.getAbsolutePath(), "");
+						addType(file.getName(), newFolder,
+								file.getAbsolutePath(), "");
 						updateFrame();
 					}
 				});
@@ -344,7 +361,8 @@ public class HomeUI extends JPanel {
 		newButton.setBorderPainted(false);
 		newButton.setContentAreaFilled(false);
 		newButton.setToolTipText(newFolder);
-		panelButton.add(new JLabel("                                           "));
+		panelButton.add(new JLabel(
+				"                                           "));
 		panelButton.add(newButton);
 		numFol++;
 	}
@@ -380,7 +398,8 @@ public class HomeUI extends JPanel {
 	 *            is the description of the file that you want to describe the
 	 *            file in the app.
 	 */
-	public void addType(String aName, String aType, String aLocation, String aDescription) {
+	public void addType(String aName, String aType, String aLocation,
+			String aDescription) {
 		String[] typeArr = {};
 		typeArr = typeFactory.getTypeList().toArray(typeArr);
 		JComboBox<String> comboBox = new JComboBox<>();
@@ -403,7 +422,8 @@ public class HomeUI extends JPanel {
 		textDesc.setLineWrap(true);
 		browse.addActionListener((e) -> {
 			JFileChooser chooser = new JFileChooser();
-			chooser.setFileFilter(new FileNameExtensionFilter("PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
+			chooser.setFileFilter(new FileNameExtensionFilter(
+					"PDF or read file", "pdf", "txt", "doc", "docx", "ppt",
 					"pptx", "xls", "rtf"));
 			int result = chooser.showOpenDialog(HomeUI.this);
 			if (result == JFileChooser.APPROVE_OPTION) {
@@ -434,7 +454,8 @@ public class HomeUI extends JPanel {
 		panel.add(panelLoca);
 		panel.add(panelDes);
 
-		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book", JOptionPane.OK_CANCEL_OPTION);
+		int choose = JOptionPane.showConfirmDialog(null, panel, "Add a Book",
+				JOptionPane.OK_CANCEL_OPTION);
 
 		if (JOptionPane.OK_OPTION == choose) {
 			String name = textName.getText();
@@ -443,13 +464,15 @@ public class HomeUI extends JPanel {
 			String description = textDesc.getText();
 
 			if (name.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "You forget to input a name !");
+				JOptionPane.showMessageDialog(null,
+						"You forget to input a name !");
 				addType(name, type, location, description);
 			} else if (location.trim().isEmpty()) {
 				JOptionPane.showMessageDialog(null, "Invalid Path File");
 				addType(name, type, location, description);
 			} else if (description.isEmpty()) {
-				JOptionPane.showMessageDialog(null, "You forget to input a description !");
+				JOptionPane.showMessageDialog(null,
+						"You forget to input a description !");
 				addType(name, type, location, description);
 			} else {
 				bookFactory.add(name, type, location, description);
@@ -505,7 +528,8 @@ public class HomeUI extends JPanel {
 		return new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				BookShelfUI.setSearchLayOut(cBox.getSelectedItem().toString(), searchText.getText());
+				BookShelfUI.setSearchLayOut(cBox.getSelectedItem().toString(),
+						searchText.getText());
 			}
 		};
 	}
@@ -516,11 +540,13 @@ public class HomeUI extends JPanel {
 	public void updateFrame() {
 		numFol = 0;
 		setNewComboBox();
-		havePage = (int) Math.ceil(typeFactory.getTypeList().size() / (double) MAX_FOLDER);
+		havePage = (int) Math.ceil(typeFactory.getTypeList().size()
+				/ (double) MAX_FOLDER);
 		pageLabel.setText("Page : " + currentPage);
 		panelButton.removeAll();
 		panelButton.repaint();
-		for (String nameType : typeFactory.getTypeList().subList((currentPage - 1) * MAX_FOLDER,
+		for (String nameType : typeFactory.getTypeList().subList(
+				(currentPage - 1) * MAX_FOLDER,
 				typeFactory.getTypeList().size())) {
 			addNewFolder(nameType);
 		}
@@ -570,13 +596,23 @@ public class HomeUI extends JPanel {
 						Component component = support.getComponent();
 						if (component instanceof JLabel) {
 							if (support.getComponent().equals(binLabel)) {
-								int choose = JOptionPane.showConfirmDialog(null,
-										String.format("Remove %s? This will remove all of the book inside this folder",
-												typeFactory.getTypeList().get(Integer.parseInt(value.toString()))),
-										"Delete The Folder", JOptionPane.OK_CANCEL_OPTION);
+								int choose = JOptionPane
+										.showConfirmDialog(
+												null,
+												String.format(
+														"Remove %s? This will remove all of the book inside this folder",
+														typeFactory
+																.getTypeList()
+																.get(Integer
+																		.parseInt(value
+																				.toString()))),
+												"Delete The Folder",
+												JOptionPane.OK_CANCEL_OPTION);
 								if (choose == JOptionPane.OK_OPTION) {
-									typeFactory.removeType(
-											typeFactory.getTypeList().get(Integer.parseInt(value.toString())));
+									typeFactory.removeType(typeFactory
+											.getTypeList().get(
+													Integer.parseInt(value
+															.toString())));
 									data.close();
 									if (panelButton.getComponentCount() <= 2) {
 										right.setEnabled(false);
