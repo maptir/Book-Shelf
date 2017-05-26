@@ -52,7 +52,13 @@ Folder Page
 Search Page
 ![SearchPage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/SearchPic.jpg)
 
-## Download
-Click [here](https://github.com/zepalz/Book-Shelf/raw/master/Book-Shelf%20v1.0.rar)
+## UML Diagram of Book-Shelf
+![umlPic](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/UML-BookShelf.png)
 
+## Download
+Click : [Book-Shelf v1.0](https://github.com/zepalz/Book-Shelf/raw/master/Book-Shelf%20v1.0.rar)
+
+## Contributors
+- [Archawin Tirugsapun](https://github.com/zepalz)
+- [Triwith Mutitakul](https://github.com/famefryer)
 
