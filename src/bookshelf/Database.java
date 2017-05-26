@@ -41,8 +41,10 @@ public class Database {
 		try {
 			input = new FileInputStream(file);
 			inputForType = new FileInputStream(typeFile);
-			BufferedReader breader = new BufferedReader(new InputStreamReader(input));
-			BufferedReader breaderForType = new BufferedReader(new InputStreamReader(inputForType));
+			BufferedReader breader = new BufferedReader(new InputStreamReader(
+					input));
+			BufferedReader breaderForType = new BufferedReader(
+					new InputStreamReader(inputForType));
 			while ((line = breader.readLine()) != null) {
 				if (line.equals("")) {
 					continue;
@@ -85,8 +87,10 @@ public class Database {
 			outputForType = new FileOutputStream(typeFile);
 			favoList = bookFactory.getFavorList();
 			for (int x = 0; x < bookList.size(); x++) {
-				byte[] byteTemp = (bookList.get(x).getName() + "," + bookList.get(x).getType() + ","
-						+ bookList.get(x).getLocation() + "," + bookList.get(x).getDescription() + "\n").getBytes();
+				byte[] byteTemp = (bookList.get(x).getName() + ","
+						+ bookList.get(x).getType() + ","
+						+ bookList.get(x).getLocation() + ","
+						+ bookList.get(x).getDescription() + "\n").getBytes();
 				output.write(byteTemp);
 			}
 			for (int x = 0; x < typeList.size(); x++) {
