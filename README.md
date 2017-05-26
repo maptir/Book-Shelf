@@ -1,6 +1,6 @@
 # Book - Shelf
 
-
+https://zepalz.github.io/Book-Shelf/
 
 To use our application download the zip file call Book-Shelf v1.0 in this
 github and extract then run the program by Book-Shelf.jar file.
@@ -42,3 +42,23 @@ favorite file.
 | Observer | In Book-Shelf Application,The observer pattern was used in every class that have ActionListener. | Observer : ActionListener class Observable : Components  |
 
 ## User Interface
+
+### Home Page
+![HomePage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/HomePagePic.jpg)
+
+### Folder Page
+![FolderPage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/FolderPagePic.jpg)
+
+### Search Page
+![SearchPage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/SearchPic.jpg)
+
+## UML Diagram of Book-Shelf
+![umlPic](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/UML-BookShelf.png)
+
+## Download
+Click : [Book-Shelf v1.0](https://github.com/zepalz/Book-Shelf/raw/master/Book-Shelf%20v1.0.rar)
+
+## Contributors
+- [Archawin Tirugsapun](https://github.com/zepalz)
+- [Triwith Mutitakul](https://github.com/famefryer)
+

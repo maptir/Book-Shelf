@@ -21,7 +21,7 @@ public abstract class FileDragNDrop extends TransferHandler {
 	 */
 	private static final long serialVersionUID = 1L;
 	// The file type that can add into the app.
-	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls", "rtf"};
+	String[] file = { "pdf", "txt", "doc", "docx", "ppt", "pptx", "xls", "rtf" };
 
 	public int getSourceActions(JComponent c) {
 		return COPY_OR_MOVE;
@@ -40,7 +40,8 @@ public abstract class FileDragNDrop extends TransferHandler {
 	public boolean importData(TransferSupport ts) {
 		try {
 			@SuppressWarnings("rawtypes")
-			List data = (List) ts.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+			List data = (List) ts.getTransferable().getTransferData(
+					DataFlavor.javaFileListFlavor);
 			if (data.size() < 1) {
 				return false;
 			}
