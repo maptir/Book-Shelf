@@ -2,8 +2,8 @@
 
 
 
-To use our application you need all of folder call "Book-Shelfv1.0"
-and double click to Book-Shelf.jar to run the program.
+To use our application download the zip file call Book-Shelf v1.0 in this
+github and extract then run the program by Book-Shelf.jar file.
 
 The application that help to organize the file in your computer
 into this application you can add such as power point, text, excel,
@@ -33,3 +33,12 @@ and it will select a folder for you or in the folder you can drag into a center 
 - You can add file to favorite file by drag it into the yellow star at the right-bottom corner
 of the app. Then if you open the Yellow Star at the home page you can see the your
 favorite file.
+
+## Design Pattern
+
+| Pattern    | Description/Reason | Classes |
+|:----------:|:-----------:|:-------:|
+| Singleton  | In Book-Shelf Application,The singleton pattern was used to create and store the book and the type. | BookFactory, TypeFactory |
+| Observer | In Book-Shelf Application,The observer pattern was used in every class that have ActionListener. | Observer : ActionListener class Observable : Components  |
+
+## User Interface
