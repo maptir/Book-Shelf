@@ -675,7 +675,6 @@ public class FolderPageUI extends JPanel {
 	 *
 	 */
 	public class addBookAction implements ActionListener {
-
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addType("", "", "", "");
