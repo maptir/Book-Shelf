@@ -346,18 +346,21 @@ public class HomeUI extends JPanel {
 				});
 			}
 		});
-		newButton.setTransferHandler(new FileDragNDrop() {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
+		if (!newFolder.equalsIgnoreCase("all")) {
+			newButton.setTransferHandler(new FileDragNDrop() {
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 1L;
 
-			@Override
-			public void importData(File file) {
-				addType(file.getName(), newFolder, file.getAbsolutePath(), "");
-				updateFrame();
-			}
-		});
+				@Override
+				public void importData(File file) {
+					addType(file.getName(), newFolder, file.getAbsolutePath(),
+							"");
+					updateFrame();
+				}
+			});
+		}
 		newButton.setBorderPainted(false);
 		newButton.setContentAreaFilled(false);
 		newButton.setToolTipText(newFolder);
@@ -478,7 +481,8 @@ public class HomeUI extends JPanel {
 				bookFactory.add(name, type, location, description);
 				data.close();
 				if (!bookFactory.isAdd())
-					JOptionPane.showMessageDialog(this, "This file is already in shelf!");
+					JOptionPane.showMessageDialog(this,
+							"This file is already in shelf!");
 			}
 		}
 	}
