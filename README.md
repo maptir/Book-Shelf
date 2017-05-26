@@ -43,13 +43,13 @@ favorite file.
 
 ## User Interface
 
-Home Page
+### Home Page
 ![HomePage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/HomePagePic.jpg)
 
-Folder Page
+### Folder Page
 ![FolderPage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/FolderPagePic.jpg)
 
-Search Page
+### Search Page
 ![SearchPage](https://github.com/zepalz/Book-Shelf/raw/master/User%20Interface%20Picture/SearchPic.jpg)
 
 ## UML Diagram of Book-Shelf
